@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<%- include('../partials/head', { title: 'Rest API | FhytsBot' }) %>
+	<link id="hljs-light" disabled rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css" integrity="sha512-hasIneQUHlh06VNBe7f6ZcHmeRTLIaQWFd43YriJ0UND19bvYRauxthDg8E4eVNPm9bRUhr5JGeqH7FRFXQu5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link id="hljs-dark" disabled rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/xt256.min.css" integrity="sha512-fhvZU0PRhieZyHjHD1sG4Zvo5EJjsnx90draikv9gBEFre1UXo4Neg3nT4xZ71TEdOLXif1C5llTy0Ughy+xSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+	<script>
+	  let isCurrentlyDark = null;
+
+	  function applyHighlightTheme() {
+		const html = document.documentElement;
+		const isDark = html.classList.contains('dark');
+
+		if (isCurrentlyDark === isDark) return;
+		isCurrentlyDark = isDark;
+
+		document.getElementById('hljs-dark').disabled = !isDark;
+		document.getElementById('hljs-light').disabled = isDark;
+
+		requestAnimationFrame(() => {
+		  document.querySelectorAll('pre code').forEach((block) => {
+			hljs.highlightElement(block);
+		  });
+		});
+	  }
+
+	  document.addEventListener('DOMContentLoaded', () => {
+		hljs.highlightAll();
+		applyHighlightTheme();
+	  });
+
+	  const observer = new MutationObserver(applyHighlightTheme);
+	  observer.observe(document.documentElement, {
+		attributes: true,
+		attributeFilter: ['class'],
+	  });
+	</script>
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: 'Rest API' }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="md:sticky md:py-2 md:top-0 w-full md:bg-white dark:md:bg-slate-800 z-50 mb-9 flex gap-4 flex-col md:flex-row">
+					<div class="w-full flex flex-col gap-2 max-w-lg">
+						<label class="block text-lg font-bold">Endpoint (POST)</label>
+						<div class="flex gap-2 items-center">
+							<input id="api-endpoint" value="<%= base_url %>/api/webhook" readonly class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+							<button id="copy-endpoint" onclick="copyToClipboard()" aria-label="Copy endpoint" title="Copy to clipboard" type="button" class="bg-sky-500 p-2 text-white rounded-md">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16z"/><path d="M6 19a3 3 0 0 1-3-3v-6c0-3.771 0-5.657 1.172-6.828S7.229 2 11 2h4a3 3 0 0 1 3 3"/></g></svg>
+							</button>
+						</div>
+					</div>
+					<div class="w-full flex flex-col gap-2 max-w-lg">
+						<label class="block text-lg font-bold">Your Token</label>
+						<div class="flex gap-2 items-center">
+							<input value="<%= user_token %>" readonly class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+							<form action="/dashboard/rest-api/regenerate-token" method="POST" class="text-center">
+								<button type="submit" class="bg-sky-500 p-2 text-white rounded-md">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.47 2.47a.75.75 0 0 1 1.06 0l2 2A.75.75 0 0 1 11 5.75H9a6.25 6.25 0 1 0 0 12.5h.5a.75.75 0 0 1 0 1.5H9a7.75 7.75 0 0 1 0-15.5h.19l-.72-.72a.75.75 0 0 1 0-1.06M13.75 5a.75.75 0 0 1 .75-.75h.5a7.75 7.75 0 0 1 0 15.5h-.19l.72.72a.75.75 0 1 1-1.06 1.06l-2-2a.75.75 0 0 1 .53-1.28h2a6.25 6.25 0 1 0 0-12.5h-.5a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/></svg>
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<article class="prose prose-lg dark:prose-invert max-w-none ">
+					<%- docs %>
+				</article>
+			</div>
+		<section>
+	</main>
+	
+	<%- include('../components/error-log') %>
+  
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+		  document.querySelectorAll('pre code').forEach((block, index) => {
+			const wrapper = block.parentElement;
+
+			const button = document.createElement('button');
+			button.innerText = 'Copy';
+			button.className = 'absolute top-2 right-2 rounded transition text-white text-sm px-2 py-1 bg-sky-500 dark:bg-sky-700 hover:scale-105 hover:duration-300 transition-all';
+
+			const container = document.createElement('div');
+			container.className = 'relative';
+			wrapper.parentNode.insertBefore(container, wrapper);
+			container.appendChild(wrapper);
+			container.appendChild(button);
+
+			button.addEventListener('click', () => {
+			  const text = block.innerText;
+			  navigator.clipboard.writeText(text).then(() => {
+				button.innerText = 'Copied!';
+				setTimeout(() => (button.innerText = 'Copy'), 1500);
+			  });
+			});
+		  });
+		});
+		
+		document.querySelectorAll('table').forEach((table) => {
+		  if (!table.parentElement.classList.contains('table-wrapper')) {
+			const wrapper = document.createElement('div');
+			wrapper.className = 'table-wrapper';
+						table.parentNode.insertBefore(wrapper, table);
+			wrapper.appendChild(table);
+		  }
+		});
+	</script>
+	<script>
+	  function copyToClipboard() {
+		const input = document.getElementById("api-endpoint");
+		input.select();
+		input.setSelectionRange(0, 99999);
+		navigator.clipboard.writeText(input.value).then(() => {
+		  const button = document.getElementById("copy-endpoint");
+		  const originalHTML = button.innerHTML;
+		  button.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4 12.9l3.143 3.6L15 7.5m5 .063l-8.572 9L11 16"/></svg>`;
+		  setTimeout(() => {
+			button.innerHTML = originalHTML;
+		  }, 1500);
+		}).catch(err => {
+		  alert("Gagal menyalin: " + err);
+		});
+	  }
+	</script>
+</body>
+</html>

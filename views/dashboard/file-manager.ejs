@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'File Manager | FhytsBot' }) %>
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: 'File Manager' }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="mb-4 flex items-center justify-between gap-4">
+					<form class="flex items-center gap-2" method="GET">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+							</svg>
+						</button>
+					</form>
+					<div class="flex items-center gap-2">
+						<button id="openUploadModalBtn" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+							</svg>
+							<span class="hidden md:flex">Add New</span>
+						</button>
+					</div>
+				</div>
+				<div class="prose prose-lg dark:prose-invert max-w-none">
+					<div class="overflow-auto w-full">
+						<table>
+							<thead>
+								<tr>
+									<th class="text-left">Name</th>
+									<th class="text-left">Size</th>
+									<th class="text-left">Date</th>
+									<th class="text-center">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if (!files || files.length === 0) { %>
+									<tr>
+									<td colspan="4" class="text-center">No file found.</td>
+									</tr>
+								<% } else { %>
+								<% files.forEach(file => { %>
+									<tr>
+										<td class="w-full">
+											<%= file.name %>
+										</td>
+										<td>
+											<%= (file.size / 1024).toFixed(1) %>KB
+										</td>
+										<td class="whitespace-nowrap">
+											<%
+											  const createdAt = new Date(file.created_at);
+											  const pad = (n) => n.toString().padStart(2, '0');
+											  const formattedDate = `${pad(createdAt.getHours())}:${pad(createdAt.getMinutes())}:${pad(createdAt.getSeconds())} ${pad(createdAt.getDate())}/${pad(createdAt.getMonth() + 1)}/${createdAt.getFullYear()}`;
+											%>
+											<%= formattedDate %>
+										</td>
+										<td class="text-center">
+											<div class="flex items-center justify-center gap-2">
+												<button onclick="copyFullPath(this, '<%= baseUrl %><%= file.path %>')" class="text-amber-500" title="Copy URL">
+													<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M15.24 2h-3.894c-1.764 0-3.162 0-4.255.148c-1.126.152-2.037.472-2.755 1.193c-.719.721-1.038 1.636-1.189 2.766C3 7.205 3 8.608 3 10.379v5.838c0 1.508.92 2.8 2.227 3.342c-.067-.91-.067-2.185-.067-3.247v-5.01c0-1.281 0-2.386.118-3.27c.127-.948.413-1.856 1.147-2.593s1.639-1.024 2.583-1.152c.88-.118 1.98-.118 3.257-.118h3.07c1.276 0 2.374 0 3.255.118A3.6 3.6 0 0 0 15.24 2"/><path fill="currentColor" d="M6.6 11.397c0-2.726 0-4.089.844-4.936c.843-.847 2.2-.847 4.916-.847h2.88c2.715 0 4.073 0 4.917.847S21 8.671 21 11.397v4.82c0 2.726 0 4.089-.843 4.936c-.844.847-2.202.847-4.917.847h-2.88c-2.715 0-4.073 0-4.916-.847c-.844-.847-.844-2.21-.844-4.936z"/></svg>
+												</button>
+												<form action="/dashboard/file-manager/delete/<%= file.id %>" method="POST" class="-mb-1">
+												  <button type="submit" class="text-rose-500" title="Delete">
+													<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M2.75 6.167c0-.46.345-.834.771-.834h2.665c.529-.015.996-.378 1.176-.916l.03-.095l.115-.372c.07-.228.131-.427.217-.605c.338-.702.964-1.189 1.687-1.314c.184-.031.377-.031.6-.031h3.478c.223 0 .417 0 .6.031c.723.125 1.35.612 1.687 1.314c.086.178.147.377.217.605l.115.372l.03.095c.18.538.74.902 1.27.916h2.57c.427 0 .772.373.772.834S20.405 7 19.979 7H3.52c-.426 0-.771-.373-.771-.833M11.607 22h.787c2.707 0 4.06 0 4.941-.863c.88-.864.97-2.28 1.15-5.111l.26-4.081c.098-1.537.147-2.305-.295-2.792s-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487s-.392 1.255-.295 2.792l.26 4.08c.18 2.833.27 4.248 1.15 5.112S8.9 22 11.607 22"/></svg>
+												  </button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								<% }) %>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="flex items-center gap-2 justify-center mt-6">
+				  <% if (totalPages > 1) { %>
+					<% if (currentPage > 1) { %>
+					  <a href="?search=<%= search %>&page=1" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded" title="First">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m13 19l-6-7l6-7"/><path d="m17 19l-6-7l6-7"/></g></svg>
+					  </a>
+					<% } %>
+
+					<% for (let i = 1; i <= totalPages; i++) { %>
+					  <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+						<a href="?search=<%= search %>&page=<%= i %>" class="h-7 w-7 flex items-center justify-center p-1 rounded 
+						  <%= i === currentPage ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white' %>">
+						  <%= i %>
+						</a>
+					  <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+						<span class="h-7 w-4 flex items-center justify-center p-1">...</span>
+					  <% } %>
+					<% } %>
+
+					<% if (currentPage < totalPages) { %>
+					  <a href="?search=<%= search %>&page=<%= totalPages %>" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m11 19l6-7l-6-7"/><path d="m7 19l6-7l-6-7"/></g></svg>
+					  </a>
+					<% } %>
+				  <% } %>
+				</div>
+			</div>
+		<section>
+	</main>
+  
+	<div id="uploadModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+	  <div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative">
+		<button id="closeUploadModalTopBtn" class="absolute top-2 right-2 text-rose-500 dark:text-rose-600 hoer:text-rose-600 hoer:dark:text-rose-500">
+		  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/></svg>
+		</button>
+		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add File</h2>
+		<form action="/dashboard/file-manager/upload" method="POST" enctype="multipart/form-data">
+		  <div class="mb-4">
+			<label for="phone" class="block text-sm font-medium mb-1">Select File</label>
+			<input type="file" name="file" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+		  </div>
+		  <div class="flex justify-end gap-2">
+			<button type="button" id="closeUploadModalBtn" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"/></svg>
+				Cancel
+			</button>
+			<button type="submit" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"/><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"/><path stroke-linecap="round" d="M7 8h6"/></g></svg>
+				Save
+			</button>
+		  </div>
+		</form>
+	  </div>
+	</div>
+	
+	<%- include('../components/error-log') %>
+
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+	  document.addEventListener('DOMContentLoaded', () => {
+		const openBtn = document.getElementById('openUploadModalBtn');
+		const modal = document.getElementById('uploadModal');
+		const closeBtn = document.getElementById('closeUploadModalBtn');
+		const closeTopBtn = document.getElementById('closeUploadModalTopBtn');
+
+		if (openBtn && modal) {
+		  openBtn.addEventListener('click', () => {
+			modal.classList.remove('hidden');
+			modal.classList.add('flex');
+		  });
+		}
+
+		const closeModal = () => {
+		  modal.classList.add('hidden');
+		  modal.classList.remove('flex');
+		};
+
+		if (closeBtn) {
+		  closeBtn.addEventListener('click', closeModal);
+		}
+
+		if (closeTopBtn) {
+		  closeTopBtn.addEventListener('click', closeModal);
+		}
+
+		if (modal) {
+		  modal.addEventListener('click', (e) => {
+			if (e.target === modal) {
+			  closeModal();
+			}
+		  });
+		}
+	  });
+	</script>
+	<script>
+	  function copyFullPath(button, url) {
+		navigator.clipboard.writeText(url).then(() => {
+		  const msg = button.querySelector('.copy-msg');
+		  msg.style.opacity = '1';
+		  setTimeout(() => {
+			msg.style.opacity = '0';
+		  }, 1500);
+		}).catch(err => {
+		  console.error('Failed to copy:', err);
+		});
+	  }
+	</script>
+</body>
+</html>

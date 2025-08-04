@@ -1,0 +1,33 @@
+<div id="toast" 
+     class="fixed bottom-4 right-4 px-4 py-3 rounded shadow-lg text-white z-50 opacity-0 pointer-events-none transition-opacity duration-500"
+     aria-live="assertive" role="alert"></div>
+
+<script>
+  (function() {
+    const toast = document.getElementById('toast');
+    const success = <%- JSON.stringify(success) %>;
+    const error = <%- JSON.stringify(error) %>;
+
+    let message = null;
+    let bgColorClasses = [];
+
+    if (success.length > 0) {
+      message = success[0];
+      bgColorClasses = ['bg-emerald-500', 'dark:bg-emerald-600'];
+    } else if (error.length > 0) {
+      message = error[0];
+      bgColorClasses = ['bg-red-500', 'dark:bg-rose-600'];
+    }
+
+    if (message) {
+      toast.textContent = message;
+      toast.classList.add(...bgColorClasses);
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none');
+        toast.classList.remove(...bgColorClasses);
+      }, 3000);
+    }
+  })();
+</script>

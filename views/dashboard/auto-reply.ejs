@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: 'Auto Reply | FhytsBot' }) %>
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: 'Auto Reply' }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="mb-4 flex items-center justify-between gap-4">
+					<div class="flex items-center gap-2">
+						<input type="text" name="search" id="search" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search..." required>
+						<button class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+							</svg>
+						</button>
+					</div>
+					<div class="flex items-center gap-2">
+						<button id="btnOpenModal" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+							</svg>
+							<span class="hidden md:flex">Add New</span>
+						</button>
+					</div>
+				</div>
+				<div class="prose prose-lg dark:prose-invert max-w-none">
+					<div class="overflow-auto w-full">
+						<table>
+							<thead>
+								<tr>
+									<th class="text-left">Title</th>
+									<th class="text-left">Prefix</th>
+									<th class="text-left">Includes</th>
+									<th class="text-left">Category</th>
+									<th class="text-left">Type</th>
+									<th class="text-left">Session</th>
+									<th class="text-center">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if (replies.length === 0) { %>
+									<tr><td colspan="7" class="text-center py-4">No automatic replies found.</td></tr>
+								<% } %>
+								<% replies.forEach(reply => { %>
+								<tr>
+									<td class="w-full whitespace-nowrap">
+										<%= reply.title %>
+									</td>
+									<td class="whitespace-nowrap">
+										<%= reply.prefix %>
+									</td>
+									<td>
+										<%= reply.includes %>
+									</td>
+									<td>
+										<%= reply.category %>
+									</td>
+									<td>
+										<%= reply.type %>
+									</td>
+									<td>
+										<%= reply.session_phone_number || 'N/A' %>
+									</td>
+									<td class="text-center">
+										<div class="flex items-center justify-center gap-2">
+											<button class="text-emerald-500 open-detail-modal"
+												  data-session="<%= reply.session_phone_number || 'N/A' %>"
+												  data-title="<%= reply.title %>"
+												  data-prefix="<%= reply.prefix %>"
+												  data-includes="<%= reply.includes %>"
+												  data-category="<%= reply.category %>"
+												  data-type="<%= reply.type %>"
+												  data-response="<%= reply.response %>"
+												  data-file="<%= reply.file %>"
+												  data-created_at="<%= reply.created_at.toLocaleString() %>">
+												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
+											</button>
+											<button class="text-amber-500">
+												<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M8.716 3.203a.7.7 0 0 1 .987 0l1.86 1.846c.2.198.26.496.151.754a.7.7 0 0 1-.644.428H9.21C5.997 6.23 3.394 8.814 3.394 12S6 17.77 9.21 17.77h.464c.386 0 .698.31.698.692a.695.695 0 0 1-.698.692H9.21C5.228 19.154 2 15.95 2 12s3.228-7.154 7.21-7.154h.175l-.669-.664a.69.69 0 0 1 0-.98m4.912 2.336c0-.382.312-.692.698-.692h.465C18.772 4.846 22 8.05 22 12s-3.228 7.154-7.21 7.154h-.175l.669.664a.69.69 0 0 1 0 .98a.7.7 0 0 1-.987 0l-1.86-1.847a.69.69 0 0 1-.151-.754a.7.7 0 0 1 .644-.428h1.86c3.212 0 5.815-2.583 5.815-5.769s-2.603-5.77-5.814-5.77h-.465a.695.695 0 0 1-.698-.692" clip-rule="evenodd"/><path fill="currentColor" d="M5.488 12c0-2.04 1.666-3.692 3.721-3.692h5.582c2.055 0 3.72 1.653 3.72 3.692s-1.665 3.692-3.72 3.692H9.209c-2.055 0-3.72-1.653-3.72-3.692"/></svg>
+											</button>
+											<form action="/dashboard/auto-reply/delete/<%= reply.id %>" method="POST">
+												<button type="submit" class="text-rose-500">
+													<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M2.75 6.167c0-.46.345-.834.771-.834h2.665c.529-.015.996-.378 1.176-.916l.03-.095l.115-.372c.07-.228.131-.427.217-.605c.338-.702.964-1.189 1.687-1.314c.184-.031.377-.031.6-.031h3.478c.223 0 .417 0 .6.031c.723.125 1.35.612 1.687 1.314c.086.178.147.377.217.605l.115.372l.03.095c.18.538.74.902 1.27.916h2.57c.427 0 .772.373.772.834S20.405 7 19.979 7H3.52c-.426 0-.771-.373-.771-.833M11.607 22h.787c2.707 0 4.06 0 4.941-.863c.88-.864.97-2.28 1.15-5.111l.26-4.081c.098-1.537.147-2.305-.295-2.792s-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487s-.392 1.255-.295 2.792l.26 4.08c.18 2.833.27 4.248 1.15 5.112S8.9 22 11.607 22"/></svg>
+												</button>
+											</form>
+										</div>
+									</td>
+								</tr>
+								<% }) %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		<section>
+	</main>
+	
+	<div id="modalAddAutoReply" class="fixed inset-0 bg-black/50 flex hidden items-center justify-center p-4 z-50 pointer-events-none">
+		<form action="/dashboard/auto-reply/create" method="POST" class="bg-white dark:bg-slate-800 rounded-md w-full max-w-lg w-full p-4 md:p-6 overflow-auto max-h-[90vh] pointer-events-auto">
+			<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add New Auto Reply</h2>
+			<div class="flex flex-col gap-4">
+				<div class="flex flex-col">
+					<label for="session_id" class="font-medium">Session</label>
+					<select id="session_id" name="session_id" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+						<% sessions.forEach(session => { %>
+						<option value="<%= session.id %>"><%= session.phone %></option>
+						<% }) %>
+					</select>
+				</div>
+				<div class="flex flex-col">
+					<label for="title" class="font-medium">Title</label>
+					<input type="text" id="title" name="title" required placeholder="Promotion" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="flex flex-col">
+						<label for="prefix" class="font-medium">Prefix</label>
+						<input type="text" id="prefix" name="prefix" required placeholder=".promo" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+					</div>
+					<div class="flex flex-col">
+						<label for="includes" class="font-medium">Includes</label>
+						<select id="includes" name="includes" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+						  <option value="Exactly">Exactly</option>
+						  <option value="Contains">Contains</option>
+						</select>
+					</div>
+				</div>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="flex flex-col">
+						<label for="category" class="font-medium">Category</label>
+						<select id="category" name="category" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+							<option value="Private">Private</option>
+							<option value="Group">Group</option>
+							<option value="All">All</option>
+						</select>
+					</div>
+					<div class="flex flex-col">
+						<label for="type" class="font-medium">Type</label>
+						<select id="type" name="type" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+							<option value="text">Text</option>
+							<option value="Image">Image</option>
+							<option value="Video">Video</option>
+							<option value="Audio">Audio</option>
+							<option value="Document">Document</option>
+							<option value="Location">Location</option>
+							<option value="Sticker">Sticker</option>
+						</select>
+					</div>
+				</div>
+				<div id="fileNameContainer" class="flex flex-col hidden">
+					<label for="fileName" class="font-medium">File Name</label>
+					<input type="text" id="fileName" name="fileName" placeholder="document.pdf" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+				</div>
+				<div id="fileUrlContainer" class="flex flex-col">
+					<label for="file" class="font-medium">File URL (optional)</label>
+					<div class="flex items-center gap-4">
+						<input type="text" id="file" name="file" placeholder="https://example.com/image.png" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+						<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M2.07 5.258C2 5.626 2 6.068 2 6.95V14c0 3.771 0 5.657 1.172 6.828S6.229 22 10 22h4c3.771 0 5.657 0 6.828-1.172S22 17.771 22 14v-2.202c0-2.632 0-3.949-.77-4.804a3 3 0 0 0-.224-.225C20.151 6 18.834 6 16.202 6h-.374c-1.153 0-1.73 0-2.268-.153a4 4 0 0 1-.848-.352C12.224 5.224 11.816 4.815 11 4l-.55-.55c-.274-.274-.41-.41-.554-.53a4 4 0 0 0-2.18-.903C7.53 2 7.336 2 6.95 2c-.883 0-1.324 0-1.692.07A4 4 0 0 0 2.07 5.257M12.25 10a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/></svg>
+						</button>
+					</div>
+				</div>
+				<div id="locationFields" class="flex flex-col gap-2 hidden">
+					<div class="flex flex-col">
+						<label class="font-medium">Location Name</label>
+						<input type="text" name="location_name" placeholder="Statue of Liberty" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+					</div>
+					<div class="flex gap-4 items-center">
+						<div class="flex flex-col">
+							<label class="font-medium">Latitude</label>
+							<input type="text" name="location_lat" placeholder="40.7128" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+						</div>
+						<div class="flex flex-col">
+							<label class="font-medium">Longitude</label>
+							<input type="text" name="location_lng" placeholder="-74.0060" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" />
+						</div>
+					</div>
+				</div>
+				<div id="responseTextContainer" class="flex flex-col">
+					<label for="response" class="font-medium">Content / Caption</label>
+					<textarea id="response" name="response" rows="3" placeholder="Enter automatic replies." class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></textarea>
+				</div>
+				<div class="flex justify-end gap-2">
+					<button type="button" id="btnCancelModal" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"/></svg>
+						Cancel
+					</button>
+					<button type="submit" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"/><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"/><path stroke-linecap="round" d="M7 8h6"/></g></svg>
+						Save
+					</button>
+				</div>  
+			</div>
+		</form>
+	</div>
+	
+	<div class="upload-modal hidden fixed inset-0 flex items-center justify-center z-50">
+	  <div class="relative bg-white w-full h-full dark:bg-slate-800 shadow-lg">
+		<div class="w-full z-50 shadow absolute bg-white dark:bg-slate-900 top-0 left-0 flex items-center justify-between gap-4 px-4 py-2">
+		  <form class="upload-search-form flex items-center gap-2">
+			<input type="text" name="upload-search" class="upload-search-input w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search Uploads...">
+			<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+			  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+			  </svg>
+			</button>
+		  </form>
+		  <button class="close-upload-modal text-rose-500 dark:text-rose-600 hover:text-rose-600 hoer:dark:text-rose-500">
+			<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+			  <path fill="currentColor" fill-rule="evenodd" d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/>
+			</svg>
+		  </button>
+		</div>
+		<div class="upload-list pt-20 max-h-full px-6 pb-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+		  <% uploads.forEach(upload => { %>
+			<button title="<%= upload.name %>" type="button" class="upload-item bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-950 w-full min-w-[200px] flex flex-col text-left px-4 py-2 border border-gray-100 dark:border-slate-700 rounded" data-url="<%= baseUrl %><%= upload.path %>" data-name="<%= upload.name.toLowerCase() %>">
+			  <span class="font-semibold text-xl overflow-hidden line-clamp-1"><%= upload.name %></span>
+			  <span class="text-sm text-gray-600 dark:text-gray-400 overflow-hidden line-clamp-1"><%= baseUrl %><%= upload.path %></span>
+			</button>
+		  <% }) %>
+		</div>
+	  </div>
+	</div>
+	
+	<div id="detailModal" class="hidden bg-black/50 fixed inset-0 flex items-center justify-center z-50">
+		<div class="bg-white w-full dark:bg-slate-800 shadow-lg max-w-lg p-4 md:p-6 rounded-lg">
+			<div class="flex justify-between items-center mb-4">
+				<h2 class="text-xl font-semibold">Auto Reply Detail</h2>
+				<button id="closeDetailModal" class="text-rose-500 dark:text-rose-600 hover:text-rose-600 hoer:dark:text-rose-500">
+					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+						<path fill="currentColor" fill-rule="evenodd" d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/>
+					</svg>
+				</button>
+			</div>
+			<div class="space-y-2 text-sm">
+				<div id="filePreview"></div>
+				<div class="grid grid-cols-2 gap-4">
+					<div class="flex flex-col">
+						<label>Title:</label>
+						<input id="detailTitle" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>Session:</label>
+						<input id="detailSession" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>Prefix:</label>
+						<input id="detailPrefix" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>Includes:</label>
+						<input id="detailIncludes" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>Category:</label>
+						<input id="detailCategory" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>Type:</label>
+						<input id="detailType" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					<div class="flex flex-col">
+						<label>File:</label>
+						<input id="detailFile" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+					
+					<div class="flex flex-col">
+						<label>Created At:</label>
+						<input id="detailCreatedAt" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+					</div>
+				</div>
+				<div class="flex flex-col">
+					<label>Response:</label>
+					<textarea id="detailResponse" rows="3" readonly class="w-full bg-gray-50 dark:bg-slate-900 p-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<%- include('../components/error-log') %>
+  
+  <script src="/assets/js/dashboard.js"></script>
+  <script>
+    const btnOpenModal = document.getElementById('btnOpenModal');
+    const btnCancelModal = document.getElementById('btnCancelModal');
+    const modal = document.getElementById('modalAddAutoReply');
+
+    btnOpenModal.addEventListener('click', () => {
+      modal.classList.remove('hidden');
+    });
+
+    btnCancelModal.addEventListener('click', () => {
+      modal.classList.add('hidden');
+    });
+  </script>
+	<script>
+		const uploadModal = document.querySelector('.upload-modal');
+		  const closeUploadModalBtn = uploadModal.querySelector('.close-upload-modal');
+		  const uploadList = uploadModal.querySelector('.upload-list');
+		  const uploadSearchInput = uploadModal.querySelector('.upload-search-input');
+		  let currentImageUrlInput = null;
+
+		  document.querySelectorAll('.open-upload-modal-btn').forEach(button => {
+			button.addEventListener('click', (e) => {
+			  const parent = e.target.closest('div');
+			  currentImageUrlInput = parent.querySelector('.uploads-url-input');
+			  uploadModal.classList.remove('hidden');
+			  uploadSearchInput.value = '';
+			  filterUploads('');
+			  uploadSearchInput.focus();
+			});
+		  });
+
+		  closeUploadModalBtn.addEventListener('click', () => {
+			uploadModal.classList.add('hidden');
+		  });
+
+		  uploadModal.addEventListener('click', (e) => {
+			if (e.target === uploadModal) {
+			  uploadModal.classList.add('hidden');
+			}
+		  });
+
+		uploadList.addEventListener('click', (e) => {
+		  const btn = e.target.closest('button.upload-item');
+		  if (!btn) return;
+		  if (currentImageUrlInput) {
+			currentImageUrlInput.value = btn.getAttribute('data-url');
+		  }
+		  uploadModal.classList.add('hidden');
+		});
+
+		uploadSearchInput.addEventListener('input', () => {
+		  const query = uploadSearchInput.value.toLowerCase();
+		  filterUploads(query);
+		});
+
+		function filterUploads(query) {
+		  const uploadButtons = uploadList.querySelectorAll('button.upload-item');
+		  uploadButtons.forEach(btn => {
+		    const name = btn.getAttribute('data-name');
+		    if (name.includes(query)) {
+			  btn.classList.remove('hidden');
+		    } else {
+		      btn.classList.add('hidden');
+		    }
+		  });
+		}
+
+		document.querySelector('#contact-search-form').addEventListener('submit', e => e.preventDefault());
+		document.querySelector('.upload-search-form').addEventListener('submit', e => e.preventDefault());
+	</script>
+	<script>
+	  document.addEventListener('DOMContentLoaded', function () {
+		const modal = document.getElementById('detailModal');
+		const closeBtn = document.getElementById('closeDetailModal');
+		const filePreview = document.getElementById('filePreview');
+
+		function getFileExtension(filename) {
+		  return filename.split('.').pop().toLowerCase();
+		}
+
+		function isImage(ext) {
+		  return ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext);
+		}
+
+		function isAudio(ext) {
+		  return ['mp3', 'wav', 'ogg', 'm4a'].includes(ext);
+		}
+
+		function isVideo(ext) {
+		  return ['mp4', 'webm', 'ogg'].includes(ext);
+		}
+
+		function showFilePreview(fileUrl) {
+		  if (!fileUrl) {
+			filePreview.innerHTML = '';
+			return;
+		  }
+		  const ext = getFileExtension(fileUrl);
+		  filePreview.innerHTML = '';
+
+		  if (isImage(ext)) {
+			filePreview.innerHTML = `<img src="${fileUrl}" alt="File Preview" class="aspect-[16/9] h-full w-full object-cover rounded" />`;
+		  } else if (isAudio(ext)) {
+			filePreview.innerHTML = `<audio controls src="${fileUrl}" class="aspect-[16/9] h-full w-full rounded"></audio>`;
+		  } else if (isVideo(ext)) {
+			filePreview.innerHTML = `<video controls src="${fileUrl}" class="aspect-[16/9] h-full w-fullrounded"></video>`;
+		  } else if (ext === 'pdf') {
+			filePreview.innerHTML = `<iframe src="${fileUrl}" class="aspect-[16/9] h-full w-full"></iframe>`;
+		  } else {
+			filePreview.innerHTML = '';
+		  }
+		}
+
+		document.querySelectorAll('.open-detail-modal').forEach(btn => {
+		  btn.addEventListener('click', function () {
+			document.getElementById('detailSession').value = this.dataset.session;
+			document.getElementById('detailTitle').value = this.dataset.title;
+			document.getElementById('detailPrefix').value = this.dataset.prefix;
+			document.getElementById('detailIncludes').value = this.dataset.includes;
+			document.getElementById('detailCategory').value = this.dataset.category;
+			document.getElementById('detailType').value = this.dataset.type;
+			document.getElementById('detailResponse').value = this.dataset.response;
+			document.getElementById('detailFile').value = this.dataset.file;
+			document.getElementById('detailCreatedAt').value = this.dataset.created_at;
+
+			showFilePreview(this.dataset.file);
+
+			modal.classList.remove('hidden');
+			modal.classList.add('flex');
+		  });
+		});
+
+		closeBtn.addEventListener('click', function () {
+		  modal.classList.remove('flex');
+		  modal.classList.add('hidden');
+		  filePreview.innerHTML = '';
+		});
+
+		modal.addEventListener('click', function (e) {
+		  if (e.target === modal) {
+			modal.classList.remove('flex');
+			modal.classList.add('hidden');
+			filePreview.innerHTML = '';
+		  }
+		});
+	  });
+	</script>
+	<script>
+	  document.addEventListener('DOMContentLoaded', function () {
+		const typeSelect = document.getElementById('type');
+		const fileNameContainer = document.getElementById('fileNameContainer');
+		const fileUrlContainer = document.getElementById('fileUrlContainer');
+		const locationFields = document.getElementById('locationFields');
+		const responseTextContainer = document.getElementById('responseTextContainer');
+
+		function toggleFields() {
+		  const type = typeSelect.value.toLowerCase();
+
+		  const showFile = ['image', 'video', 'audio', 'document', 'sticker'].includes(type);
+		  const showLocation = type === 'location';
+		  const showResponseText = !['audio', 'sticker'].includes(type);
+		  const showFileName = type === 'document';
+
+		  fileUrlContainer.classList.toggle('hidden', !showFile);
+		  locationFields.classList.toggle('hidden', !showLocation);
+		  responseTextContainer.classList.toggle('hidden', !showResponseText);
+		  fileNameContainer.classList.toggle('hidden', !showFileName);
+		}
+
+		typeSelect.addEventListener('change', toggleFields);
+		toggleFields();
+	  });
+	</script>
+</body>
+</html>

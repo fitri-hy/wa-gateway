@@ -1,0 +1,306 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 04, 2025 at 07:29 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `demo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auto_replies`
+--
+
+CREATE TABLE `auto_replies` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `prefix` varchar(255) NOT NULL,
+  `includes` enum('Exactly','Contains') NOT NULL,
+  `category` enum('Private','Group','All') NOT NULL,
+  `type` enum('text','Image','Video','Document','Audio','Location','Sticker') NOT NULL,
+  `response` text DEFAULT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `fileName` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `broadcasts`
+--
+
+CREATE TABLE `broadcasts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session` varchar(50) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `content` text DEFAULT NULL,
+  `media_url` text DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(100) DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double DEFAULT NULL,
+  `location_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `type` enum('text','image','video','audio','document','location','sticker') NOT NULL,
+  `content` text DEFAULT NULL,
+  `media_url` varchar(1024) DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(255) DEFAULT NULL,
+  `latitude` decimal(10,7) DEFAULT NULL,
+  `longitude` decimal(10,7) DEFAULT NULL,
+  `location_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `plugins`
+--
+
+CREATE TABLE `plugins` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `enable` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `enable`) VALUES
+(1, '_ping.js', ''),
+(2, '_wikipedia.js', ''),
+(3, '_weather.js', ''),
+(4, '_translate.js', ''),
+(5, '_bmi.js', ''),
+(6, '_bmkg.js', ''),
+(8, '_country.js', ''),
+(9, '_github.js', ''),
+(10, '_antiviewonce.js', ''),
+(11, '_youtubedl.js', ''),
+(13, '_facebookdl.js', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `connected` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uploads`
+--
+
+CREATE TABLE `uploads` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `token` text NOT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'user'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`) VALUES
+(1, 'Fitri HY', 'admin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'admin'),
+(5, 'Amelia', 'user@gmail.com', '$2b$10$w9twcg8AfWUfOf4XNZvQ6e8Htik9O/ZAAe0z2tAICas0QI12gFRIq', '01a3c45faafd0754de66726d148cd29e8f59b3a92bcf4fbd414db82f2baa36c4', 'user');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `session_id` (`session_id`);
+
+--
+-- Indexes for table `broadcasts`
+--
+ALTER TABLE `broadcasts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contacts`
+--
+ALTER TABLE `contacts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `plugins`
+--
+ALTER TABLE `plugins`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_phone` (`user_id`,`phone`);
+
+--
+-- Indexes for table `uploads`
+--
+ALTER TABLE `uploads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `broadcasts`
+--
+ALTER TABLE `broadcasts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contacts`
+--
+ALTER TABLE `contacts`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `plugins`
+--
+ALTER TABLE `plugins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `sessions`
+--
+ALTER TABLE `sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uploads`
+--
+ALTER TABLE `uploads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  ADD CONSTRAINT `auto_replies_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

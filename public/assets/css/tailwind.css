@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Inter', sans-serif !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.prose a {
+  @apply text-sky-500 underline font-semibold;
+}
+
+:root {
+  --scroll-thumb: #888;
+  --scroll-track: #f1f1f1;
+}
+
+.dark {
+  --scroll-thumb: #555;
+  --scroll-track: #1a1a1a;
+}
+
+pre {
+  background-color: transparent !important;
+}
+
+pre, code {
+  padding: 0.70rem !important;
+  margin: 0 !important;
+  border-radius: 6px !important;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #666;
+}
+
+.table-wrapper {
+  @apply w-full overflow-x-auto;
+}
+
+.table-wrapper thead tr th {
+  @apply whitespace-nowrap text-white px-4 py-2 bg-sky-300 dark:bg-sky-800;
+}
+
+.table-wrapper thead tr th:first-child {
+  @apply rounded-tl;
+}
+
+.table-wrapper thead tr th:last-child {
+  @apply rounded-tr;
+}
+
+.table-wrapper tbody {
+  @apply rounded-b bg-white dark:bg-slate-900 border-l border-r border-b border-gray-100 dark:border-slate-700/60;
+}
+
+.table-wrapper tbody tr td {
+  @apply px-3 py-1;
+}

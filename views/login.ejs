@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include('partials/head', { title: 'Sign in | FhytsBot' }) %>
+</head>
+<body class="flex items-center justify-center text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<main class="w-full max-w-sm p-4">
+		<section class="relative p-6 bg-white dark:bg-slate-800 rounded-md shadow-md shadow-gray-200 dark:shadow-slate-900 flex flex-col gap-4 justify-center items-center">
+			<div class="absolute top-2 right-2">
+				<button id="toggleDark" class="z-10" title="Toggle Dark Mode">
+				  <svg id="iconSun" class="h-6 w-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+					<path d="M4.25 19a.75.75 0 0 1 .75-.75h14a.75.75 0 0 1 0 1.5H5a.75.75 0 0 1-.75-.75m3 3a.75.75 0 0 1 .75-.75h8a.75.75 0 0 1 0 1.5H8a.75.75 0 0 1-.75-.75"/>
+					<path d="M6.083 15.25a6.75 6.75 0 1 1 11.835 0H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5z"/>
+					<path d="M12 1.25a.75.75 0 0 1 .75.75v1a.75.75 0 0 1-1.5 0V2a.75.75 0 0 1 .75-.75M4.399 4.399a.75.75 0 0 1 1.06 0l.393.392a.75.75 0 0 1-1.06 1.061l-.393-.393a.75.75 0 0 1 0-1.06m15.202 0a.75.75 0 0 1 0 1.06l-.393.393a.75.75 0 0 1-1.06-1.06l.393-.393a.75.75 0 0 1 1.06 0M1.25 12a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1-.75-.75m19 0a.75.75 0 0 1 .75-.75h1a.75.75 0 0 1 0 1.5h-1a.75.75 0 0 1-.75-.75"/>
+				  </svg>
+				  <svg id="iconMoon" class="h-6 w-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+					<path d="M2 12C2 6.477 6.477 2 12 2c.463 0 .54.693.143.933a6.5 6.5 0 1 0 8.924 8.924c.24-.396.933-.32.933.143c0 1.138-.19 2.231-.54 3.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h.54A10 10 0 0 1 2 12m3 6.25a.75.75 0 0 0 0 1.5h14a.75.75 0 0 0 0-1.5zm3 3a.75.75 0 0 0 0 1.5h8a.75.75 0 0 0 0-1.5zM19.9 2.307a.483.483 0 0 0-.9 0l-.43 1.095a.48.48 0 0 1-.272.274l-1.091.432a.486.486 0 0 0 0 .903l1.091.432a.48.48 0 0 1 .272.273L19 6.81c.162.41.74.41.9 0l.43-1.095a.48.48 0 0 1 .273-.273l1.091-.432a.486.486 0 0 0 0-.903l-1.091-.432a.48.48 0 0 1-.273-.274z"/>
+					<path d="M16.033 8.13a.483.483 0 0 0-.9 0l-.157.399a.48.48 0 0 1-.272.273l-.398.158a.486.486 0 0 0 0 .903l.398.157c.125.05.223.148.272.274l.157.399c.161.41.739.41.9 0l.157-.4a.48.48 0 0 1 .272-.273l.398-.157a.486.486 0 0 0 0-.903l-.398-.158a.48.48 0 0 1-.272-.273z"/>
+				  </svg>
+				</button>
+			</div>
+			<a href="/" class="text-black">
+				<img class="h-16 w-16 rounded" src="/assets/images/logo.png" alt="logo" />
+			</a>
+			<div>
+				<h1 class="font-bold text-2xl text-center">
+					Sign In
+				</h1>
+				<p class="text-center">
+					Log in to your account
+				</p>
+			</div>
+			<form action="/login" method="POST" class="w-full flex flex-col gap-4">
+				<div class="flex flex-col gap-1">
+					<label for="email" class="font-medium">Email</label>
+					<input id="email" type="email" name="email" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="your-mail@gmail.com" required>
+				</div>
+				<div class="relative flex flex-col gap-1">
+					<div class="flex justify-between gap-4 items-center">
+						<label for="password" class="font-medium">Password</label>
+						<span class="text-sm">Forgot Password? <a href="/forgot-password" class="font-semibold text-sky-500 hover:underline">Reset</a><span>
+					</div>
+					<input id="password" type="password" name="password" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="••••••••••••" required>
+					<button type="button" class="absolute z-10 right-2 bottom-2" onclick="togglePassword()">
+						<svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
+					</button>
+				</div>
+				<div class="flex justify-center">
+					<button class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+						LOGIN
+					</button>
+				</div>
+			</form>
+			<span class="text-center text-sm">
+				Don't have an account?
+				<a href="/register" class="font-semibold text-sky-500 hover:underline">
+					Sign Up
+				</a>
+			</span>
+			
+			<!-- DEMO Account -->
+			<span class="text-center mt-4 text-xs">
+				Email: admin@gmail.com | pass: 123456<br>
+				Email: user@gmail.com | pass: 123456
+			</span>
+		<section>
+	</main>
+	
+	<%- include('components/error-log') %>
+  
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+	  function togglePassword() {
+		const input = document.getElementById("password");
+		const icon = document.getElementById("eyeIcon");
+
+		if (input.type === "password") {
+		  input.type = "text";
+		  icon.innerHTML = `
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M1.606 6.08a1 1 0 0 1 1.313.526L2 7l.92-.394v-.001l.003.009l.021.045l.094.194c.086.172.219.424.4.729a13.4 13.4 0 0 0 1.67 2.237a12 12 0 0 0 .59.592C7.18 11.8 9.251 13 12 13a8.7 8.7 0 0 0 3.22-.602c1.227-.483 2.254-1.21 3.096-1.998a13 13 0 0 0 2.733-3.725l.027-.058l.005-.011a1 1 0 0 1 1.838.788L22 7l.92.394l-.003.005l-.004.008l-.011.026l-.04.087a14 14 0 0 1-.741 1.348a15.4 15.4 0 0 1-1.711 2.256l.797.797a1 1 0 0 1-1.414 1.415l-.84-.84a12 12 0 0 1-1.897 1.256l.782 1.202a1 1 0 1 1-1.676 1.091l-.986-1.514c-.679.208-1.404.355-2.176.424V16.5a1 1 0 0 1-2 0v-1.544c-.775-.07-1.5-.217-2.177-.425l-.985 1.514a1 1 0 0 1-1.676-1.09l.782-1.203c-.7-.37-1.332-.8-1.897-1.257l-.84.84a1 1 0 0 1-1.414-1.414l.797-.797a15.4 15.4 0 0 1-1.87-2.519a14 14 0 0 1-.591-1.107l-.033-.072l-.01-.021l-.002-.007l-.001-.002v-.001C1.08 7.395 1.08 7.394 2 7l-.919.395a1 1 0 0 1 .525-1.314" clip-rule="evenodd"/></svg>
+		  `;
+		} else {
+		  input.type = "password";
+		  icon.innerHTML = `
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
+		  `;
+		}
+	  }
+	</script>
+</body>
+</html>
