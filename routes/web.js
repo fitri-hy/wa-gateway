@@ -82,5 +82,8 @@ router.post('/api/webhook', sendMessage);
 
 const Administrator = require('../controllers/administratorController');
 router.get('/administrator', administratorMiddleware, Administrator.index);
+router.get('/administrator/users', administratorMiddleware, Administrator.users);
+router.post('/administrator/users/update', administratorMiddleware, Administrator.usersUpdate);
+router.post('/administrator/users/delete/:id', administratorMiddleware, Administrator.usersDelete);
 
 module.exports = router;
