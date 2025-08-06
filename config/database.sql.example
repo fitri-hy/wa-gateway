@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2025 at 07:29 AM
+-- Generation Time: Aug 06, 2025 at 05:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -171,16 +171,17 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `token` text NOT NULL,
-  `role` varchar(20) NOT NULL DEFAULT 'user'
+  `role` varchar(20) NOT NULL DEFAULT 'user',
+  `status` enum('active','inactive','suspended') DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`) VALUES
-(1, 'Fitri HY', 'admin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'admin'),
-(5, 'Amelia', 'user@gmail.com', '$2b$10$w9twcg8AfWUfOf4XNZvQ6e8Htik9O/ZAAe0z2tAICas0QI12gFRIq', '01a3c45faafd0754de66726d148cd29e8f59b3a92bcf4fbd414db82f2baa36c4', 'user');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`) VALUES
+(1, 'Fitri HY', 'admin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'admin', 'active'),
+(5, 'Amelia', 'user@gmail.com', '$2b$10$w9twcg8AfWUfOf4XNZvQ6e8Htik9O/ZAAe0z2tAICas0QI12gFRIq', '01a3c45faafd0754de66726d148cd29e8f59b3a92bcf4fbd414db82f2baa36c4', 'user', 'active');
 
 --
 -- Indexes for dumped tables

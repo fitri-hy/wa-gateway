@@ -4,6 +4,14 @@ module.exports = (req, res, next) => {
   }
 
   const userRole = req.session.user.role;
+  const userStatus = req.session.user.status;
+  
+  if (userStatus !== 'active') {
+    return res.status(403).render('error', {
+      title: '403 Access Denied',
+      message: 'Your account is inactive or suspended. Please contact support.'
+    });
+  }
 
   if (userRole !== 'admin' && userRole !== 'user') {
     return res.status(403).render('error', { 

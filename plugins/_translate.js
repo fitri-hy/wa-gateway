@@ -1,11 +1,5 @@
 const axios = require('axios');
 
-const EMOJIS = {
-  success: '✅',
-  error: '❌',
-  loading: '⌛',
-};
-
 module.exports = {
   command: 'translate id Hello, how are you',
   title: 'Google Translate',
@@ -20,7 +14,7 @@ module.exports = {
       const parts = text.trim().split(' ').filter(Boolean);
       if (parts.length < 3) {
         await sock.sendMessage(msg.key.remoteJid, {
-          text: '⚠️ Format salah.\nGunakan: !translate <kode_bahasa_target> <teks_yang_akan_diterjemahkan>\nContoh: !translate id Hello World'
+          text: 'Format salah.\nGunakan: !translate <kode_bahasa_target> <teks_yang_akan_diterjemahkan>\nContoh: !translate id Hello World'
         }, { quoted: msg });
         return true;
       }
@@ -28,10 +22,8 @@ module.exports = {
       const targetLang = parts[1];
       const textToTranslate = parts.slice(2).join(' ');
 
-      try {
-        await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.loading, key: msg.key } });
-      } catch {}
-
+	  await sock.sendMessage(sender, { react: { text: '⌛', key: msg.key } });
+	  
       try {
         const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(textToTranslate)}`;
         const { data } = await axios.get(url);
@@ -43,10 +35,10 @@ module.exports = {
 
         await sock.sendMessage(msg.key.remoteJid, { text: responseText }, { quoted: msg });
 
-        await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.success, key: msg.key } });
+        await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
       } catch (err) {
         console.error('Error:', err);
-        await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.error, key: msg.key } });
+        await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
       }
 
       return true;

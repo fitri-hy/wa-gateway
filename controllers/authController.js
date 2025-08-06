@@ -77,6 +77,17 @@ exports.loginUser = async (req, res) => {
     }
 
     const user = results[0];
+	
+	if (user.status === 'inactive') {
+      req.flash('error', 'Your account is inactive. Please contact support.');
+      return res.redirect('/login');
+    }
+	
+	if (user.status === 'suspended') {
+      req.flash('error', 'Your account is suspended. Please contact support.');
+      return res.redirect('/login');
+    }
+	
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -90,6 +101,7 @@ exports.loginUser = async (req, res) => {
       email: user.email,
       token: user.token,
       role: user.role,
+      status: user.status,
     };
 
     if (user.role === 'admin') {
@@ -138,10 +150,11 @@ exports.registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const token = crypto.randomBytes(32).toString('hex');
     const role = 'user';
+    const status = 'active';
 
     db.query(
-      'INSERT INTO users (name, email, password, token, role) VALUES (?, ?, ?, ?, ?)',
-      [name, email.toLowerCase(), hashedPassword, token, role],
+      'INSERT INTO users (name, email, password, token, role, status) VALUES (?, ?, ?, ?, ?, ?)',
+      [name, email.toLowerCase(), hashedPassword, token, role, status],
       (err) => {
         if (err) {
           if (err.code === 'ER_DUP_ENTRY') {

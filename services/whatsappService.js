@@ -183,7 +183,9 @@ async function deleteSession(phone) {
     try {
       clients[phone].sock.ev.removeAllListeners();
       clients[phone].sock.end();
-    } catch {}
+    } catch (err) {
+      console.error('Error closing client socket:', err);
+    }
     delete clients[phone];
   }
 
@@ -191,23 +193,43 @@ async function deleteSession(phone) {
     try {
       wsClients[phone].send(JSON.stringify({ deleted: true }));
       wsClients[phone].close();
-    } catch {}
+    } catch (err) {
+      console.error('Error closing websocket:', err);
+    }
     delete wsClients[phone];
   }
 
-  await new Promise((resolve, reject) => {
-    db.query('DELETE FROM sessions WHERE phone = ?', [phone], (err) => {
-      if (err) {
-        console.error('Error deleting session from DB:', err);
-        reject(err);
-        return;
-      }
-      resolve();
-    });
-  });
+  try {
+    const [rows] = await db.promise().query(
+      'SELECT id FROM sessions WHERE phone = ?',
+      [phone]
+    );
 
-  const sessionDir = path.join(__dirname, '..', 'sessions', phone);
-  await rimraf(sessionDir);
+    if (rows.length === 0) {
+      console.warn(`No session found for phone: ${phone}`);
+      return;
+    }
+
+    const sessionId = rows[0].id;
+
+    await db.promise().query(
+      'DELETE FROM auto_replies WHERE session_id = ?',
+      [sessionId]
+    );
+
+    await db.promise().query(
+      'DELETE FROM sessions WHERE id = ?',
+      [sessionId]
+    );
+
+    const sessionDir = path.join(__dirname, '..', 'sessions', phone);
+    await rimraf(sessionDir);
+
+    console.log(`Session ${phone} deleted successfully.`);
+  } catch (err) {
+    console.error('Error deleting session and related data:', err);
+    throw err;
+  }
 }
 
 function getClientByPhone(phone) {

@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-  /*
+  
   const sessionsDir = path.join(__dirname, 'sessions');
   if (fs.existsSync(sessionsDir)) {
     const phones = fs.readdirSync(sessionsDir);
@@ -56,7 +56,7 @@ const server = app.listen(PORT, () => {
       }
     });
   }
-  */
+  
 });
 
 const wss = new WebSocketServer({ server });

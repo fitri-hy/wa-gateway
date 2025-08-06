@@ -2,12 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const youtubedl = require('youtube-dl-exec');
 
-const EMOJIS = {
-  success: '✅',
-  error: '❌',
-  loading: '⌛',
-};
-
 module.exports = {
   command: 'fbdl https://www.facebook.com/watch...',
   title: 'Facebook Downloader',
@@ -25,15 +19,15 @@ module.exports = {
 
     if (!url || !url.startsWith('http')) {
       await sock.sendMessage(sender, {
-        text: '⚠️ Format salah.\nGunakan: !fbdl <url Facebook>\nContoh: !fbdl https://www.facebook.com/watch/?v=xxxx',
+        text: 'Format salah.\nGunakan: !fbdl <url Facebook>\nContoh: !fbdl https://www.facebook.com/watch/?v=xxxx',
       }, { quoted: msg });
       return;
     }
 
-    await sock.sendMessage(sender, { react: { text: EMOJIS.loading, key: msg.key } });
-
     const tempDir = path.join(__dirname, '../public/uploads/.temp');
     if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
+	
+	await sock.sendMessage(msg.key.remoteJid, { react: { text: '⌛', key: msg.key } });
 
     try {
       const metadata = await youtubedl(url, {
@@ -69,15 +63,11 @@ module.exports = {
         }
       });
 
-      await sock.sendMessage(sender, { react: { text: EMOJIS.success, key: msg.key } });
+      await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
 
     } catch (err) {
       console.error('Error:', err);
-      await sock.sendMessage(sender, {
-        text: `❌ Gagal mengunduh video Facebook.\n${err.message || err}`,
-      }, { quoted: msg });
-
-      await sock.sendMessage(sender, { react: { text: EMOJIS.error, key: msg.key } });
+      await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
     }
   }
 };

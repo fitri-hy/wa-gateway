@@ -2,41 +2,30 @@ const fs = require('fs');
 const path = require('path');
 const youtubedl = require('youtube-dl-exec');
 
-const EMOJIS = {
-  success: '✅',
-  error: '❌',
-  loading: '⌛',
-};
-
 module.exports = {
   command: 'ytdl https://www.youtube.com/watch...',
   title: 'YouTube Downloader',
   description: 'Download videos from YouTube and send them directly to WhatsApp contacts without hassle.',
   author: 'Fitri HY',
 
-  execute: async (msg, sock, args) => {
+  execute: async (msg, sock) => {
     const sender = msg.key.remoteJid;
-    const text = msg.message?.conversation?.trim() || msg.message?.extendedTextMessage?.text?.trim();
+    const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
 
-    if (!text.startsWith('!ytdl')) return;
+    if (!text?.startsWith('!ytdl ')) return;
 
-    const parts = text.split(' ');
-    const url = parts[1];
-
+    const url = text.split(' ')[1];
     if (!url || !url.startsWith('http')) {
-      await sock.sendMessage(sender, {
-        text: '⚠️ Format salah.\nGunakan: !ytdl <url YouTube>\nContoh: !ytdl https://youtube.com/watch?v=xxxx',
-      }, { quoted: msg });
-      return;
+      return await sock.sendMessage(sender, { text: 'Format salah.\nGunakan: !ytdl <url YouTube>\nContoh: !ytdl https://youtube.com/watch?v=xxxx' }, { quoted: msg });
     }
-
-    await sock.sendMessage(sender, { react: { text: EMOJIS.loading, key: msg.key } });
 
     const tempDir = path.join(__dirname, '../public/uploads/.temp');
     if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
 
+    await sock.sendMessage(sender, { react: { text: '⌛', key: msg.key } });
+	
     try {
-      const metadata = await youtubedl(url, {
+      const meta = await youtubedl(url, {
         dumpSingleJson: true,
         noCheckCertificates: true,
         noWarnings: true,
@@ -44,39 +33,25 @@ module.exports = {
         addHeader: ['referer:youtube.com', 'user-agent:googlebot']
       });
 
-      if (!metadata || !metadata.title) throw new Error('Gagal mendapatkan metadata video.');
+      if (!meta?.title) throw new Error('Gagal mendapatkan metadata video.');
 
-      const title = metadata.title.replace(/[^\w\s]/gi, '').substring(0, 50);
-      const videoPath = path.join(tempDir, `${title}.mp4`);
+      const safeTitle = meta.title.replace(/[^\w\s]/gi, '').slice(0, 50);
+      const videoPath = path.join(tempDir, `${safeTitle}.mp4`);
 
-      await youtubedl(url, {
-        output: videoPath,
-        noWarnings: true,
-        quiet: true,
-        format: 'mp4',
-      });
+      await youtubedl(url, { output: videoPath, quiet: true, format: 'mp4', noWarnings: true });
 
       await sock.sendMessage(sender, {
         video: { url: videoPath },
         mimetype: 'video/mp4',
-        caption: `📥 *${metadata.title}*\n\n✅ Video berhasil diunduh.`,
+        caption: `📥 *${meta.title}*\n\n✅ Video berhasil diunduh.`,
       }, { quoted: msg });
 
-      fs.unlink(videoPath, (err) => {
-        if (err) {
-          console.error('Gagal hapus file:', err);
-        }
-      });
+      fs.unlink(videoPath, err => err && console.error('Gagal hapus file:', err));
 
-      await sock.sendMessage(sender, { react: { text: EMOJIS.success, key: msg.key } });
-
-    } catch (err) {
-      console.error('Error:', err);
-      await sock.sendMessage(sender, {
-        text: `❌ Gagal mengunduh video.\n${err.message || err}`,
-      }, { quoted: msg });
-
-      await sock.sendMessage(sender, { react: { text: EMOJIS.error, key: msg.key } });
+      await sock.sendMessage(sender, { react: { text: '✅', key: msg.key } });
+    } catch (e) {
+      console.error(e);
+      await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
     }
   }
 };

@@ -3,12 +3,6 @@ const axios = require('axios');
 
 const octokit = new Octokit();
 
-const EMOJIS = {
-  success: '✅',
-  error: '❌',
-  loading: '⌛',
-};
-
 module.exports = {
   command: 'github fitri-hy',
   title: 'Github Stalker',
@@ -24,18 +18,17 @@ module.exports = {
     const parts = text.split(' ');
     if (parts.length < 2) {
       await sock.sendMessage(msg.key.remoteJid, {
-        text: '❌ Format salah. Gunakan: !github <username>'
+        text: 'Format salah. Gunakan: !github <username>'
       }, { quoted: msg });
       return true;
     }
 
     const username = parts[1].trim();
+	
+	await sock.sendMessage(msg.key.remoteJid, { react: { text: '⌛', key: msg.key } });
 
     try {
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.loading, key: msg.key } });
-
       const { data } = await octokit.users.getByUsername({ username });
-
       const avatarUrl = data.avatar_url;
       const response = await axios.get(avatarUrl, { responseType: 'arraybuffer' });
       const imgBuffer = Buffer.from(response.data, 'binary');
@@ -57,16 +50,12 @@ module.exports = {
         caption: profileText
       }, { quoted: msg });
 
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.success, key: msg.key } });
+      await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
 
       return true;
     } catch (err) {
       console.error('Error:', err.message);
-      await sock.sendMessage(msg.key.remoteJid, {
-        text: `❌ Gagal mengambil data github untuk user *${username}*. Pastikan username benar.`
-      }, { quoted: msg });
-
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.error, key: msg.key } });
+      await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
       return true;
     }
   }

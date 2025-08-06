@@ -5,7 +5,7 @@ exports.index = async (req, res) => {
   const userId = req.session.user?.id;
   if (!userId) return res.redirect('/login');
 
-  db.query('SELECT id, name, email, role FROM users WHERE id = ?', [userId], (err, results) => {
+  db.query('SELECT id, name, email, role, status FROM users WHERE id = ?', [userId], (err, results) => {
     if (err) {
       console.error(err);
       req.flash('error', 'Database error.');

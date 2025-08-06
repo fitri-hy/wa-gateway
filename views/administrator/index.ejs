@@ -58,68 +58,7 @@
 					  </div>
 					<% }) %>
 				</div>
-				<% for (const [tableName, rows] of Object.entries(latestData)) { %>
-				  <h3 class="text-2xl font-bold mt-6 mb-4"><%= tableName %></h3>
-				  <% if (rows.length === 0) { %>
-					<p class="border-b pb-2">No recent data</p>
-				  <% } else { %> 
-					<div class="w-full">
-					  <div class="overflow-auto w-full table-wrapper">
-						<table class="min-w-full">
-							<thead>
-							  <tr>
-								<% if ('user_name' in rows[0]) { %>
-								  <th class="whitespace-nowrap">User Name</th>
-								<% } %>
-								<% if ('session_phone' in rows[0]) { %>
-								  <th class="whitespace-nowrap">Session</th>
-								<% } %>
-
-								<% 
-								  function toTitleCaseReplacePhone(str) {
-									const words = str.split('_');
-
-									if (words.length === 2 && words[0].toLowerCase() === 'session' && words[1].toLowerCase() === 'id') {
-									  return 'Session';
-									}
-
-									return words
-									  .map(word => {
-										const w = word.charAt(0).toUpperCase() + word.slice(1);
-										return w === 'Phone' ? 'Session' : w;
-									  })
-									  .join(' ');
-								  }
-
-								  const cols = Object.keys(rows[0]).filter(c => c !== 'user_name' && c !== 'session_phone');
-								  cols.forEach(col => { %>
-									<th class="whitespace-nowrap"><%= toTitleCaseReplacePhone(col) %></th>
-								<% }) %>
-							  </tr>
-							</thead>
-						  <tbody>
-							<% rows.forEach(row => { %>
-							  <tr>
-								<% if ('user_name' in row) { %>
-								  <td class="whitespace-nowrap"><%= row.user_name %></td>
-								<% } %>
-								<% if ('session_phone' in row) { %>
-								  <td class="whitespace-nowrap"><%= row.session_phone %></td>
-								<% } %>
-
-								<% 
-								  Object.entries(row).forEach(([key, val]) => {
-									if (key !== 'user_name' && key !== 'session_phone') { %>
-									  <td class="whitespace-nowrap"><%= val %></td>
-								<% }}) %>
-							  </tr>
-							<% }) %>
-						  </tbody>
-						</table>
-					  </div>
-					</div>
-				  <% } %>
-				<% } %>
+				
 			</div>
 		<section>
 	</main>

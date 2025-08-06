@@ -1,5 +1,3 @@
-const EMOJIS = { success: '✅', error: '❌', loading: '⌛' };
-
 module.exports = {
   command: 'bmi 170 65',
   title: 'Calculator BMI',
@@ -10,32 +8,31 @@ module.exports = {
   execute: async (msg, sock, args, phone) => {
     const text = msg?.message?.conversation?.trim();
     if (!text?.startsWith('!bmi')) return false;
+	
+	await sock.sendMessage(msg.key.remoteJid, { react: { text: '⌛', key: msg.key } });
 
     try {
       const jid = msg.key.remoteJid;
-      await sock.sendMessage(jid, { react: { text: EMOJIS.loading, key: msg.key } });
-
       const [, tinggiStr, beratStr] = text.split(' ');
       const tinggi = parseFloat(tinggiStr);
       const berat = parseFloat(beratStr);
 
       if (!tinggi || !berat) {
         await sock.sendMessage(jid, {
-          text: '⚠️ Format salah.\nGunakan: !bmi <tinggi_cm> <berat_kg>\nContoh: !bmi 170 65'
+          text: 'Format salah.\nGunakan: !bmi <tinggi_cm> <berat_kg>\nContoh: !bmi 170 65'
         }, { quoted: msg });
-        await sock.sendMessage(jid, { react: { text: EMOJIS.error, key: msg.key } });
         return true;
       }
-
+	  
       const bmi = berat / ((tinggi / 100) ** 2);
       const kategori = bmi < 18.5 ? 'Kurus' : bmi < 24.9 ? 'Normal' : bmi < 29.9 ? 'Kelebihan berat badan' : 'Obesitas';
 
-      const reply = `📊 *Hasil Perhitungan BMI*\n\nTinggi: ${tinggi} cm\nBerat: ${berat} kg\nBMI: ${bmi.toFixed(2)}\nKategori: *${kategori}*`;
+      const reply = `*Hasil Perhitungan BMI*\n\nTinggi: ${tinggi} cm\nBerat: ${berat} kg\nBMI: ${bmi.toFixed(2)}\nKategori: *${kategori}*`;
       await sock.sendMessage(jid, { text: reply }, { quoted: msg });
-      await sock.sendMessage(jid, { react: { text: EMOJIS.success, key: msg.key } });
+      await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
     } catch (err) {
       console.error('Error:', err.message);
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.error, key: msg.key } });
+      await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
     }
 
     return true;

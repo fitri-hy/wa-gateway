@@ -2,67 +2,92 @@ const db = require('../config/Mysql');
 
 exports.index = (req, res) => {
   const userId = req.session.user?.id;
-  const protocol = req.protocol;
-  const host = req.get('host');
-  const baseUrl = `${protocol}://${host}`;
-
   if (!userId) return res.redirect('/login');
 
-  const queryReplies = `
+  const search = req.query.search ? req.query.search.trim() : '';
+  const page = parseInt(req.query.page) || 1;
+  const limit = 15;
+  const offset = (page - 1) * limit;
+
+  const countQuery = `
+    SELECT COUNT(*) as total
+    FROM auto_replies ar
+    LEFT JOIN sessions s ON ar.session_id = s.id
+    WHERE ar.user_id = ? AND ar.title LIKE ?
+  `;
+
+  const dataQuery = `
     SELECT ar.*, s.phone AS session_phone_number
     FROM auto_replies ar
     LEFT JOIN sessions s ON ar.session_id = s.id
-    WHERE ar.user_id = ?
+    WHERE ar.user_id = ? AND ar.title LIKE ?
     ORDER BY ar.updated_at DESC
+    LIMIT ? OFFSET ?
   `;
 
-  const querySessions = `
-    SELECT id, phone FROM sessions WHERE user_id = ? AND connected = 1
-  `;
+  const searchParam = `%${search}%`;
 
-  const error = req.query.error || null;
-  const success = req.query.success || null;
-
-  db.query(queryReplies, [userId], (errReplies, replies) => {
-    if (errReplies) {
-      console.error('Error fetching auto replies:', errReplies);
+  db.query(countQuery, [userId, searchParam], (errCount, countResult) => {
+    if (errCount) {
+      console.error('Error fetching auto replies count:', errCount);
       return res.status(500).render('error', {
         title: '500 Internal Server Error',
-        message: 'Failed to retrieve auto reply data.',
+        message: 'Failed to retrieve auto reply data count.',
       });
     }
 
-    db.query(querySessions, [userId], (errSessions, sessions) => {
-      if (errSessions) {
-        console.error('Error fetching sessions:', errSessions);
+    const totalItems = countResult[0].total;
+    const totalPages = Math.ceil(totalItems / limit);
+
+    db.query(dataQuery, [userId, searchParam, limit, offset], (errReplies, replies) => {
+      if (errReplies) {
+        console.error('Error fetching auto replies:', errReplies);
         return res.status(500).render('error', {
           title: '500 Internal Server Error',
-          message: 'Failed to retrieve sessions data.',
+          message: 'Failed to retrieve auto reply data.',
         });
       }
 
-      db.query('SELECT * FROM uploads WHERE user_id = ? ORDER BY id DESC', [userId], (errUploads, uploads) => {
-        if (errUploads) {
-          console.error('Error fetching uploads:', errUploads);
-          return res.render('dashboard/auto-reply', {
-            baseUrl,
-            replies,
-            sessions,
-            user: req.session.user,
-            error: 'Failed to load uploads.',
-            success,
-            uploads: []
+      const querySessions = `SELECT id, phone FROM sessions WHERE user_id = ? AND connected = 1`;
+
+      db.query(querySessions, [userId], (errSessions, sessions) => {
+        if (errSessions) {
+          console.error('Error fetching sessions:', errSessions);
+          return res.status(500).render('error', {
+            title: '500 Internal Server Error',
+            message: 'Failed to retrieve sessions data.',
           });
         }
 
-        res.render('dashboard/auto-reply', {
-          baseUrl,
-          replies,
-          sessions,
-          user: req.session.user,
-          error,
-          success,
-          uploads
+        db.query('SELECT * FROM uploads WHERE user_id = ? ORDER BY id DESC', [userId], (errUploads, uploads) => {
+          if (errUploads) {
+            console.error('Error fetching uploads:', errUploads);
+            return res.render('dashboard/auto-reply', {
+              replies,
+              sessions,
+              uploads: [],
+              user: req.session.user,
+              error: 'Failed to load uploads.',
+              success: null,
+              search,
+              currentPage: page,
+              totalPages,
+              baseUrl: `${req.protocol}://${req.get('host')}`
+            });
+          }
+
+          res.render('dashboard/auto-reply', {
+            replies,
+            sessions,
+            uploads,
+            user: req.session.user,
+            error: null,
+            success: null,
+            search,
+            currentPage: page,
+            totalPages,
+            baseUrl: `${req.protocol}://${req.get('host')}`
+          });
         });
       });
     });

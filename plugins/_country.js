@@ -1,11 +1,5 @@
 const axios = require('axios');
 
-const EMOJIS = {
-  success: '✅',
-  error: '❌',
-  loading: '⌛',
-};
-
 module.exports = {
   command: 'country indonesia',
   title: 'Country Info',
@@ -21,16 +15,16 @@ module.exports = {
     const parts = text.split(' ').filter(Boolean);
     if (parts.length < 2) {
       await sock.sendMessage(msg.key.remoteJid, {
-        text: '⚠️ Format salah.\nGunakan: !country <nama_negara>\nContoh: !country japan'
+        text: 'Format salah.\nGunakan: !country <nama_negara>\nContoh: !country japan'
       }, { quoted: msg });
       return true;
     }
 
     const countryName = parts.slice(1).join(' ');
+	
+	await sock.sendMessage(msg.key.remoteJid, { react: { text: '⌛', key: msg.key } });
 
     try {
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.loading, key: msg.key } });
-
       const { data } = await axios.get(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}`);
       const country = data[0];
 
@@ -55,7 +49,7 @@ module.exports = {
             .map(c => `${c.name} (${c.symbol})`)
             .join(', ')
         : 'N/A';
-
+		
       const responseText = `
 *${flag} ${name.common} (${name.official})*
 
@@ -76,14 +70,10 @@ module.exports = {
       `.trim();
 
       await sock.sendMessage(msg.key.remoteJid, { text: responseText }, { quoted: msg });
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.success, key: msg.key } });
-
+      await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
     } catch (err) {
       console.error('Error:', err.message);
-      await sock.sendMessage(msg.key.remoteJid, {
-        text: `❌ Negara "${countryName}" tidak ditemukan.`
-      }, { quoted: msg });
-      await sock.sendMessage(msg.key.remoteJid, { react: { text: EMOJIS.error, key: msg.key } });
+      await sock.sendMessage(sender, { react: { text: '❌', key: msg.key } });
     }
 
     return true;

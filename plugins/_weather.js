@@ -21,11 +21,7 @@ module.exports = {
         return true;
       }
 
-      try {
-        await sock.sendMessage(msg.key.remoteJid, {
-          react: { text: '⌛', key: msg.key }
-        });
-      } catch {}
+      await sock.sendMessage(sender, { react: { text: '⌛', key: msg.key } });
 
       try {
         const url = `https://wttr.in/${encodeURIComponent(cityName)}?format=%t|%C|%w|%h&lang=id&m`;
