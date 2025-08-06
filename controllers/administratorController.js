@@ -125,6 +125,9 @@ exports.users = async (req, res) => {
 
 exports.usersUpdate = (req, res) => {
   const { id, name, role, status } = req.body;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
 
   if (!name || !role || !status) {
     req.flash('error', 'All fields are required!');
@@ -186,7 +189,19 @@ exports.usersUpdate = (req, res) => {
 
 exports.usersDelete = (req, res) => {
   const id = req.params.id;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+  
+  if (String(req.session.user.id) === String(id)) {
+    req.flash('error', 'You cannot delete your own account.');
+    return res.redirect('/administrator/users');
+  }
+  
   const checkQuery = `SELECT role FROM users WHERE id = ?`;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
 
   db.query(checkQuery, [id], (err, results) => {
     if (err) {
@@ -202,8 +217,8 @@ exports.usersDelete = (req, res) => {
 
     const role = results[0].role;
 
-    if (role === 'admin') {
-      req.flash('error', 'Users with admin role cannot be deleted.');
+    if (role === 'superadmin') {
+      req.flash('error', 'Users with the superadmin role cannot be deleted.');
       return res.redirect('/administrator/users');
     }
 
@@ -379,6 +394,10 @@ exports.contacts = async (req, res) => {
 
 exports.contactsDelete = async (req, res) => {
   const contactId = req.params.id;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+  
 
   try {
     const [[contact]] = await db.promise().query('SELECT * FROM contacts WHERE id = ?', [contactId]);
@@ -469,6 +488,10 @@ exports.files = async (req, res) => {
 
 exports.filesDelete = async (req, res) => {
   const fileId = req.params.id;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+  
 
   try {
     const [[file]] = await db.promise().query('SELECT * FROM uploads WHERE id = ?', [fileId]);
@@ -672,7 +695,10 @@ exports.broadcastsDelete = (req, res) => {
 
 // Auto Reply
 exports.autoreply = (req, res) => {
-  if (!req.session?.user) return res.redirect('/login');
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+  
 
   const search = req.query.search || '';
   const page = parseInt(req.query.page) || 1;

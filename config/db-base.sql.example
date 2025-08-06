@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2025 at 10:14 AM
+-- Generation Time: Aug 06, 2025 at 10:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -180,8 +180,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`) VALUES
-(1, 'Fitri HY', 'admin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'admin', 'active'),
-(2, 'Amelia', 'user@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'user', 'active');
+(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active'),
+(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active'),
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active');
 
 --
 -- Indexes for dumped tables
@@ -289,7 +290,7 @@ ALTER TABLE `uploads`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
