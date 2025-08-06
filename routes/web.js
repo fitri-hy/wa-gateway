@@ -85,5 +85,17 @@ router.get('/administrator', administratorMiddleware, Administrator.index);
 router.get('/administrator/users', administratorMiddleware, Administrator.users);
 router.post('/administrator/users/update', administratorMiddleware, Administrator.usersUpdate);
 router.post('/administrator/users/delete/:id', administratorMiddleware, Administrator.usersDelete);
+router.get('/administrator/devices', administratorMiddleware, Administrator.devices);
+router.post('/administrator/devices/delete/:phone', administratorMiddleware, Administrator.devicesDelete);
+router.get('/administrator/contacts', administratorMiddleware, Administrator.contacts);
+router.post('/administrator/contacts/delete/:id', administratorMiddleware, Administrator.contactsDelete);
+router.get('/administrator/files', administratorMiddleware, Administrator.files);
+router.post('/administrator/files/delete/:id', administratorMiddleware, Administrator.filesDelete);
+router.get('/administrator/sending', administratorMiddleware, Administrator.sending);
+router.post('/administrator/sending/delete/:id', administratorMiddleware, Administrator.sendingDelete);
+router.get('/administrator/broadcasts', administratorMiddleware, Administrator.broadcasts);
+router.post('/administrator/broadcasts/delete/:id', administratorMiddleware, Administrator.broadcastsDelete);
+router.get('/administrator/auto-reply', administratorMiddleware, Administrator.autoreply);
+router.post('/administrator/auto-reply/delete/:id', administratorMiddleware, Administrator.autoreplyDelete);
 
 module.exports = router;

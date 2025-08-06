@@ -44,7 +44,12 @@
 								<% } else { %>
 								<% users.forEach(user => { %>
 									<tr>
-										<td class="whitespace-nowrap"><%= user.name %></td>
+										<td class="whitespace-nowrap text-black dark:text-white">
+											<%= user.name %>
+											<% if (user.id === user_id) { %>
+											  <span class="text-xs px-1 py-[2px] rounded bg-sky-500 dark:bg-sky-600 text-white">You</span>
+											<% } %>
+										</td>
 										<td><%= user.email %></td>
 										<td>
 											<%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %>

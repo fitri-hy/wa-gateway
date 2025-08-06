@@ -43,9 +43,12 @@ exports.index = async (req, res) => {
 
 exports.delete = async (req, res) => {
   const phone = req.params.phone;
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
   try {
     await deleteSession(phone);
-	req.flash('success', 'Session detele successfully.');
+	req.flash('success', 'Session delete successfully.');
 	res.redirect('/dashboard/devices');
   } catch (error) {
     console.error(error);
