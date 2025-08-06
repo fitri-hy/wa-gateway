@@ -125,28 +125,62 @@ exports.users = async (req, res) => {
 
 exports.usersUpdate = (req, res) => {
   const { id, name, role, status } = req.body;
-  
-  if (!name || !email || !role || !status ) {
+
+  if (!name || !role || !status) {
     req.flash('error', 'All fields are required!');
     return res.redirect('/administrator/users');
   }
-  
+
   const nameRegex = /^[a-zA-Z\s]{1,25}$/;
   if (!nameRegex.test(name)) {
     req.flash('error', 'Name must be max 25 characters and contain only letters and spaces.');
-    return res.redirect('/register');
+    return res.redirect('/administrator/users');
   }
-  
-  const query = `UPDATE users SET name=?, role=?, status=? WHERE id=?`;
-  db.query(query, [name, role, status, id], (err, result) => {
-    if (err) {
+
+  const getUserQuery = `SELECT role, status FROM users WHERE id = ?`;
+  db.query(getUserQuery, [id], (err, results) => {
+    if (err || results.length === 0) {
       console.error(err);
-      req.flash('error', 'Failed to update user data.');
+      req.flash('error', 'User not found.');
       return res.redirect('/administrator/users');
     }
 
-    req.flash('success', 'User updated successfully.');
-    res.redirect('/administrator/users');
+    const existingRole = results[0].role;
+    const existingStatus = results[0].status;
+
+    if (existingRole === 'superadmin') {
+      if (role !== existingRole || status !== existingStatus) {
+        req.flash('error', 'Role and status of superadmin cannot be changed.');
+        return res.redirect('/administrator/users');
+      }
+      const updateQuery = `UPDATE users SET name = ? WHERE id = ?`;
+      const params = [name, id];
+
+      db.query(updateQuery, params, (updateErr, result) => {
+        if (updateErr) {
+          console.error(updateErr);
+          req.flash('error', 'Failed to update user data.');
+          return res.redirect('/administrator/users');
+        }
+
+        req.flash('success', 'User name updated successfully.');
+        return res.redirect('/administrator/users');
+      });
+    } else {
+      const updateQuery = `UPDATE users SET name = ?, role = ?, status = ? WHERE id = ?`;
+      const params = [name, role, status, id];
+
+      db.query(updateQuery, params, (updateErr, result) => {
+        if (updateErr) {
+          console.error(updateErr);
+          req.flash('error', 'Failed to update user data.');
+          return res.redirect('/administrator/users');
+        }
+
+        req.flash('success', 'User updated successfully.');
+        return res.redirect('/administrator/users');
+      });
+    }
   });
 };
 

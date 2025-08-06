@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
 
   const userRole = req.session.user.role;
 
-  if (userRole !== 'admin') {
+  if (userRole !== 'admin' && userRole !== 'superadmin') {
     return res.status(403).render('error', { 
       title: '403 Access Denied',
 	  message: 'You do not have access to this page!' 

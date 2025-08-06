@@ -7,7 +7,7 @@
 	</a>
 </div>
 <nav class="p-4 flex flex-col gap-1">
-	<% if (user && user.role === 'admin') { %>
+	<% if (user && (user.role === 'admin' || user.role === 'superadmin')) { %>
 	  <a href="/administrator" class="flex items-center justify-center gap-2 w-full mb-6 rounded-md font-semibold p-2 bg-sky-500 dark:bg-sky-600 hover:bg-sky-600 dark:hover:bg-sky-500 text-white text-center hover:duration-300 transition-all">
 		Admin Area
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

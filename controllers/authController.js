@@ -104,7 +104,7 @@ exports.loginUser = async (req, res) => {
       status: user.status,
     };
 
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'superadmin') {
       return res.redirect('/administrator');
     } else if (user.role === 'user') {
       return res.redirect('/dashboard');
