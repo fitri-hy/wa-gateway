@@ -67,53 +67,61 @@ exports.users = async (req, res) => {
   const limit = 25;
   const offset = (page - 1) * limit;
 
+  const countQuery = `
+    SELECT COUNT(*) AS total 
+    FROM users 
+    WHERE name LIKE ? OR email LIKE ?
+  `;
+  const countParams = [`%${search}%`, `%${search}%`];
+
+  const dataQuery = `
+    SELECT 
+      users.id, 
+      users.name, 
+      users.email, 
+      users.role, 
+      users.status,
+      users.package_start,
+      users.package_end,
+      packages.id AS package_id,
+      packages.name AS package_name,
+      packages.description AS package_description,
+      packages.duration_days
+    FROM users
+    LEFT JOIN packages ON users.package_id = packages.id
+    WHERE users.name LIKE ? OR users.email LIKE ?
+    ORDER BY users.id DESC
+    LIMIT ? OFFSET ?
+  `;
+  const dataParams = [`%${search}%`, `%${search}%`, limit, offset];
+
+  const packagesQuery = 'SELECT id, name, duration_days FROM packages';
+
   try {
-    const countQuery = `
-      SELECT COUNT(*) AS total 
-      FROM users 
-      WHERE name LIKE ? OR email LIKE ?
-    `;
-    const countParams = [`%${search}%`, `%${search}%`];
-
-    db.query(countQuery, countParams, (err, countResult) => {
-      if (err) {
-        console.error('Error counting users:', err);
-        return res.status(500).render('error', {
-		  title: '500 Internal Server Error',
-		  message: 'Server Error',
-		});
-      }
-
-      const totalUsers = countResult[0].total;
-      const totalPages = Math.ceil(totalUsers / limit);
-
-      const dataQuery = `
-        SELECT id, name, email, role, status 
-        FROM users 
-        WHERE name LIKE ? OR email LIKE ?
-        ORDER BY id DESC
-        LIMIT ? OFFSET ?
-      `;
-      const dataParams = [`%${search}%`, `%${search}%`, limit, offset];
-
-      db.query(dataQuery, dataParams, (err, users) => {
-        if (err) {
-          console.error('Error retrieving users:', err);
-          return res.status(500).render('error', {
-		    title: '500 Internal Server Error',
-		    message: 'Server Error',
-		  });
-        }
-
-        res.render('administrator/users', {
-          user_id: req.session.user.id,
-          users,
-          search,
-          currentPage: page,
-          totalPages
+    const query = (sql, params) =>
+      new Promise((resolve, reject) => {
+        db.query(sql, params, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
         });
       });
+
+    const countResult = await query(countQuery, countParams);
+    const totalUsers = countResult[0].total;
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    const users = await query(dataQuery, dataParams);
+    const packages = await query(packagesQuery);
+
+    res.render('administrator/users', {
+      user_id: req.session.user.id,
+      users,
+      search,
+      currentPage: page,
+      totalPages,
+      packages
     });
+
   } catch (error) {
     console.error('Unexpected error in users controller:', error);
     res.status(500).render('error', {
@@ -123,13 +131,14 @@ exports.users = async (req, res) => {
   }
 };
 
-exports.usersUpdate = (req, res) => {
-  const { id, name, role, status } = req.body;
+exports.usersUpdate = async (req, res) => {
+  const { id, name, role, status, package_id } = req.body;
+
   if (!req.session?.user) {
     return res.redirect('/login');
   }
 
-  if (!name || !role || !status) {
+  if (!name || !role || !status || !package_id) {
     req.flash('error', 'All fields are required!');
     return res.redirect('/administrator/users');
   }
@@ -140,51 +149,80 @@ exports.usersUpdate = (req, res) => {
     return res.redirect('/administrator/users');
   }
 
-  const getUserQuery = `SELECT role, status FROM users WHERE id = ?`;
-  db.query(getUserQuery, [id], (err, results) => {
-    if (err || results.length === 0) {
-      console.error(err);
+  try {
+    const [userRows] = await db.promise().query(
+      `SELECT role, status FROM users WHERE id = ?`,
+      [id]
+    );
+
+    if (userRows.length === 0) {
       req.flash('error', 'User not found.');
       return res.redirect('/administrator/users');
     }
 
-    const existingRole = results[0].role;
-    const existingStatus = results[0].status;
+    const existingUser = userRows[0];
 
-    if (existingRole === 'superadmin') {
-      if (role !== existingRole || status !== existingStatus) {
-        req.flash('error', 'Role and status of superadmin cannot be changed.');
-        return res.redirect('/administrator/users');
-      }
-      const updateQuery = `UPDATE users SET name = ? WHERE id = ?`;
-      const params = [name, id];
+    if (existingUser.role === 'superadmin') {
+      if (role !== existingUser.role || status !== existingUser.status) {
+		req.flash('error', 'Role and status of superadmin cannot be changed.');
+		return res.redirect('/administrator/users');
+	  }
 
-      db.query(updateQuery, params, (updateErr, result) => {
-        if (updateErr) {
-          console.error(updateErr);
-          req.flash('error', 'Failed to update user data.');
-          return res.redirect('/administrator/users');
-        }
+	  if (parseInt(package_id) !== existingUser.package_id) {
+		req.flash('error', 'Package of superadmin cannot be changed.');
+		return res.redirect('/administrator/users');
+	  }
 
-        req.flash('success', 'User name updated successfully.');
-        return res.redirect('/administrator/users');
-      });
-    } else {
-      const updateQuery = `UPDATE users SET name = ?, role = ?, status = ? WHERE id = ?`;
-      const params = [name, role, status, id];
+	  await db.promise().query(
+		`UPDATE users SET name = ? WHERE id = ?`,
+		[name, id]
+	  );
 
-      db.query(updateQuery, params, (updateErr, result) => {
-        if (updateErr) {
-          console.error(updateErr);
-          req.flash('error', 'Failed to update user data.');
-          return res.redirect('/administrator/users');
-        }
-
-        req.flash('success', 'User updated successfully.');
-        return res.redirect('/administrator/users');
-      });
+	  req.flash('success', 'Superadmin updated successfully.');
+	  return res.redirect('/administrator/users');
     }
-  });
+
+    const [packageRows] = await db.promise().query(
+      `SELECT duration_days FROM packages WHERE id = ?`,
+      [package_id]
+    );
+
+    if (packageRows.length === 0) {
+      req.flash('error', 'Selected package not found.');
+      return res.redirect('/administrator/users');
+    }
+
+    const duration = packageRows[0].duration_days;
+    const now = new Date();
+
+    const package_start = formatDateToMySQL(now);
+    const package_end = duration === -1 ? null : formatDateToMySQL(new Date(now.getTime() + (duration - 1) * 86400000));
+
+    await db.promise().query(
+      `UPDATE users 
+       SET name = ?, role = ?, status = ?, package_id = ?, package_start = ?, package_end = ?
+       WHERE id = ?`,
+      [name, role, status, package_id, package_start, package_end, id]
+    );
+
+    req.flash('success', 'User updated successfully.');
+    res.redirect('/administrator/users');
+
+  } catch (error) {
+    console.error('Error updating user:', error);
+    req.flash('error', 'Server error while updating user.');
+    res.redirect('/administrator/users');
+  }
+
+  function formatDateToMySQL(date) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mi = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+  }
 };
 
 exports.usersDelete = (req, res) => {

@@ -3,36 +3,279 @@
 <head>
   <%- include('partials/head', { title: 'Whatsapp Gateway | FhytsBot' }) %>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-white to-sky-50/60 dark:from-neutral-900 dark:to-slate-900 text-gray-800 dark:text-gray-100">
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-white to-sky-50/60 dark:from-neutral-900 dark:to-slate-900 text-gray-800 dark:text-gray-100">
 	<div class="-z-10 fixed top-0 h-[100vh] inset-0 bg-[linear-gradient(to_right,#94a3b82e_1px,transparent_1px),linear-gradient(to_bottom,#94a3b82e_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#4755692e_1px,transparent_1px),linear-gradient(to_bottom,#4755692e_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
 	<div class="absolute -z-10 top-1/4 left-1/4 w-32 h-32 rounded-full bg-purple-500/20 blur-xl floating"></div>
 	<div class="absolute -z-10 top-1/3 right-1/4 w-40 h-40 rounded-full bg-blue-500/20 blur-xl floating-2"></div>
 	<div class="absolute -z-10 bottom-1/4 right-1/3 w-28 h-28 rounded-full bg-pink-500/20 blur-xl floating-3"></div>
-	
-	<section class="h-full w-full">
-		<div class="relative p-4">
-			<div>
-				<img src="/assets/images/gateway.png" alt="whastapp-gateway" class="h-full w-auto mx-auto" />
+	<%- include('components/header') %>
+	<section class="container mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-20 p-4 md:p-6 mt-12">
+		<div class="flex md:hidden">
+			<img src="/assets/images/gateway.png" alt="fhytsbot" class="drop-shadow-xl m-auto" />
+		</div>
+		<div class="max-w-2xl flex flex-col gap-4">
+			<div class="flex justify-center md:justify-start">
+				<span class="bg-sky-50 dark:bg-slate-800 text-sky-600 px-3 py-1.5 rounded-full border border-sky-200 dark:border-slate-600 dark:text-sky-500 text-sm">
+					#1 Unofficial Whatsapp Gateway
+				</span>
 			</div>
-			<div class="-mt-16 -mt-36 w-full max-w-3xl w-auto mx-auto bg-white/70 backdrop-blur-sm shadow-lg px-9 py-12 rounded-xl">
-				<h1 class="text-5xl md:text-6xl font-bold text-black glow-text text-center">
-				  <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">FhytsBot</span>
-				</h1>
-				<h2 class="text-lg md:text-2xl font-semibold text-center  mt-2 md:mt-4">
-					WhatsApp Gateway for Business Automation
-				</h2>
-				<p class="text-sm md:text-lg text-center mt-2 md:mt-4">
-					Build 24/7 customer communication and send notifications, auto-replies, and mass messages in just a few clicks without any hassle.
-				</p>
-				<div class="flex items-center justify-center gap-4 mt-6">
-					<a href="/login" class="bg-gradient-to-r text-lg from-sky-500 dark:from-sky-600 to-indigo-500 dark:to-indigo-600 flex items-center gap-2 rounded-full px-4 py-3 text-white font-semibold hover:shadow-lg hover:scale-105 hover:duration-all transition-all">
-						Create Now
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6m0 0H9m9 0v9"/></svg>
-					</a>
+			<h1 class="text-black dark:text-white leading-tight tracking-tight text-4xl xl:text-5xl font-extrabold text-center md:text-left">
+				<span class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
+					WhatsApp
+				</span>Gateway for Business
+				<span class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
+					Automation
+				</span>
+			</h1>
+			<p class="text-normal md:text-lg text-center md:text-left">
+				Build 24/7 customer communication and send notifications, auto-replies, and mass messages in just a few clicks without any hassle.
+			</p>
+			<ul class="text-normal font-semibold grid grid-cols-2 gap-2 max-w-sm px-4 mx-auto md:mx-0">
+				<li class="flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072m5.025.085c.3.285.311.76.025 1.06l-8.571 9a.75.75 0 0 1-1.14-.063l-.429-.563a.75.75 0 0 1 1.076-1.032l7.978-8.377a.75.75 0 0 1 1.06-.026" clip-rule="evenodd"/></svg>
+					EASY TO USE
+				</li>
+				<li class="flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072m5.025.085c.3.285.311.76.025 1.06l-8.571 9a.75.75 0 0 1-1.14-.063l-.429-.563a.75.75 0 0 1 1.076-1.032l7.978-8.377a.75.75 0 0 1 1.06-.026" clip-rule="evenodd"/></svg>
+					STABLE & FAST
+				</li>
+				<li class="flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072m5.025.085c.3.285.311.76.025 1.06l-8.571 9a.75.75 0 0 1-1.14-.063l-.429-.563a.75.75 0 0 1 1.076-1.032l7.978-8.377a.75.75 0 0 1 1.06-.026" clip-rule="evenodd"/></svg>
+					NO LIMITS
+				</li>
+				<li class="flex items-center gap-2">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.493 6.935a.75.75 0 0 1 .072 1.058l-7.857 9a.75.75 0 0 1-1.13 0l-3.143-3.6a.75.75 0 0 1 1.13-.986l2.578 2.953l7.292-8.353a.75.75 0 0 1 1.058-.072m5.025.085c.3.285.311.76.025 1.06l-8.571 9a.75.75 0 0 1-1.14-.063l-.429-.563a.75.75 0 0 1 1.076-1.032l7.978-8.377a.75.75 0 0 1 1.06-.026" clip-rule="evenodd"/></svg>
+					PLUGIN AD-ONS
+				</li>
+			</ul>
+			<div class="mt-4 flex items-center justify-center md:justify-start gap-6">
+				<a href="/register" class="flex items-center gap-2 p-4 rounded-lg text-white font-semibold text-xl bg-gradient-to-r from-emerald-400 to-green-500 shadow-md hover:scale-105 hover:duration-300 hover:transition-all hover:shadow-lg">
+					Try Now
+					<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M9 6.75a.75.75 0 0 1 0-1.5h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V7.81L6.53 18.53a.75.75 0 0 1-1.06-1.06L16.19 6.75z" clip-rule="evenodd"/></svg>
+				</a>
+				<a href="#" class="text-sky-500 hover:text-sky-600 flex items-center gap-2 font-semibold text-xl hover:scale-105 hover:duration-300 hover:transition-all">
+					Explore
+					<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M9 6.75a.75.75 0 0 1 0-1.5h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-1.5 0V7.81L6.53 18.53a.75.75 0 0 1-1.06-1.06L16.19 6.75z" clip-rule="evenodd"/></svg>
+				</a>
+			</div>
+		</div>
+		<div class="hidden md:flex">
+			<img src="/assets/images/gateway.png" alt="fhytsbot" class="drop-shadow-xl m-auto" />
+		</div>
+	</section>
+	
+	<section id="feature" class="container mx-auto p-4 md:p-6 mt-12">
+		<h2 class="text-black dark:text-white leading-tight tracking-tight text-3xl xl:text-4xl font-extrabold text-center">
+			<span class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
+			Features
+			</span>Available
+		</h2>
+		<p class="text-center max-w-sm mx-auto mt-2">
+			Lorem Ipsum is simply dummy text of the printing and typesetting.
+		</p>
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-9">
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/send-message.png" alt="send-message" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Send Messages
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
+				</div>
+			</div>
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/broadcast.png" alt="broadcast" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Broadcasts
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
+				</div>
+			</div>
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/auto-reply.png" alt="auto-reply" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Auto Reply
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
+				</div>
+			</div>
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/multi-account.png" alt="multi-account" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Multi Account
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
+				</div>
+			</div>
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/plugin-ad-ons.png" alt="plugin-ad-ons" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Plugin Ad-Ons
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
+				</div>
+			</div>
+			<div class="flex gap-4 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+				<img src="/assets/images/icon/rest-api.png" alt="rest-api" class="flex-none h-20 w-20 onject-cover" />
+				<div class="w-full">
+					<h3 class="text-xl font-bold">
+						Rest API
+					</h3>
+					<p>
+						Lorem Ipsum is simply dummy text of the printing and typesetting.
+					</p>
 				</div>
 			</div>
 		</div>
 	</section>
+	
+	<section id="pricing" class="container mx-auto p-4 md:p-6 mt-12">
+		<h2 class="text-black dark:text-white leading-tight tracking-tight text-3xl xl:text-4xl font-extrabold text-center">
+			<span class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
+			Pricing
+			</span>Options
+		</h2>
+		<p class="text-center max-w-sm mx-auto mt-2">
+			Lorem Ipsum is simply dummy text of the printing and typesetting.
+		</p>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-9">
+			<% if (packagesList && packagesList.length > 0) { %>
+				<% packagesList.forEach(pkg => { %>
+					<div class="hover:scale-105 hover:shadow-xl hover:duration-300 hover:transition-all flex flex-col gap-2 bg-white dark:bg-slate-800 p-4 rounded-lg shadow-md">
+						<h3 class="text-xl font-bold">
+							<%= pkg.name %>
+						</h3>
+						<h4 class="text-4xl font-extrabold">
+							<% 
+							  let priceNum = Number(pkg.price);
+							  let displayPrice = 'Free';
+							  if (priceNum > 0) {
+								displayPrice = Math.floor(priceNum / 1000) + 'k';
+							  }
+							%>
+							<span class="tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-sky-500 to-blue-500">
+								<%= displayPrice %>
+							</span>
+							<span class="text-sm font-semibold">
+								<% if (pkg.duration_days === -1) { %>
+									/ Lifetime
+								<% } else { %>
+									/ <%= pkg.duration_days %> days
+								<% } %>
+							</span>
+						</h4>
+						<p><%= pkg.description %></p>
+						<ul class="mt-2 px-2">
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Account Whastapp
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Send Messages
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Broadcasts
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Auto Reply
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Contacts
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								File Manager
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Plugin Ad-Ons
+							</li>
+							<li class="flex items-center gap-2">
+								<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M7 7.75a4.25 4.25 0 0 0 0 8.5c.597 0 1.045-.107 1.407-.284c.362-.176.679-.442.986-.816c.54-.66.983-1.558 1.567-2.741q.175-.355.37-.744l.34-.69c.581-1.181 1.117-2.27 1.777-3.075c.41-.501.89-.923 1.49-1.215S16.216 6.25 17 6.25a5.75 5.75 0 1 1-3.45 10.35a.75.75 0 0 1 .9-1.2A4.25 4.25 0 1 0 17 7.75c-.597 0-1.045.107-1.407.284c-.362.176-.679.442-.986.816c-.54.66-.983 1.558-1.567 2.741q-.175.355-.37.744l-.34.69c-.581 1.181-1.117 2.27-1.777 3.076c-.41.5-.89.922-1.49 1.214s-1.28.435-2.063.435A5.75 5.75 0 1 1 10.451 7.4a.75.75 0 1 1-.901 1.2A4.23 4.23 0 0 0 7 7.75" clip-rule="evenodd"/></svg>
+								Rest-API Access
+							</li>
+						</ul>
+						<div class="flex justify-center items-center mt-2">
+						  <% if (pkg.price == 0) { %>
+							<a href="/register" class="buy-now-btn bg-gradient-to-r text-lg from-green-500 dark:from-green-600 to-emerald-500 dark:to-emerald-600 flex items-center gap-2 rounded-full px-4 py-2 text-white font-semibold hover:shadow-lg hover:scale-105 hover:duration-all transition-all">
+							  Try Now
+							</a>
+						  <% } else { %>
+							<% const waMessage = encodeURIComponent(`Hello, I am interested in the Package: *${pkg.name}* Price: *Rp${Number(pkg.price).toLocaleString('id-ID')}*`); %>
+							<a href="https://wa.me/6281525977595?text=<%= waMessage %>" target="_blank" class="buy-now-btn bg-gradient-to-r text-lg from-sky-500 dark:from-sky-600 to-indigo-500 dark:to-indigo-600 flex items-center gap-2 rounded-full px-4 py-2 text-white font-semibold hover:shadow-lg hover:scale-105 hover:duration-all transition-all">
+							  Buy Now
+							</a>
+						  <% } %>
+						</div>
+					</div>
+				<% }) %>
+			<% } else { %>
+				<p class="text-center py-4">No package.</p>
+			<% } %>
+		</div>
+	</section>
+	
+	<section id="contact" class="container mx-auto p-4 md:p-6 mt-12">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-20 mt-9">
+			<div>
+				<img src="/assets/images/contact.png" alt="contact" class="w-full drop-shadow-xl m-auto" />
+			</div>
+			<form action="mailto:cs@fhytsbot.com" class="flex flex-col gap-2 bg-white dark:bg-slate-800 p-4 md:p-6 rounded-lg shadow-md">
+				<h2 class="text-black dark:text-white leading-tight tracking-tight text-3xl xl:text-4xl font-extrabold">
+					<span class="bg-gradient-to-r from-indigo-500 via-sky-500 to-emerald-500 bg-clip-text text-transparent">
+					Contact
+					</span>US
+				</h2>
+				<p class="max-w-sm">
+					Lorem Ipsum is simply dummy text of the printing and typesetting.
+				</p>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+					<div class="flex flex-col gap-1">
+						<label>
+							Full Name
+						</label>
+						<input type="text" maxlength="25" pattern="^[a-zA-Z\s]+$" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Jhon Doe" required="">
+					</div>
+					<div class="flex flex-col gap-1">
+						<label>
+							Email
+						</label>
+						<input type="email" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="your-mail@gmail.com" required="">
+					</div>
+				</div>
+				<div class="flex flex-col gap-1 mt-2">
+					<label>
+						Email
+					</label>
+					<textarea pattern="^[a-zA-Z\s]+$" rows="4" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Enter your question" required=""></textarea>
+				</div>
+				<div class="flex mt-4">
+					<button type="submit" class="bg-gradient-to-r text-lg from-sky-500 dark:from-sky-600 to-indigo-500 dark:to-indigo-600 flex items-center gap-2 rounded-full px-4 py-2 text-white font-semibold hover:shadow-lg hover:scale-105 hover:duration-all transition-all">
+					  Submit
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+	<%- include('components/footer') %>
 	<script src="/assets/js/app.js"></script>
 </body>
 </html>

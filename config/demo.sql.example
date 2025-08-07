@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2025 at 07:36 AM
+-- Generation Time: Aug 07, 2025 at 08:48 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -207,9 +207,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`, `package_id`, `package_start`, `package_end`) VALUES
-(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 3, NULL, NULL),
-(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 3, NULL, NULL),
-(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'suspended', 2, '2025-08-01 08:15:23', '2025-08-30 08:15:29');
+(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 3, '2025-08-07 13:41:54', NULL),
+(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 3, '2025-08-07 13:41:52', NULL),
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 1, '2025-08-07 13:42:24', '2025-08-09 13:42:24');
 
 --
 -- Indexes for dumped tables
