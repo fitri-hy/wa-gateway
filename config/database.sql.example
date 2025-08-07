@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 06, 2025 at 10:56 AM
+-- Generation Time: Aug 07, 2025 at 07:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -105,6 +105,30 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `packages`
+--
+
+CREATE TABLE `packages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `duration_days` int(11) NOT NULL DEFAULT 3,
+  `price` decimal(10,2) NOT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `packages`
+--
+
+INSERT INTO `packages` (`id`, `name`, `duration_days`, `price`, `description`) VALUES
+(1, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
+(2, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
+(3, 'Ultimate', -1, 500000.00, 'Access all full features for life without time limits.'),
+(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features quickly.');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `plugins`
 --
 
@@ -125,11 +149,11 @@ INSERT INTO `plugins` (`id`, `name`, `enable`) VALUES
 (4, '_translate.js', ''),
 (5, '_bmi.js', ''),
 (6, '_bmkg.js', ''),
+(7, '_facebookdl.js', ''),
 (8, '_country.js', ''),
 (9, '_github.js', ''),
 (10, '_antiviewonce.js', ''),
-(11, '_youtubedl.js', ''),
-(13, '_facebookdl.js', '');
+(11, '_youtubedl.js', '');
 
 -- --------------------------------------------------------
 
@@ -172,17 +196,20 @@ CREATE TABLE `users` (
   `password` varchar(255) DEFAULT NULL,
   `token` text NOT NULL,
   `role` varchar(20) NOT NULL DEFAULT 'user',
-  `status` enum('active','inactive','suspended') DEFAULT 'active'
+  `status` enum('active','inactive','suspended') DEFAULT 'active',
+  `package_id` int(11) DEFAULT NULL,
+  `package_start` datetime DEFAULT NULL,
+  `package_end` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`) VALUES
-(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active'),
-(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active'),
-(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active');
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`, `package_id`, `package_start`, `package_end`) VALUES
+(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 3, NULL, NULL),
+(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 3, NULL, NULL),
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'suspended', 2, '2025-08-01 08:15:23', '2025-08-30 08:15:29');
 
 --
 -- Indexes for dumped tables
@@ -211,6 +238,12 @@ ALTER TABLE `contacts`
 -- Indexes for table `messages`
 --
 ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `packages`
+--
+ALTER TABLE `packages`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -269,10 +302,16 @@ ALTER TABLE `messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `packages`
+--
+ALTER TABLE `packages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `plugins`
 --
 ALTER TABLE `plugins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `sessions`

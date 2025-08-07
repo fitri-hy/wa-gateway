@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 const { WebSocketServer } = require('ws');
 
 const webRouter = require('./routes/web');
+const cleanupMiddleware = require('./middleware/cleanupMiddlewares');
 const { registerWsClient, startSession } = require('./services/whatsappService');
 
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cleanupMiddleware);
+
 app.use('/', webRouter);
 
 app.use((req, res, next) => {
@@ -45,7 +48,7 @@ app.use((req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-  /*
+  
   const sessionsDir = path.join(__dirname, 'sessions');
   if (fs.existsSync(sessionsDir)) {
     const phones = fs.readdirSync(sessionsDir);
@@ -56,7 +59,7 @@ const server = app.listen(PORT, () => {
       }
     });
   }
-  */
+  
 });
 
 const wss = new WebSocketServer({ server });

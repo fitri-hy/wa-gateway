@@ -67,7 +67,7 @@ exports.loginUser = async (req, res) => {
   db.query('SELECT * FROM users WHERE email = ?', [email.toLowerCase()], async (err, results) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Server errort');
+      req.flash('error', 'Server error');
       return res.redirect('/login');
     }
 
@@ -77,17 +77,6 @@ exports.loginUser = async (req, res) => {
     }
 
     const user = results[0];
-	
-	if (user.status === 'inactive') {
-      req.flash('error', 'Your account is inactive. Please contact support.');
-      return res.redirect('/login');
-    }
-	
-	if (user.status === 'suspended') {
-      req.flash('error', 'Your account is suspended. Please contact support.');
-      return res.redirect('/login');
-    }
-	
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -103,6 +92,16 @@ exports.loginUser = async (req, res) => {
       role: user.role,
       status: user.status,
     };
+
+    if (user.status === 'inactive') {
+      req.flash('error', 'Your account is inactive. Please contact support.');
+      return res.redirect('/login');
+    }
+
+    if (user.status === 'suspended') {
+      req.flash('error', 'Your account is suspended. Please contact support.');
+      return res.redirect('/login');
+    }
 
     if (user.role === 'admin' || user.role === 'superadmin') {
       return res.redirect('/administrator');
@@ -152,27 +151,56 @@ exports.registerUser = async (req, res) => {
     const role = 'user';
     const status = 'active';
 
-    db.query(
-      'INSERT INTO users (name, email, password, token, role, status) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, email.toLowerCase(), hashedPassword, token, role, status],
-      (err) => {
-        if (err) {
-          if (err.code === 'ER_DUP_ENTRY') {
-            req.flash('error', 'Email already registered!');
-            return res.redirect('/register');
-          }
-          console.error(err);
-          req.flash('error', 'Error registering user!');
-          return res.redirect('/register');
-        }
-
-        res.redirect('/login');
-      }
+    const [packageRows] = await db.promise().query(
+      'SELECT duration_days FROM packages WHERE id = ?',
+      [1]
     );
+
+    if (packageRows.length === 0) {
+      req.flash('error', 'Default package not found!');
+      return res.redirect('/register');
+    }
+
+    const durationDays = packageRows[0].duration_days;
+    if (durationDays <= 0) {
+      req.flash('error', 'Invalid package duration!');
+      return res.redirect('/register');
+    }
+
+    const packageStart = new Date();
+    const packageEnd = new Date(packageStart);
+    packageEnd.setDate(packageEnd.getDate() + durationDays - 1);
+
+	function formatDateToMySQL(date) {
+	  const yyyy = date.getFullYear();
+	  const mm = String(date.getMonth() + 1).padStart(2, '0');
+	  const dd = String(date.getDate()).padStart(2, '0');
+	  const hh = String(date.getHours()).padStart(2, '0');
+	  const mi = String(date.getMinutes()).padStart(2, '0');
+	  const ss = String(date.getSeconds()).padStart(2, '0');
+	  return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+	}
+
+    const packageStartStr = formatDateToMySQL(packageStart);
+    const packageEndStr = formatDateToMySQL(packageEnd);
+
+    await db.promise().query(
+      `INSERT INTO users 
+       (name, email, password, token, role, status, package_id, package_start, package_end) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, email.toLowerCase(), hashedPassword, token, role, status, 1, packageStartStr, packageEndStr]
+    );
+
+    res.redirect('/login');
+
   } catch (err) {
+    if (err.code === 'ER_DUP_ENTRY') {
+      req.flash('error', 'Email already registered!');
+      return res.redirect('/register');
+    }
     console.error(err);
-	req.flash('error', 'Server error!');
-	return res.redirect('/register');
+    req.flash('error', 'Server error!');
+    return res.redirect('/register');
   }
 };
 

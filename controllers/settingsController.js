@@ -5,12 +5,15 @@ exports.index = async (req, res) => {
   const userId = req.session.user?.id;
   if (!userId) return res.redirect('/login');
 
-  db.query('SELECT id, name, email, role, status FROM users WHERE id = ?', [userId], (err, results) => {
-    if (err) {
-      console.error(err);
-      req.flash('error', 'Database error.');
-      return res.redirect('/dashboard/settings');
-    }
+  try {
+    const [results] = await db.promise().query(`
+      SELECT u.id, u.name, u.email, u.role, u.status,
+             u.package_id, u.package_start, u.package_end,
+             p.name AS package_name, p.duration_days
+      FROM users u
+      LEFT JOIN packages p ON u.package_id = p.id
+      WHERE u.id = ?
+    `, [userId]);
 
     if (results.length === 0) {
       req.flash('error', 'User not found.');
@@ -18,8 +21,73 @@ exports.index = async (req, res) => {
     }
 
     const user = results[0];
+
+    if (!user.package_id) {
+      user.expiredFormatted = 'No Active Packages';
+      user.remainingDays = null;
+      user.totalDays = null;
+      user.progressPercent = null;
+      user.usedDaysDisplay = null;
+
+    } else if (user.duration_days === -1) {
+      user.expiredFormatted = 'Unlimited';
+      user.remainingDays = null;
+      user.totalDays = null;
+      user.progressPercent = 100;
+      user.usedDaysDisplay = '∞';
+
+    } else if (!user.package_start || !user.package_end) {
+      user.expiredFormatted = 'No Active Packages';
+      user.remainingDays = null;
+      user.totalDays = null;
+      user.progressPercent = null;
+      user.usedDaysDisplay = null;
+
+    } else {
+      function toDateOnly(d) {
+        return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      }
+
+      const startDate = toDateOnly(new Date(user.package_start));
+      const endDate = toDateOnly(new Date(user.package_end));
+      const today = toDateOnly(new Date());
+
+      const totalDays = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+
+      let usedDays;
+      if (today < startDate) {
+        usedDays = 0;
+      } else if (today > endDate) {
+        usedDays = totalDays;
+      } else {
+        usedDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+      }
+
+      usedDays = Math.min(Math.max(usedDays, 0), totalDays);
+      const remainingDays = totalDays - usedDays;
+      const percent = totalDays > 0 ? Math.min(100, Math.floor((usedDays / totalDays) * 100)) : 0;
+
+      const expiredDate = new Date(user.package_end);
+      const hours = expiredDate.getHours().toString().padStart(2, '0');
+      const minutes = expiredDate.getMinutes().toString().padStart(2, '0');
+      const day = expiredDate.getDate().toString().padStart(2, '0');
+      const month = (expiredDate.getMonth() + 1).toString().padStart(2, '0');
+      const year = expiredDate.getFullYear();
+
+      user.expiredFormatted = `${hours}:${minutes} ${day}/${month}/${year}`;
+      user.totalDays = totalDays;
+      user.remainingDays = remainingDays > 0 ? remainingDays : 0;
+      user.progressPercent = percent;
+      user.usedDaysDisplay = `${usedDays.toString().padStart(2, '0')}/${totalDays.toString().padStart(2, '0')}`;
+    }
+
     res.render('dashboard/settings', { user });
-  });
+
+  } catch (err) {
+    console.error(err);
+    req.flash('error', 'Database error.');
+    return res.redirect('/dashboard/settings');
+  }
 };
 
 exports.update = async (req, res) => {
