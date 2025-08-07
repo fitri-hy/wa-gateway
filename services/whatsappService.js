@@ -70,7 +70,7 @@ async function startSession(phone) {
 
         try {
           await rimraf(sessionDir);
-          console.log(`${phone} Session folder deleted.`);
+          console.log(`${phone} Data session deleted.`);
         } catch (err) {
           console.error(`Failed to delete session folder for ${phone}:`, err);
         }
