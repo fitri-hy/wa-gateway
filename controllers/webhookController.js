@@ -1,5 +1,6 @@
 const db = require('../config/MySQL');
 const { getClientByPhone } = require('../services/whatsappService');
+const { webhookContextInfo } = require('../helpers/webhookContextInfo');
 
 function validateAndGetClient(token, session, callback) {
   if (!token || !session) {
@@ -36,7 +37,7 @@ function validateAndGetClient(token, session, callback) {
   });
 }
 
-function SendingMessage(req, res) {
+async function SendingMessage(req, res) {
   const token = req.headers.token;
   const { session, to, type, content } = req.body;
 
@@ -44,7 +45,7 @@ function SendingMessage(req, res) {
     return res.status(400).json({ message: 'Bad Request: Missing required fields.' });
   }
 
-  validateAndGetClient(token, session, (err, { client } = {}) => {
+  validateAndGetClient(token, session, async (err, { user, client } = {}) => {
     if (err) {
       return res.status(err.status).json({ message: err.message });
     }
@@ -113,6 +114,15 @@ function SendingMessage(req, res) {
 
       default:
         return res.status(400).json({ message: 'Invalid message type.' });
+    }
+
+    try {
+      const contextInfo = await webhookContextInfo(user.id);
+      if (contextInfo) {
+        messagePayload.contextInfo = contextInfo;
+      }
+    } catch (e) {
+      console.error('Error getting contextInfo:', e);
     }
 
     client.sendMessage(toJid, messagePayload)

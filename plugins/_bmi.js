@@ -1,3 +1,5 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
+
 module.exports = {
   command: 'bmi 170 65',
   title: 'Calculator BMI',
@@ -18,9 +20,12 @@ module.exports = {
       const berat = parseFloat(beratStr);
 
       if (!tinggi || !berat) {
-        await sock.sendMessage(jid, {
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
           text: 'Format salah.\nGunakan: !bmi <tinggi_cm> <berat_kg>\nContoh: !bmi 170 65'
-        }, { quoted: msg });
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
         return true;
       }
 	  
@@ -28,7 +33,14 @@ module.exports = {
       const kategori = bmi < 18.5 ? 'Kurus' : bmi < 24.9 ? 'Normal' : bmi < 29.9 ? 'Kelebihan berat badan' : 'Obesitas';
 
       const reply = `*Hasil Perhitungan BMI*\n\nTinggi: ${tinggi} cm\nBerat: ${berat} kg\nBMI: ${bmi.toFixed(2)}\nKategori: *${kategori}*`;
-      await sock.sendMessage(jid, { text: reply }, { quoted: msg });
+	  
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+        text: reply
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+		
       await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
     } catch (err) {
       console.error('Error:', err.message);

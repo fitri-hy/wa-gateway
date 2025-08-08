@@ -97,5 +97,9 @@ router.get('/administrator/broadcasts', administratorMiddleware, Administrator.b
 router.post('/administrator/broadcasts/delete/:id', administratorMiddleware, Administrator.broadcastsDelete);
 router.get('/administrator/auto-reply', administratorMiddleware, Administrator.autoreply);
 router.post('/administrator/auto-reply/delete/:id', administratorMiddleware, Administrator.autoreplyDelete);
+router.get('/administrator/ads', administratorMiddleware, Administrator.ads);
+router.post('/administrator/ads/add', administratorMiddleware, Administrator.adsAdd);
+router.post('/administrator/ads/edit/:id', administratorMiddleware, Administrator.adsEdit);
+router.post('/administrator/ads/delete/:id', administratorMiddleware, Administrator.adsDelete);
 
 module.exports = router;

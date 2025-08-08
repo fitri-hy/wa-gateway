@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const { Octokit } = require('@octokit/rest');
 const axios = require('axios');
 
@@ -17,9 +18,12 @@ module.exports = {
 
     const parts = text.split(' ');
     if (parts.length < 2) {
-      await sock.sendMessage(msg.key.remoteJid, {
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         text: 'Format salah. Gunakan: !github <username>'
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       return true;
     }
 
@@ -44,12 +48,15 @@ module.exports = {
         `📦 Repos: ${data.public_repos}\n` +
         `✉️ Email: ${data.email || '-'}\n` +
         `💬 Bio: ${data.bio || '-'}`;
-
-      await sock.sendMessage(msg.key.remoteJid, {
+	  
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         image: imgBuffer,
         caption: profileText
-      }, { quoted: msg });
-
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+	  
       await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
 
       return true;

@@ -50,20 +50,22 @@ app.use((req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-
+/*
   (async () => {
     const sessionsDir = path.join(__dirname, 'sessions');
 
     if (!fs.existsSync(sessionsDir)) {
       fs.mkdirSync(sessionsDir, { recursive: true });
-      console.log('Created sessions directory.');
+      //console.log('Created sessions directory.');
     }
 
     try {
       const [rows] = await db.promise().query(
-        'SELECT phone FROM sessions WHERE connected = 1'
+        'SELECT id, phone FROM sessions WHERE connected = 1'
       );
-      const dbPhones = rows.map(row => row.phone);
+      const dbSessions = rows; 
+
+      const dbPhones = dbSessions.map(row => row.phone);
 
       const folderPhones = fs.readdirSync(sessionsDir).filter(phone => {
         const fullPath = path.join(sessionsDir, phone);
@@ -71,42 +73,56 @@ const server = app.listen(PORT, () => {
       });
 
       const foldersToDelete = folderPhones.filter(phone => !dbPhones.includes(phone));
+
       for (const phone of foldersToDelete) {
         const fullPath = path.join(sessionsDir, phone);
         await rimraf(fullPath);
-        // console.log(`Deleted session folder for ${phone} (not in DB)`);
+        //console.log(`Deleted session folder for ${phone} (not in DB)`);
       }
 
-      const dbPhonesToUpdate = dbPhones.filter(phone => {
-        const fullPath = path.join(sessionsDir, phone);
-        if (!fs.existsSync(fullPath)) return true;
-        if (fs.readdirSync(fullPath).length === 0) return true;
-        return false;
-      });
+      const sessionsToUpdate = [];
+      const sessionsToDelete = [];
 
-      if (dbPhonesToUpdate.length > 0) {
+      for (const session of dbSessions) {
+        const fullPath = path.join(sessionsDir, session.phone);
+
+        if (!fs.existsSync(fullPath) || fs.readdirSync(fullPath).length === 0) {
+          sessionsToDelete.push(session.id);
+        } else {
+          // Folder ada dan tidak kosong, tidak perlu update
+        }
+      }
+
+      if (sessionsToDelete.length > 0) {
         await db.promise().query(
-          `UPDATE sessions SET connected = 0 WHERE phone IN (${dbPhonesToUpdate.map(() => '?').join(',')})`,
-          dbPhonesToUpdate
+          `DELETE FROM auto_replies WHERE session_id IN (${sessionsToDelete.map(() => '?').join(',')})`,
+          sessionsToDelete
         );
-        // console.log(`Updated connected=0 for sessions without folder or empty folder:`, dbPhonesToUpdate);
+
+        await db.promise().query(
+          `DELETE FROM sessions WHERE id IN (${sessionsToDelete.map(() => '?').join(',')})`,
+          sessionsToDelete
+        );
+
+        //console.log(`Deleted sessions and related auto_replies for session IDs:`, sessionsToDelete);
       }
 
-      const validPhones = dbPhones.filter(phone => {
-        const fullPath = path.join(sessionsDir, phone);
+      const validSessions = dbSessions.filter(session => {
+        const fullPath = path.join(sessionsDir, session.phone);
         return fs.existsSync(fullPath) && fs.readdirSync(fullPath).length > 0;
       });
 
-      for (const phone of validPhones) {
-        console.log(`Initializing session for ${phone}`);
-        await startSession(phone).catch(console.error);
+      for (const session of validSessions) {
+        console.log(`Initializing session for ${session.phone}`);
+        await startSession(session.phone).catch(console.error);
       }
 
-      console.log('All valid sessions initialized.');
+      //console.log('All valid sessions initialized.');
     } catch (err) {
       console.error('Failed to initialize sessions:', err);
     }
   })();
+*/
 });
 
 const wss = new WebSocketServer({ server });

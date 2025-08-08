@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 07, 2025 at 08:48 AM
+-- Generation Time: Aug 08, 2025 at 05:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,31 @@ SET time_zone = "+00:00";
 --
 -- Database: `demo`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ads`
+--
+
+CREATE TABLE `ads` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `media_type` int(11) NOT NULL DEFAULT 3,
+  `thumbnail_path` varchar(500) NOT NULL,
+  `source_url` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `ads`
+--
+
+INSERT INTO `ads` (`id`, `title`, `body`, `media_type`, `thumbnail_path`, `source_url`, `created_at`) VALUES
+(1, 'Jasa Buat Website Profesional', 'Website cepat, responsif, dan mudah dikelola.', 3, 'https://tonjoo.com/wp-content/uploads/2021/08/jasa-pembuatan-website-terbaik-1.png', 'https://fhylabs.com', '2025-08-08 00:00:00'),
+(2, 'Web App Modern & Interaktif', 'Aplikasi web dengan UX/UI kekinian.', 3, 'https://image.web.id/images/what-is-pwa.jpg', 'https://fhylabs.com', '2025-08-08 00:00:00'),
+(3, 'Solusi Web Bisnis Lengkap', 'Dari desain hingga maintenance website.', 3, 'https://bigevo.com/assets/upload/article/website-adalah.jpg', 'https://fhylabs.com', '2025-08-08 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -124,7 +149,7 @@ INSERT INTO `packages` (`id`, `name`, `duration_days`, `price`, `description`) V
 (1, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
 (2, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
 (3, 'Ultimate', -1, 500000.00, 'Access all full features for life without time limits.'),
-(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features quickly.');
+(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features.');
 
 -- --------------------------------------------------------
 
@@ -216,6 +241,12 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status
 --
 
 --
+-- Indexes for table `ads`
+--
+ALTER TABLE `ads`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `auto_replies`
 --
 ALTER TABLE `auto_replies`
@@ -276,6 +307,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `ads`
+--
+ALTER TABLE `ads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `auto_replies`

@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const fs = require('fs');
 const path = require('path');
 const youtubedl = require('youtube-dl-exec');
@@ -8,7 +9,7 @@ module.exports = {
   description: 'Download videos from Facebook and send them directly via WhatsApp quickly and easily.',
   author: 'Fitri HY',
 
-  execute: async (msg, sock, args) => {
+  execute: async (msg, sock, args, phone) => {
     const sender = msg.key.remoteJid;
     const text = msg.message?.conversation?.trim() || msg.message?.extendedTextMessage?.text?.trim();
 
@@ -18,10 +19,13 @@ module.exports = {
     const url = parts[1];
 
     if (!url || !url.startsWith('http')) {
-      await sock.sendMessage(sender, {
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         text: 'Format salah.\nGunakan: !fbdl <url Facebook>\nContoh: !fbdl https://www.facebook.com/watch/?v=xxxx',
-      }, { quoted: msg });
-      return;
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+      return true;
     }
 
     const tempDir = path.join(__dirname, '../public/uploads/.temp');
@@ -50,12 +54,16 @@ module.exports = {
         format: 'mp4',
         addHeader: ['referer:facebook.com', 'user-agent:googlebot']
       });
-
-      await sock.sendMessage(sender, {
+	  
+	  
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         video: { url: videoPath },
         mimetype: 'video/mp4',
         caption: `📥 *${metadata.title}*\n\n✅ Video berhasil diunduh.`,
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
       fs.unlink(videoPath, (err) => {
         if (err) {

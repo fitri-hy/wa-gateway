@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const fs = require('fs');
 const { join } = require('path');
 const axios = require('axios');
@@ -18,9 +19,12 @@ module.exports = {
 
     const query = text.slice(6).trim();
     if (!query) {
-      await sock.sendMessage(sender, {
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         text: 'Mohon masukkan kata kunci untuk pencarian Wikipedia.\nContoh: !wiki Indonesia'
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       return true;
     }
 
@@ -44,9 +48,20 @@ module.exports = {
       if (data.titles?.normalized) message += `📌 Judul Normalisasi: ${data.titles.normalized}`;
 
       if (data.thumbnail?.source) {
-        await sock.sendMessage(sender, { image: { url: data.thumbnail.source }, caption: message }, { quoted: msg });
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
+          image: { url: data.thumbnail.source },
+		  caption: message,
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       } else {
-        await sock.sendMessage(sender, { text: message }, { quoted: msg });
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
+          text: message,
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       }
 
       await sock.sendMessage(sender, { react: { text: '✅', key: msg.key } });

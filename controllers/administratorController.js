@@ -1,6 +1,7 @@
 const db = require('../config/Mysql');
 const fs = require('fs');
 const path = require('path');
+const util = require('util');
 
 exports.index = async (req, res) => {
   if (!req.session?.user) {
@@ -801,4 +802,219 @@ exports.autoreplyDelete = (req, res) => {
     }
     res.redirect('/administrator/auto-reply');
   });
+};
+
+// Ads
+exports.ads = async (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  const search = req.query.search || '';
+  const page = parseInt(req.query.page) || 1;
+  const limit = 25;
+  const offset = (page - 1) * limit;
+
+  const countQuery = `
+    SELECT COUNT(*) AS total 
+    FROM ads
+    WHERE title LIKE ? OR body LIKE ?
+  `;
+  const countParams = [`%${search}%`, `%${search}%`];
+
+  const dataQuery = `
+    SELECT id, title, body, media_type, thumbnail_path, source_url, created_at
+    FROM ads
+    WHERE title LIKE ? OR body LIKE ?
+    ORDER BY created_at DESC
+    LIMIT ? OFFSET ?
+  `;
+  const dataParams = [`%${search}%`, `%${search}%`, limit, offset];
+
+  try {
+    const query = (sql, params) =>
+      new Promise((resolve, reject) => {
+        db.query(sql, params, (err, result) => {
+          if (err) return reject(err);
+          resolve(result);
+        });
+      });
+
+    const countResult = await query(countQuery, countParams);
+    const totalAds = countResult[0].total;
+    const totalPages = Math.ceil(totalAds / limit);
+
+    const adsData = await query(dataQuery, dataParams);
+
+    res.render('administrator/ads', {
+      user_id: req.session.user.id,
+      search,
+      currentPage: page,
+      totalPages,
+      ads: adsData
+    });
+
+  } catch (error) {
+    console.error('Unexpected error in ads controller:', error);
+    res.status(500).render('error', {
+      title: '500 Internal Server Error',
+      message: 'Server Error',
+    });
+  }
+};
+
+exports.adsAdd = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const { title, body, media_type, thumbnail_path, source_url } = req.body;
+
+    const titleRegex = /^.{3,30}$/;
+    const bodyRegex = /^.{3,50}$/;
+    const urlRegex = /^https?:\/\/[\w\-\.]+\.[a-z]{2,}(\S*)?$/i;
+
+    if (!title || !body || !media_type || !thumbnail_path || !source_url) {
+      req.flash('error', 'All fields are required.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!titleRegex.test(title)) {
+      req.flash('error', 'Title must be 3–30 characters.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!bodyRegex.test(body)) {
+      req.flash('error', 'Body must be 3–50 characters.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!urlRegex.test(thumbnail_path)) {
+      req.flash('error', 'Thumbnail URL is invalid.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!urlRegex.test(source_url)) {
+      req.flash('error', 'Source URL is invalid.');
+      return res.redirect('/administrator/ads');
+    }
+
+    const sql = `
+      INSERT INTO ads (title, body, media_type, thumbnail_path, source_url, created_at)
+      VALUES (?, ?, ?, ?, ?, NOW())
+    `;
+    await db.execute(sql, [title, body, media_type, thumbnail_path, source_url]);
+
+    req.flash('success', 'Ads added successfully.');
+    res.redirect('/administrator/ads');
+
+  } catch (err) {
+    console.error('Error adding ad:', err);
+    req.flash('error', 'Failed to add ads.');
+    res.redirect('/administrator/ads');
+  }
+};
+
+exports.adsEdit = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const id = req.params.id;
+    const { title, body, media_type, thumbnail_path, source_url } = req.body;
+
+    if (!id) {
+      req.flash('error', 'Ads not found.');
+      return res.redirect('/administrator/ads');
+    }
+
+    const titleRegex = /^.{3,30}$/;
+    const bodyRegex = /^.{3,50}$/;
+    const urlRegex = /^https?:\/\/[\w\-\.]+\.[a-z]{2,}(\S*)?$/i;
+
+    if (!title || !body || !media_type || !thumbnail_path || !source_url) {
+      req.flash('error', 'All fields are required.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!titleRegex.test(title)) {
+      req.flash('error', 'Title must be 3–30 characters.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!bodyRegex.test(body)) {
+      req.flash('error', 'Body must be 3–50 characters.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!urlRegex.test(thumbnail_path)) {
+      req.flash('error', 'Thumbnail URL is invalid.');
+      return res.redirect('/administrator/ads');
+    }
+
+    if (!urlRegex.test(source_url)) {
+      req.flash('error', 'Source URL is invalid.');
+      return res.redirect('/administrator/ads');
+    }
+
+    const executeAsync = util.promisify(db.execute).bind(db);
+    const rows = await executeAsync('SELECT * FROM ads WHERE id = ?', [id]);
+
+    if (rows.length === 0) {
+      req.flash('error', 'Ads not found.');
+      return res.redirect('/administrator/ads');
+    }
+
+    const updateSql = `
+      UPDATE ads SET
+        title = ?,
+        body = ?,
+        media_type = ?,
+        thumbnail_path = ?,
+        source_url = ?
+      WHERE id = ?
+    `;
+
+    await executeAsync(updateSql, [title, body, media_type, thumbnail_path, source_url, id]);
+
+    req.flash('success', 'Ads updated successfully.');
+    res.redirect('/administrator/ads');
+
+  } catch (err) {
+    console.error('Error updating ad:', err);
+    req.flash('error', 'Failed to update ad.');
+    res.redirect('/administrator/ads');
+  }
+};
+
+exports.adsDelete = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const id = req.params.id;
+
+    if (!id) {
+      req.flash('error', 'Ads not found.');
+      return res.redirect('/administrator/ads');
+    }
+
+    const executeAsync = util.promisify(db.execute).bind(db);
+
+    const rows = await executeAsync('SELECT * FROM ads WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      req.flash('error', 'Ads not found.');
+      return res.redirect('/administrator/ads');
+    }
+
+    await executeAsync('DELETE FROM ads WHERE id = ?', [id]);
+
+    req.flash('success', 'Ads successfully removed.');
+    res.redirect('/administrator/ads');
+
+  } catch (err) {
+    console.error('Error deleting ad:', err);
+    req.flash('error', 'Failed to remove ads.');
+    res.redirect('/administrator/ads');
+  }
 };

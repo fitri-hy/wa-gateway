@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const { downloadMediaMessage, getContentType } = require('baileys');
 
 module.exports = {
@@ -7,7 +8,7 @@ module.exports = {
   author: 'Fitri HY',
   github: 'https://github.com/fitri-hy',
   
-  execute: async (msg, sock) => {
+  execute: async (msg, sock, args, phone) => {
     const sender = msg.key.remoteJid;
 
     const text = msg.message?.conversation
@@ -20,10 +21,13 @@ module.exports = {
     const context = msg.message?.extendedTextMessage?.contextInfo;
 
     if (!context || !context.quotedMessage) {
-      await sock.sendMessage(sender, {
-        text: '⚠️ Tidak ada pesan sekali lihat yang dibalas.',
-      }, { quoted: msg });
-      return;
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+	    text: 'Tidak ada pesan sekali lihat yang dibalas.' 
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+      return true;
     }
 
     const quotedMessage = context.quotedMessage;
@@ -33,10 +37,13 @@ module.exports = {
       Object.values(quotedMessage).some(m => m?.viewOnce);
 
     if (!isViewOnce) {
-      await sock.sendMessage(sender, {
-        text: '❌ Pesan yang dibalas bukan pesan sekali lihat.',
-      }, { quoted: msg });
-      return;
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+	    text: 'Pesan yang dibalas bukan pesan sekali lihat.' 
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+      return true;
     }
 
     let viewOnceMsg = quotedMessage.viewOnceMessage?.message || quotedMessage;
@@ -44,9 +51,12 @@ module.exports = {
     let mediaMessage = viewOnceMsg?.[viewOnceType];
 
     if (!mediaMessage) {
-      await sock.sendMessage(sender, {
-        text: '❌ Gagal mengambil media dari pesan.',
-      }, { quoted: msg });
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+	    text: 'Gagal mengambil media dari pesan.' 
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       return;
     }
 
@@ -63,21 +73,32 @@ module.exports = {
       );
 
       if (viewOnceType === 'imageMessage') {
-        await sock.sendMessage(sender, {
+		  
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
           image: buffer,
           caption: '📸 Gambar sekali lihat berhasil diungkap.',
-        }, { quoted: msg });
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
       } else if (viewOnceType === 'videoMessage') {
-        await sock.sendMessage(sender, {
+		  
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
           video: buffer,
           caption: '🎥 Video sekali lihat berhasil diungkap.',
-        }, { quoted: msg });
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
       } else {
-        await sock.sendMessage(sender, {
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
           text: '⚠️ Jenis media tidak didukung.',
-        }, { quoted: msg });
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
       }
 
       await sock.sendMessage(sender, { react: { text: '✅', key: msg.key } });

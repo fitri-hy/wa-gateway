@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const axios = require('axios');
 
 module.exports = {
@@ -32,9 +33,12 @@ module.exports = {
           `\n`;
       }).join('\n');
 	  
-      await sock.sendMessage(msg.key.remoteJid, {
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         text: `*3 Gempa Terkini BMKG:*\n\n${responseText}`
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
       await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
     } catch (err) {

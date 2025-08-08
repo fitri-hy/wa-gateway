@@ -1,4 +1,5 @@
 const db = require('../config/MySQL');
+const { createContextInfoIfFreePackage } = require('../helpers/contextInfo');
 const { getAllSessionsStatus } = require('../services/whatsappService');
 const { getContactsByUser } = require('../services/contactService');
 const { getClientByPhone } = require('../services/whatsappService');
@@ -113,7 +114,16 @@ exports.text = async (req, res) => {
     }
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
-    await client.sendMessage(to, { text: content });
+   
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
+      text: content,
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 	
 	const sql = `INSERT INTO messages (user_id, session, phone, type, content) VALUES (?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'text', content], (err) => {
@@ -162,10 +172,17 @@ exports.image = async (req, res) => {
     }
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
-    await client.sendMessage(to, {
+	
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       image: { url: imageUrl },
       caption: caption || '',
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 	
 	const sql = `INSERT INTO messages (user_id, session, phone, type, content, media_url) VALUES (?, ?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'image', caption || '', imageUrl], (err) => {
@@ -214,11 +231,17 @@ exports.video = async (req, res) => {
     }
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
-
-    await client.sendMessage(to, {
+	
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       video: { url: videoUrl },
       caption: caption || '',
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 
 	const sql = `INSERT INTO messages (user_id, session, phone, type, content, media_url) VALUES (?, ?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'video', caption || '', videoUrl], (err) => {
@@ -268,10 +291,16 @@ exports.audio = async (req, res) => {
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
 
-    await client.sendMessage(to, {
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 	
 	const sql = `INSERT INTO messages (user_id, session, phone, type, media_url, mime_type) VALUES (?, ?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'audio', audioUrl, 'audio/mpeg'], (err) => {
@@ -338,12 +367,18 @@ exports.document = async (req, res) => {
 
     const mimetype = mimeTypes[ext] || 'application/octet-stream';
 
-    await client.sendMessage(to, {
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       document: { url: documentUrl },
       mimetype,
       fileName: fileName || `file.${ext}`,
       caption: caption || '',
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 
 	const sql = `INSERT INTO messages (user_id, session, phone, type, content, media_url, file_name, mime_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'document', caption || '', documentUrl, fileName, mimetype], (err) => {
@@ -393,13 +428,19 @@ exports.location = async (req, res) => {
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
 
-    await client.sendMessage(to, {
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       location: {
         degreesLatitude: parseFloat(latitude),
         degreesLongitude: parseFloat(longitude),
         name,
       }
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 
 	const sql = `INSERT INTO messages (user_id, session, phone, type, latitude, longitude, location_name) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'location', parseFloat(latitude), parseFloat(longitude), name], (err) => {
@@ -449,9 +490,15 @@ exports.sticker = async (req, res) => {
 
     const to = phone.includes('@') ? phone : `${phone}@s.whatsapp.net`;
 
-    await client.sendMessage(to, {
+    // Contex Info
+    const contextInfo = await createContextInfoIfFreePackage(userId);
+    const messagePayload = {
       sticker: { url: stickerUrl }
-    });
+    };
+    if (contextInfo) {
+      messagePayload.contextInfo = contextInfo;
+    }
+    await client.sendMessage(to, messagePayload);
 	
 	const sql = `INSERT INTO messages (user_id, session, phone, type, media_url) VALUES (?, ?, ?, ?, ?)`;
 	db.query(sql, [userId, session, phone, 'sticker', stickerUrl], (err) => {

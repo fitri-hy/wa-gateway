@@ -1,4 +1,5 @@
 const db = require('../config/MySQL');
+const { createContextInfoIfFreePackage } = require('../helpers/contextInfo');
 const { getAllSessionsStatus } = require('../services/whatsappService');
 const { getContactsByUser } = require('../services/contactService');
 const { getClientByPhone } = require('../services/whatsappService');
@@ -125,7 +126,17 @@ exports.text = async (req, res) => {
     const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, { text: content });
+   
+	  // Contex Info
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
+	    text: content,
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 	
@@ -189,10 +200,18 @@ exports.image = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+   
+	  // Contex Info
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         image: { url: imageUrl },
         caption: caption || '',
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 	
@@ -256,10 +275,17 @@ exports.video = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+	  
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         video: { url: videoUrl },
         caption: caption || '',
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 
@@ -323,10 +349,17 @@ exports.audio = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+	  
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         audio: { url: audioUrl },
         mimetype: 'audio/mpeg',
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 	
@@ -408,12 +441,19 @@ exports.document = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+	  
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         document: { url: documentUrl },
         mimetype,
         fileName: fileName || `file.${ext}`,
         caption: caption || '',
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 
@@ -477,13 +517,20 @@ exports.location = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+	  
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         location: {
           degreesLatitude: parseFloat(latitude),
           degreesLongitude: parseFloat(longitude),
           name,
         }
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 
@@ -547,9 +594,16 @@ exports.sticker = async (req, res) => {
 	const phoneNumbers = phone.split(',');
 	for (const number of phoneNumbers) {
 	  const to = `${number}@s.whatsapp.net`;
-	  await client.sendMessage(to, {
+	  
+	  const contextInfo = await createContextInfoIfFreePackage(userId);
+	  const messagePayload = {
         sticker: { url: stickerUrl }
-      });
+	  };
+	  if (contextInfo) {
+	    messagePayload.contextInfo = contextInfo;
+	  }
+      await client.sendMessage(to, messagePayload);
+	  
 	  await new Promise(resolve => setTimeout(resolve, 2000));
 	}
 	

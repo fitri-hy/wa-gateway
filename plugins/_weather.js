@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const fs = require('fs');
 const { join } = require('path');
 const axios = require('axios');
@@ -15,9 +16,12 @@ module.exports = {
       const cityName = text.slice(9).trim();
 
       if (!cityName) {
-        await sock.sendMessage(msg.key.remoteJid, {
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
           text: 'Mohon masukkan nama kota.\nContoh: !weather Jakarta'
-        }, { quoted: msg });
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
         return true;
       }
 
@@ -45,15 +49,17 @@ module.exports = {
 
         const weatherText = `*Cuaca di ${cityName}:*\n\n🌡️ *Suhu:* ${weatherJson.temperature}\n🌤️ *Kondisi:* ${weatherJson.condition}\n🌬️ *Angin:* ${weatherJson.wind}\n💧 *Kelembapan:* ${weatherJson.humidity}`.trim();
 
-        await sock.sendMessage(msg.key.remoteJid, { text: weatherText }, { quoted: msg });
+        const contextInfo = await createContextInfoPlugin(phone);
+        const messagePayload = { 
+          text: weatherText
+	    };
+        if (contextInfo) messagePayload.contextInfo = contextInfo;
+        await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
         await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
 
       } catch (err) {
         console.error('Error:', err);
-        await sock.sendMessage(msg.key.remoteJid, {
-          text: `Maaf, gagal mendapatkan informasi cuaca untuk "${cityName}".`
-        }, { quoted: msg });
         await sock.sendMessage(msg.key.remoteJid, { react: { text: '❌', key: msg.key } });
       }
 

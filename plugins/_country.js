@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const axios = require('axios');
 
 module.exports = {
@@ -14,9 +15,14 @@ module.exports = {
 
     const parts = text.split(' ').filter(Boolean);
     if (parts.length < 2) {
-      await sock.sendMessage(msg.key.remoteJid, {
+		
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         text: 'Format salah.\nGunakan: !country <nama_negara>\nContoh: !country japan'
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+	  
       return true;
     }
 
@@ -68,8 +74,14 @@ module.exports = {
 
 🗺️ *Map:* ${maps.googleMaps}
       `.trim();
-
-      await sock.sendMessage(msg.key.remoteJid, { text: responseText }, { quoted: msg });
+	  
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+        text: responseText
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+	  
       await sock.sendMessage(msg.key.remoteJid, { react: { text: '✅', key: msg.key } });
     } catch (err) {
       console.error('Error:', err.message);

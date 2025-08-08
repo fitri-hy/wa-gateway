@@ -1,3 +1,4 @@
+const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
 const fs = require('fs');
 const path = require('path');
 const youtubedl = require('youtube-dl-exec');
@@ -8,7 +9,7 @@ module.exports = {
   description: 'Download videos from YouTube and send them directly to WhatsApp contacts without hassle.',
   author: 'Fitri HY',
 
-  execute: async (msg, sock) => {
+  execute: async (msg, sock, args, phone) => {
     const sender = msg.key.remoteJid;
     const text = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
 
@@ -16,7 +17,13 @@ module.exports = {
 
     const url = text.split(' ')[1];
     if (!url || !url.startsWith('http')) {
-      return await sock.sendMessage(sender, { text: 'Format salah.\nGunakan: !ytdl <url YouTube>\nContoh: !ytdl https://youtube.com/watch?v=xxxx' }, { quoted: msg });
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
+        text: 'Format salah.\nGunakan: !ytdl <url YouTube>\nContoh: !ytdl https://youtube.com/watch?v=xxxx',
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+      return true;
     }
 
     const tempDir = path.join(__dirname, '../public/uploads/.temp');
@@ -40,11 +47,14 @@ module.exports = {
 
       await youtubedl(url, { output: videoPath, quiet: true, format: 'mp4', noWarnings: true });
 
-      await sock.sendMessage(sender, {
+      const contextInfo = await createContextInfoPlugin(phone);
+      const messagePayload = { 
         video: { url: videoPath },
         mimetype: 'video/mp4',
         caption: `📥 *${meta.title}*\n\n✅ Video berhasil diunduh.`,
-      }, { quoted: msg });
+	  };
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
 
       fs.unlink(videoPath, err => err && console.error('Gagal hapus file:', err));
 
