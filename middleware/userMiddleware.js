@@ -58,7 +58,7 @@ module.exports = async (req, res, next) => {
 	  return res.status(403).render('pricing', {
         title: 'Incomplete Package Information',
         message: 'We noticed some missing information in your subscription. Kindly reach out to support to resolve this.',
-        packages,
+        packages: filteredPackages,
 	  });
     }
 
@@ -69,7 +69,7 @@ module.exports = async (req, res, next) => {
 	  return res.status(403).render('pricing', {
         title: 'Subscription Expired',
         message: 'Your subscription package has expired. Kindly renew it to continue enjoying our services.',
-        packages,
+        packages: filteredPackages,
 	  });
     }
 
