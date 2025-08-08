@@ -105,5 +105,10 @@ router.get('/administrator/ads', administratorMiddleware, Administrator.ads);
 router.post('/administrator/ads/add', administratorMiddleware, Administrator.adsAdd);
 router.post('/administrator/ads/edit/:id', administratorMiddleware, Administrator.adsEdit);
 router.post('/administrator/ads/delete/:id', administratorMiddleware, Administrator.adsDelete);
+router.get('/administrator/plugins', administratorMiddleware, Administrator.plugins);
+router.get('/administrator/plugins/views', administratorMiddleware, Administrator.pluginPreviewForm);
+router.post('/administrator/plugins/add', administratorMiddleware, Administrator.addPlugin);
+router.post('/administrator/plugins/edit', administratorMiddleware, Administrator.editPlugin);
+router.post('/administrator/plugins/delete/:name', administratorMiddleware, Administrator.deletePlugin);
 
 module.exports = router;

@@ -29,11 +29,43 @@ if (sidebar && closeBtn) {
 }
 
 // Nav Link
-const links = document.querySelectorAll(".nav-link");
+const links = Array.from(document.querySelectorAll(".nav-link"));
 const currentPath = window.location.pathname;
 
+function normalizePath(path) {
+  if (path.length > 1 && path.endsWith("/")) {
+    return path.slice(0, -1);
+  }
+  return path;
+}
+
+function isMatch(href, currentPath) {
+  href = normalizePath(href);
+  currentPath = normalizePath(currentPath);
+  return currentPath === href || currentPath.startsWith(href + "/");
+}
+
+const normalizedCurrentPath = normalizePath(currentPath);
+
+const matchedLinks = links.filter(link => {
+  const href = link.getAttribute("href");
+  return isMatch(href, normalizedCurrentPath);
+});
+
+let maxLength = -1;
+let activeHref = null;
+
+matchedLinks.forEach(link => {
+  const href = normalizePath(link.getAttribute("href"));
+  if (href.length > maxLength) {
+    maxLength = href.length;
+    activeHref = href;
+  }
+});
+
 links.forEach(link => {
-  if (link.getAttribute("href") === currentPath) {
+  const href = normalizePath(link.getAttribute("href"));
+  if (href === activeHref) {
     link.classList.add("text-sky-500", "font-semibold");
   } else {
     link.classList.remove("text-sky-500", "font-semibold");

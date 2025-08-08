@@ -1,4 +1,5 @@
 const db = require('../config/Mysql');
+const pluginManager = require('../services/pluginManager');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
@@ -1017,4 +1018,218 @@ exports.adsDelete = async (req, res) => {
     req.flash('error', 'Failed to remove ads.');
     res.redirect('/administrator/ads');
   }
+};
+
+// Plugin
+exports.plugins = async (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  try {
+    let plugins = pluginManager.getPlugins();
+
+    const search = (req.query.search || '').toLowerCase();
+    const page = parseInt(req.query.page) || 1;
+    const limit = 25;
+
+    if (search) {
+      plugins = plugins.filter(p =>
+        p.command.toLowerCase().includes(search) ||
+        p.title.toLowerCase().includes(search) ||
+        p.description.toLowerCase().includes(search)
+      );
+    }
+
+    const totalPlugins = plugins.length;
+    const totalPages = Math.ceil(totalPlugins / limit);
+    const offset = (page - 1) * limit;
+
+    const paginatedPlugins = plugins.slice(offset, offset + limit);
+
+    res.render('administrator/plugins', {
+      user_id: req.session.user.id,
+      plugins: paginatedPlugins,
+      currentPage: page,
+      totalPages,
+      search
+    });
+  } catch (error) {
+    console.error('Unexpected error in Administrator.plugins:', error);
+    res.status(500).render('error', {
+      title: '500 Internal Server Error',
+      message: 'Server Error',
+    });
+  }
+};
+
+exports.pluginPreviewForm = (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  const pluginsDir = path.join(__dirname, '../plugins');
+  const pluginName = req.query.name;
+
+  if (pluginName) {
+    const filePath = path.join(pluginsDir, pluginName);
+
+    fs.readFile(filePath, 'utf8', (err, data) => {
+      if (err) {
+        console.error('Gagal baca file plugin:', err);
+        req.flash('error', 'Plugin tidak ditemukan');
+        return res.redirect('/administrator/plugins');
+      }
+
+      res.render('administrator/plugin-form', {
+        user_id: req.session.user.id,
+        code: data,
+        title: pluginName,
+        editing: true
+      });
+    });
+  } else {
+    const defaultCode = `const { createContextInfoPlugin } = require('../helpers/pluginContextInfo');
+
+module.exports = {
+  command: 'example', // required (use !example)
+  title: 'Example Plugin',
+  description: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+  author: 'Your Name',
+  github: 'https://github.com/<username>',
+  
+  execute: async (msg, sock, args, phone) => {
+    const text = typeof msg?.message?.conversation === 'string' ? msg.message.conversation : '';
+    if (text.startsWith('!' + module.exports.command)) {
+      const contextInfo = await createContextInfoPlugin(phone);
+      
+      //=== [START] Your Plugin Functions ===
+      await sock.sendMessage(msg.key.remoteJid, { react: { 
+        text: '🤖', 
+        key: msg.key 
+      } });
+
+      const messagePayload = { 
+        text: 'Example test Ok!' 
+      };
+      //=== [END] Your Plugin Functions ===
+      
+      if (contextInfo) messagePayload.contextInfo = contextInfo;
+      await sock.sendMessage(msg.key.remoteJid, messagePayload, { quoted: msg });
+      return;
+    }
+  }
+};`;
+
+    res.render('administrator/plugin-form', {
+      user_id: req.session.user.id,
+      code: defaultCode,
+      title: '',
+      editing: false
+    });
+  }
+};
+
+exports.addPlugin = (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  const { title, code } = req.body;
+
+  if (!title || !title.trim()) {
+    req.flash('error', 'Plugin file name (title) is required!');
+    return res.redirect('/administrator/plugins/add');
+  }
+
+  let filename = title.trim();
+  if (!filename.endsWith('.js')) {
+    filename += '.js';
+  }
+
+  const pluginsDir = path.join(__dirname, '../plugins');
+  const filePath = path.join(pluginsDir, filename);
+
+  if (fs.existsSync(filePath)) {
+    req.flash('error', 'The plugin file already exists, use another name or delete the file first.');
+    return res.redirect('/administrator/plugins/add');
+  }
+
+  fs.writeFile(filePath, code, 'utf8', err => {
+    if (err) {
+      console.error('Failed to save plugin file:', err);
+      req.flash('error', 'Failed to save plugin file.');
+      return res.redirect('/administrator/plugins/add');
+    }
+
+    req.flash('success', 'Plugin saved successfully!');
+    res.redirect('/administrator/plugins');
+  });
+};
+
+exports.editPlugin = (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  let { title, code } = req.body;
+
+  if (!title || !title.trim()) {
+    req.flash('error', 'Plugin file name (title) is required!');
+    return res.redirect(`/administrator/plugins/views?name=${encodeURIComponent(title || '')}`);
+  }
+
+  title = title.trim();
+  if (!title.endsWith('.js')) {
+    title += '.js';
+  }
+
+  const pluginsDir = path.join(__dirname, '../plugins');
+  const filePath = path.join(pluginsDir, title);
+
+  if (!fs.existsSync(filePath)) {
+    req.flash('error', 'Plugin file does not exist.');
+    return res.redirect('/administrator/plugins');
+  }
+
+  fs.writeFile(filePath, code, 'utf8', err => {
+    if (err) {
+      console.error('Failed to update plugin file:', err);
+      req.flash('error', 'Failed to update plugin file.');
+      return res.redirect(`/administrator/plugins/views?name=${encodeURIComponent(title)}`);
+    }
+
+    req.flash('success', 'Plugin updated successfully!');
+    res.redirect('/administrator/plugins');
+  });
+};
+
+exports.deletePlugin = (req, res) => {
+  const name = req.params.name;
+
+  if (!name) {
+    req.flash('error', 'Plugin name is mandatory');
+    return res.redirect('/administrator/plugins');
+  }
+
+  const pluginsDir = path.join(__dirname, '../plugins');
+  const filePath = path.join(pluginsDir, name);
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      req.flash('error', 'Plugin file not found');
+      return res.redirect('/administrator/plugins');
+    }
+
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error('Gagal hapus plugin:', err);
+        req.flash('error', 'Failed to remove plugin');
+        return res.redirect('/administrator/plugins');
+      }
+
+      req.flash('success', `Plugin ${name} successfully removed`);
+      return res.redirect('/administrator/plugins');
+    });
+  });
 };
