@@ -20,7 +20,7 @@ function loadPlugin(file) {
       github: pluginModule.github || ''
     };
   } catch (err) {
-    console.error(`Gagal baca plugin ${file}:`, err);
+    // console.error(`Gagal baca plugin ${file}:`, err);
     return null;
   }
 }
@@ -45,7 +45,7 @@ watcher.on('add', filePath => {
     const plugin = loadPlugin(file);
     if (plugin) {
       pluginsCache.push(plugin);
-      console.log(`Plugin ditambahkan: ${file}`);
+      // console.log(`Plugin ditambahkan: ${file}`);
     }
   }
 });
@@ -61,7 +61,7 @@ watcher.on('change', filePath => {
         console.log(`Plugin diupdate: ${file}`);
       } else {
         pluginsCache.push(plugin);
-        console.log(`Plugin ditambahkan saat update: ${file}`);
+        // console.log(`Plugin ditambahkan saat update: ${file}`);
       }
     }
   }
@@ -71,7 +71,7 @@ watcher.on('unlink', filePath => {
   const file = path.basename(filePath);
   if (file.endsWith('.js')) {
     pluginsCache = pluginsCache.filter(p => p.command !== path.parse(file).name);
-    console.log(`Plugin dihapus: ${file}`);
+    // console.log(`Plugin dihapus: ${file}`);
   }
 });
 

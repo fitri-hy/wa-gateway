@@ -89,7 +89,7 @@ async function syncPluginsDB() {
   return new Promise((resolve, reject) => {
     const files = fs.readdirSync(pluginsDir).filter(file => file.endsWith('.js'));
 
-    const sql = 'SELECT id, name FROM plugins';
+    const sql = 'SELECT id, name FROM plugins ORDER BY id DESC';
     db.query(sql, (err, results) => {
       if (err) return reject(err);
 
