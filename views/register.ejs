@@ -1,7 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%- include('partials/head', { title: 'Sign in | FhytsBot' }) %>
+  <%- include('partials/head', { title: 'Sign Up | FhytsBot' }) %>
+  <meta property="og:title" content="Sign Up | FhytsBot" />
+  <meta name="twitter:title" content="Sign Up | FhytsBot" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:url" content="<%= BASE_URL %>" />
+  <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
+  <meta property="og:description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
+  <meta name="twitter:description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
+  <meta name="keywords" content="sign up, create account, register, new account, user registration" />
+  <meta name="robots" content="index, follow" />
 </head>
 <body class="flex items-center justify-center text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
 	<main class="w-full max-w-sm p-4">
@@ -53,6 +65,13 @@
 						<svg id="eyeIcon2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
 					</button>
 				</div>
+				<label class="flex items-center space-x-2">
+					<input type="checkbox" class="h-5 w-5" required />
+					<span>
+						I agree <a href="/terms-conditions" class="text-sky-500" target="_blank">Terms & Conditions</a>
+					</span>
+				</label>
+
 				<div class="flex justify-center">
 					<button class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 						REGISTER

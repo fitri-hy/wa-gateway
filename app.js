@@ -27,6 +27,9 @@ app.use(session({
 
 app.use(flash());
 app.use((req, res, next) => {
+  const protocol = req.protocol;
+  const host = req.get('host');
+  res.locals.BASE_URL = `${protocol}://${host}`;
   res.locals.user = req.session.user || null;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');

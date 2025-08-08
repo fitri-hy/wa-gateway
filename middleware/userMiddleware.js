@@ -37,12 +37,16 @@ module.exports = async (req, res, next) => {
       FROM packages
       ORDER BY id ASC
     `);
+	
+	const filteredPackages = packages
+	  .filter(pkg => parseFloat(pkg.price) > 0)
+	  .sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
     if (!userData || !userData.package_id) {
 	  return res.status(403).render('pricing', {
         title: 'Incomplete Package Information',
         message: 'We noticed some missing information in your subscription. Kindly reach out to support to resolve this.',
-		packages,
+		packages: filteredPackages,
 	  });
     }
 

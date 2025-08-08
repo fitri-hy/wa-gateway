@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head', { title: 'Privacy Policy | FhytsBot' }) %>
+  <meta property="og:title" content="Privacy Policy | FhytsBot" />
+  <meta name="twitter:title" content="Privacy Policy | FhytsBot" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:url" content="<%= BASE_URL %>" />
+  <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
+  <meta property="og:description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
+  <meta name="twitter:description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
+  <meta name="keywords" content="privacy policy, data protection, personal information, user privacy, data security" />
+
+  <meta name="robots" content="index, follow" />
+</head>
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-white to-sky-50/60 dark:from-neutral-900 dark:to-slate-900 text-gray-800 dark:text-gray-100">
+	<div class="-z-10 fixed top-0 h-[100vh] inset-0 bg-[linear-gradient(to_right,#94a3b82e_1px,transparent_1px),linear-gradient(to_bottom,#94a3b82e_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#4755692e_1px,transparent_1px),linear-gradient(to_bottom,#4755692e_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+	<div class="absolute -z-10 top-1/4 left-1/4 w-32 h-32 rounded-full bg-purple-500/20 blur-xl floating"></div>
+	<div class="absolute -z-10 top-1/3 right-1/4 w-40 h-40 rounded-full bg-blue-500/20 blur-xl floating-2"></div>
+	<div class="absolute -z-10 bottom-1/4 right-1/3 w-28 h-28 rounded-full bg-pink-500/20 blur-xl floating-3"></div>
+	<%- include('components/header') %>
+	<article class="mx-auto max-w-3xl p-4 mt-12">
+		<div class="prose dark:prose-invert max-w-none bg-white rounded-lg shadow-lg p-4 md:p-6">
+			<%- content %>
+		</div>
+	</article>
+	<%- include('components/footer') %>
+	<script src="/assets/js/app.js"></script>
+</body>
+</html>

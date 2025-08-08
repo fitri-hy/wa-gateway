@@ -2,6 +2,18 @@
 <html>
 <head>
   <%- include('partials/head', { title: title + ' | FhytsBot' }) %>
+  <meta property="og:title" content="<%= title %> | FhytsBot" />
+  <meta name="twitter:title" content="<%= title %> | FhytsBot" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="og:url" content="<%= BASE_URL %>" />
+  <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
+  <meta name="description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
+  <meta property="og:description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
+  <meta name="twitter:description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
+  <meta name="keywords" content="error page, 404 error, page not found, website error, broken link" />
+  <meta name="robots" content="index, follow" />
 </head>
 <body class="flex items-center justify-center text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
 	<main class="w-full max-w-sm p-4">

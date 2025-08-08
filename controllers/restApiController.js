@@ -11,7 +11,7 @@ exports.index = async (req, res) => {
   const baseUrl = `${req.protocol}://${req.get('host')}`;
 
   try {
-    const mdPath = path.join(__dirname, '..', 'config', 'Rest_API.md');
+    const mdPath = path.join(__dirname, '..', 'config', 'data', 'Rest_API.md');
     const markdown = await fs.readFile(mdPath, 'utf-8');
 
     const htmlContent = marked.parse(markdown);

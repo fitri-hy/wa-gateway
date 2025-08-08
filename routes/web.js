@@ -7,6 +7,10 @@ const upload = require('../middleware/uploadMiddleware');
 const Home = require('../controllers/homeController');
 router.get('/', Home.index);
 
+const Agreement = require('../controllers/agreementController');
+router.get('/privacy-policy', Agreement.privacy);
+router.get('/terms-conditions', Agreement.term);
+
 const Auth = require('../controllers/authController');
 router.get('/login', Auth.login);
 router.post('/login', Auth.loginUser);
