@@ -32,6 +32,7 @@ router.post('/dashboard/devices/delete/:phone', userMiddleware, Device.delete);
 
 const Contact = require('../controllers/contactController');
 router.get('/dashboard/contact', userMiddleware, Contact.index);
+router.post('/dashboard/contact/import', userMiddleware, upload.single('file'), Contact.import);
 router.post('/dashboard/contact/save', userMiddleware, Contact.store);
 router.post('/dashboard/contact/update/:id', userMiddleware, Contact.update);
 router.post('/dashboard/contact/delete/:id', userMiddleware, Contact.delete);

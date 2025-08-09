@@ -22,7 +22,8 @@ const allowedExtensions = [
   '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg',
   '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx', '.txt',
   '.mp3', '.wav', '.ogg', '.aac',
-  '.mp4', '.mov', '.avi', '.mkv', '.webm'
+  '.mp4', '.mov', '.avi', '.mkv', '.webm',
+  '.vcf'
 ];
 
 const fileFilter = (req, file, cb) => {

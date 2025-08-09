@@ -29,6 +29,13 @@
 							</svg>
 							<span class="hidden md:flex">Add New</span>
 						</button>
+						<form id="uploadForm" action="/dashboard/contact/import" method="POST" enctype="multipart/form-data">
+							<input type="file" id="file" name="file" accept=".vcf" style="display:none" required>
+							<button type="button" id="uploadBtn" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path d="M4 12a8 8 0 1 0 16 0"/><path stroke-linejoin="round" d="M12 4v10m0 0l3-3m-3 3l-3-3"/></g></svg>
+								<span class="hidden md:flex">Import</span>
+							</button>
+						</form>
 					</div>
 				</div>
 				<div class="prose prose-lg dark:prose-invert max-w-none">
@@ -175,6 +182,21 @@
 		modal.classList.add('hidden');
 		modal.classList.remove('flex');
 	  }
+	</script>
+	<script>
+	  const fileInput = document.getElementById('file');
+	  const uploadBtn = document.getElementById('uploadBtn');
+	  const uploadForm = document.getElementById('uploadForm');
+
+	  uploadBtn.addEventListener('click', () => {
+		fileInput.click();
+	  });
+
+	  fileInput.addEventListener('change', () => {
+		if(fileInput.files.length > 0) {
+		  uploadForm.submit();
+		}
+	  });
 	</script>
 </body>
 </html>
