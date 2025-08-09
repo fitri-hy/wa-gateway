@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 08, 2025 at 05:56 AM
+-- Generation Time: Aug 09, 2025 at 05:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -162,23 +162,6 @@ CREATE TABLE `plugins` (
   `name` varchar(255) NOT NULL,
   `enable` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `plugins`
---
-
-INSERT INTO `plugins` (`id`, `name`, `enable`) VALUES
-(1, '_ping.js', ''),
-(2, '_wikipedia.js', ''),
-(3, '_weather.js', ''),
-(4, '_translate.js', ''),
-(5, '_bmi.js', ''),
-(6, '_bmkg.js', ''),
-(7, '_facebookdl.js', ''),
-(8, '_country.js', ''),
-(9, '_github.js', ''),
-(10, '_antiviewonce.js', ''),
-(11, '_youtubedl.js', '');
 
 -- --------------------------------------------------------
 
@@ -348,7 +331,7 @@ ALTER TABLE `packages`
 -- AUTO_INCREMENT for table `plugins`
 --
 ALTER TABLE `plugins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sessions`

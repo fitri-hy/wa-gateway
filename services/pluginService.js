@@ -14,18 +14,15 @@ function findPluginIndex(fileName) {
 }
 
 async function insertPluginIfNotExists(name) {
-  const cleanName = name.trim().toLowerCase();
+  const cleanName = name.trim();
   return new Promise((resolve, reject) => {
-    const sqlCheck = 'SELECT id FROM plugins WHERE LOWER(TRIM(name)) = ? LIMIT 1';
-    db.query(sqlCheck, [cleanName], (err, results) => {
+    const sqlInsert = `
+      INSERT INTO plugins (name) VALUES (?)
+      ON DUPLICATE KEY UPDATE name = VALUES(name)
+    `;
+    db.query(sqlInsert, [cleanName], (err) => {
       if (err) return reject(err);
-      if (results.length > 0) return resolve(false);
-
-      const sqlInsert = 'INSERT INTO plugins (name) VALUES (?)';
-      db.query(sqlInsert, [name], (err2) => {
-        if (err2) return reject(err2);
-        resolve(true);
-      });
+      resolve(true);
     });
   });
 }
