@@ -78,8 +78,8 @@ module.exports = async (req, res, next) => {
   } catch (err) {
     console.error('Error checking package:', err);
     return res.status(500).render('error', {
-      title: 'Server Error',
-      message: 'An error occurred while checking the user package.'
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };

@@ -26,8 +26,8 @@ exports.index = async (req, res) => {
   } catch (err) {
     console.error('Failed to load Rest_API.md:', err);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Failed to load Rest Api data.',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };

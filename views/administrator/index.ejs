@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Administrator | FhytsBot' }) %>
+  <%- include('../partials/head', { title: 'Administrator | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,27 +12,27 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Administrator' }) %>
+		<%- include('../components/header-dash', { dash_title: __('analytic.Administrator') }) %>
 		<section class="px-4 pb-4">
 			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<%
 				  const now = new Date();
 				  const hour = now.getHours();
-				  let greeting = 'Welcome';
+				  let greeting = __('analytic.Welcome');
 
 				  if (hour >= 4 && hour < 11) {
-					greeting = 'Good Morning ☀️';
+					greeting = __('analytic.Good Morning') + ' ☀️';
 				  } else if (hour >= 11 && hour < 15) {
-					greeting = 'Good Afternoon 🌤️';
+					greeting = __('analytic.Good Afternoon') + ' 🌤️';
 				  } else if (hour >= 15 && hour < 18) {
-					greeting = 'Good Evening 🌇';
+					greeting = __('analytic.Good Evening') + ' 🌇';
 				  } else {
-					greeting = 'Good Night 🌙';
+					greeting = __('analytic.Good Night') + ' 🌙';
 				  }
 				%>
 				<div class="mb-6 flex flex-col">
 				  <span class="font-bold text-2xl md:text-3xl text-black dark:text-white text-center md:text-left"><%= greeting %>, <strong class="text-sky-500"><%= user_name %></strong>.</span>
-				  <span class="text-lg text-center md:text-left">We hope you have a productive day.</span>
+				  <span class="text-lg text-center md:text-left"><%= __('analytic.We hope you have a productive day') %></span>
 				</div>
 				
 				<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -54,7 +54,7 @@
 							<%= item.count %>
 						</h2>
 						<span class="text-cemter font-semibold">
-							<%= item.table %>
+							<%= __('analytic.' + item.table) %>
 						</span>
 					  </div>
 					<% }) %>

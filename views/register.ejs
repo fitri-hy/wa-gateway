@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%- include('partials/head', { title: 'Sign Up | FhytsBot' }) %>
-  <meta property="og:title" content="Sign Up | FhytsBot" />
-  <meta name="twitter:title" content="Sign Up | FhytsBot" />
+  <%- include('partials/head', { title: __('register.Sign Up') + ' | ' + __('app.FhytsBot') }) %>
+  <meta property="og:title" content="<%= __('register.Sign Up') %> | <%= __('app.FhytsBot') %>" />
+  <meta name="twitter:title" content="<%= __('register.Sign Up') %> | <%= __('app.FhytsBot') %>" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:url" content="<%= BASE_URL %>" />
   <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
   <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
-  <meta name="description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
-  <meta property="og:description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
-  <meta name="twitter:description" content="Create a new account quickly and securely. Sign up to access all features and enjoy our services." />
+  <meta name="description" content="<%= __('register.Create a new account quickly') %>" />
+  <meta property="og:description" content="<%= __('register.Create a new account quickly') %>" />
+  <meta name="twitter:description" content="<%= __('register.Create a new account quickly') %>" />
   <meta name="keywords" content="sign up, create account, register, new account, user registration" />
   <meta name="robots" content="index, follow" />
 </head>
@@ -36,30 +36,30 @@
 			</a>
 			<div>
 				<h1 class="font-bold text-2xl text-center">
-					Sign Up
+					<%= __('register.Sign Up') %>
 				</h1>
 				<p class="text-center">
-					Create your account
+					<%= __('register.Create your account') %>
 				</p>
 			</div>
 			<form action="/register" method="POST" class="w-full flex flex-col gap-4">
 				<div class="flex flex-col gap-1">
-					<label for="name" class="font-medium">Full Name</label>
+					<label for="name" class="font-medium"><%= __('register.Full Name') %></label>
 					<input id="name" type="text" name="name" maxlength="25" pattern="^[a-zA-Z\s]+$" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Jhon Doe" required>
 				</div>
 				<div class="flex flex-col gap-1">
-					<label for="email" class="font-medium">Email</label>
-					<input id="email" type="email" name="email" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="your-mail@gmail.com" required>
+					<label for="email" class="font-medium"><%= __('register.Email') %></label>
+					<input id="email" type="email" name="email" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="john@gmail.com" required>
 				</div>
 				<div class="relative flex flex-col gap-1">
-					<label for="password" class="font-medium">Password</label>
+					<label for="password" class="font-medium"><%= __('register.Password') %></label>
 					<input id="password" type="password" name="password" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="••••••••••••" required>
 					<button type="button" class="absolute z-10 right-2 bottom-2" onclick="togglePassword('password', 'eyeIcon1')">
 						<svg id="eyeIcon1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
 					</button>
 				</div>
 				<div class="relative flex flex-col gap-1">
-					<label for="re-password" class="font-medium">Confirm Password</label>
+					<label for="re-password" class="font-medium"><%= __('register.Confirm Password') %></label>
 					<input id="re-password" type="password" name="re-password" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="••••••••••••" required>
 					<button type="button" class="absolute z-10 right-2 bottom-2" onclick="togglePassword('re-password', 'eyeIcon2')">
 						<svg id="eyeIcon2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
@@ -68,20 +68,20 @@
 				<label class="flex items-center space-x-2">
 					<input type="checkbox" class="h-5 w-5" required />
 					<span>
-						I agree <a href="/terms-conditions" class="text-sky-500" target="_blank">Terms & Conditions</a>
+						<%= __('register.I agre') %> <a href="/terms-conditions" class="text-sky-500" target="_blank"><%= __('register.Terms & Conditions') %></a>
 					</span>
 				</label>
 
 				<div class="flex justify-center">
 					<button class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-						REGISTER
+						<%= __('register.REGISTER') %>
 					</button>
 				</div>
 			</form>
 			<span class="text-center text-sm">
-				Already have an account?
+				<%= __('register.Already have an account?') %>
 				<a href="/login" class="font-semibold text-sky-500 hover:underline">
-					Sign In
+					<%= __('register.Sign In') %>
 				</a>
 			</span>
 		<section>

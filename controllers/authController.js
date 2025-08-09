@@ -209,8 +209,8 @@ exports.logout = (req, res) => {
     if (err) {
       console.error(err);
 	  return res.status(500).render('error', {
-		title: '500 Internal Server Error',
-		message: 'Error logging out',
+        title: res.__('error.Internal Server Error'),
+        message: res.__('error.It seems there was an error'),
 	  });
     }
     res.redirect('/login');

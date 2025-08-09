@@ -112,4 +112,17 @@ router.post('/administrator/plugins/add', administratorMiddleware, Administrator
 router.post('/administrator/plugins/edit', administratorMiddleware, Administrator.editPlugin);
 router.post('/administrator/plugins/delete/:name', administratorMiddleware, Administrator.deletePlugin);
 
+router.get('/lang', (req, res) => {
+  const currentLang = req.getLocale();
+  const nextLang = currentLang === 'en' ? 'id' : 'en';
+  res.cookie('lang', nextLang, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+  const referer = req.get('Referer');
+  if (referer) {
+    res.redirect(referer);
+  } else {
+    res.redirect('/');
+  }
+});
+
+
 module.exports = router;

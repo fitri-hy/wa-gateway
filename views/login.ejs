@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%- include('partials/head', { title: 'Sign In | FhytsBot' }) %>
-  <meta property="og:title" content="Sign In | FhytsBot" />
-  <meta name="twitter:title" content="Sign In | FhytsBot" />
+  <%- include('partials/head', { title: __('login.Sign In') + ' | ' + __('app.FhytsBot') }) %>
+  <meta property="og:title" content="<%= __('login.Sign In') %> |  <%= __('app.FhytsBot') %>" />
+  <meta name="twitter:title" content="<%= __('login.Sign In') %> |  <%= __('app.FhytsBot') %>" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:url" content="<%= BASE_URL %>" />
   <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
-  <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" /><meta name="description" content="Sign in to your account securely to access all features and services. Enter your username and password to get started." />
-  <meta property="og:description" content="Sign in to your account securely to access all features and services. Enter your username and password to get started." />
-  <meta name="twitter:description" content="Sign in to your account securely to access all features and services. Enter your username and password to get started." />
+  <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" /><meta name="description" content="<%= __('login.Sign in to your account securely') %>" />
+  <meta property="og:description" content="<%= __('login.Sign in to your account securely') %>" />
+  <meta name="twitter:description" content="<%= __('login.Sign in to your account securely') %>" />
   <meta name="keywords" content="sign in, login, user login, account access, secure sign in" />
   <meta name="robots" content="index, follow" />
 </head>
@@ -35,21 +35,21 @@
 			</a>
 			<div>
 				<h1 class="font-bold text-2xl text-center">
-					Sign In
+					<%= __('login.Sign In') %>
 				</h1>
 				<p class="text-center">
-					Log in to your account
+					<%= __('login.Log in to your account') %>
 				</p>
 			</div>
 			<form action="/login" method="POST" class="w-full flex flex-col gap-4">
 				<div class="flex flex-col gap-1">
-					<label for="email" class="font-medium">Email</label>
-					<input id="email" type="email" name="email" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="your-mail@gmail.com" required>
+					<label for="email" class="font-medium"><%= __('login.Email') %></label>
+					<input id="email" type="email" name="email" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="john@gmail.com" required>
 				</div>
 				<div class="relative flex flex-col gap-1">
 					<div class="flex justify-between gap-4 items-center">
-						<label for="password" class="font-medium">Password</label>
-						<span class="text-sm">Forgot Password? <a href="/forgot-password" class="font-semibold text-sky-500 hover:underline">Reset</a><span>
+						<label for="password" class="font-medium"><%= __('login.Password') %></label>
+						<span class="text-sm"><%= __('login.Forgot Password') %> <a href="/forgot-password" class="font-semibold text-sky-500 hover:underline">Reset</a><span>
 					</div>
 					<input id="password" type="password" name="password" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="••••••••••••" required>
 					<button type="button" class="absolute z-10 right-2 bottom-2" onclick="togglePassword()">
@@ -58,14 +58,14 @@
 				</div>
 				<div class="flex justify-center">
 					<button class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-						LOGIN
+						<%= __('login.LOGIN') %>
 					</button>
 				</div>
 			</form>
 			<span class="text-center text-sm">
-				Don't have an account?
+				<%= __('login.Dont have an account') %>
 				<a href="/register" class="font-semibold text-sky-500 hover:underline">
-					Sign Up
+					<%= __('login.Sign Up') %>
 				</a>
 			</span>
 			

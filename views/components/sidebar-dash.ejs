@@ -2,63 +2,63 @@
 	<a href="/dashboard" class="flex items-center gap-2 text-black dark:text-white">
 		<img class="h-8 w-8 rounded" src="/assets/images/logo.png" alt="logo" />
 		<h1 class="font-bold text-xl flex gap-2">
-			FhytsBot <span class="text-xs">v1.0</span>
+			<%= __('app.FhytsBot') %> <span class="text-xs">v1.0</span>
 		</h1>
 	</a>
 </div>
 <nav class="p-4 flex flex-col gap-1">
 	<% if (user && (user.role === 'admin' || user.role === 'superadmin')) { %>
 	  <a href="/administrator" class="flex items-center justify-center gap-2 w-full mb-6 rounded-md font-semibold p-2 bg-sky-500 dark:bg-sky-600 hover:bg-sky-600 dark:hover:bg-sky-500 text-white text-center hover:duration-300 transition-all">
-		Admin Area
+		<%= __('sidebar.Admin Area') %>
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 		  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6m0 0H9m9 0v9"/>
 		</svg>
 	  </a>
 	<% } %>
-	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300">GENERAL</span>
+	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300"><%= __('sidebar.GENERAL') %></span>
 	<a href="/dashboard" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.444 3.685a10 10 0 0 1 1.662-.896c1.403-.593 2.104-.89 3-.296C12 3.086 12 4.057 12 6v2c0 1.886 0 2.828.586 3.414S14.114 12 16 12h2c1.942 0 2.914 0 3.507.895s.297 1.596-.296 3a10 10 0 0 1-11.162 5.913A10 10 0 0 1 6.444 3.685Z"/><path stroke-linecap="round" d="M14.5 2.315A10.02 10.02 0 0 1 21.685 9.5" opacity="0.5"/></g></svg>
-		<span>Dashboard</span>
+		<span><%= __('sidebar.Dashboard') %></span>
 	</a>
-	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4">MANAGEMENT</span>
+	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4"><%= __('sidebar.MANAGEMENT') %></span>
 	<a href="/dashboard/devices" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 10c0-3.771 0-5.657 1.172-6.828S8.229 2 12 2s5.657 0 6.828 1.172S20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828S15.771 22 12 22s-5.657 0-6.828-1.172S4 17.771 4 14z"/><path stroke-linecap="round" d="M15 19H9"/></g></svg>
-		<span>Devices</span>
+		<span><%= __('sidebar.Devices') %></span>
 	</a>
 	<a href="/dashboard/contact" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8c0-2.828 0-4.243.879-5.121C4.757 2 6.172 2 9 2h6c2.828 0 4.243 0 5.121.879C21 3.757 21 5.172 21 8v8c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22H9c-2.828 0-4.243 0-5.121-.879C3 20.243 3 18.828 3 16z"/><path stroke-linecap="round" d="M8 2.5V22M2 12h2m-2 4h2M2 8h2m7.5-1.5h5m-5 3.5h5"/></g></svg>
-		<span>Contact</span>
+		<span><%= __('sidebar.Contact') %></span>
 	</a>
 	<a href="/dashboard/file-manager" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M6.86 1.25h.127c.351 0 .577 0 .798.02a4.75 4.75 0 0 1 2.59 1.073c.17.142.33.302.579.55l.576.577c.846.845 1.171 1.161 1.547 1.37q.328.182.689.286c.413.117.866.124 2.062.124h.425c1.273 0 2.3 0 3.111.102c.841.106 1.556.332 2.144.86q.147.133.28.28c.529.588.754 1.303.86 2.144c.102.812.102 1.838.102 3.111v2.31c0 1.837 0 3.293-.153 4.432c-.158 1.172-.49 2.121-1.238 2.87c-.749.748-1.698 1.08-2.87 1.238c-1.14.153-2.595.153-4.433.153H9.944c-1.838 0-3.294 0-4.433-.153c-1.172-.158-2.121-.49-2.87-1.238c-.748-.749-1.08-1.698-1.238-2.87c-.153-1.14-.153-2.595-.153-4.433V6.86c0-.797 0-1.303.082-1.74A4.75 4.75 0 0 1 5.12 1.331c.438-.082.944-.082 1.74-.082m.09 1.5c-.917 0-1.271.003-1.553.056a3.25 3.25 0 0 0-2.59 2.591c-.054.282-.057.636-.057 1.553V14c0 1.907.002 3.262.14 4.29c.135 1.005.389 1.585.812 2.008s1.003.677 2.009.812c1.028.138 2.382.14 4.289.14h4c1.907 0 3.262-.002 4.29-.14c1.005-.135 1.585-.389 2.008-.812s.677-1.003.812-2.009c.138-1.027.14-2.382.14-4.289v-2.202c0-1.336-.001-2.267-.09-2.975c-.087-.689-.246-1.06-.487-1.328a2 2 0 0 0-.168-.168c-.268-.241-.64-.4-1.328-.487c-.707-.089-1.639-.09-2.975-.09h-.484c-1.048 0-1.724 0-2.363-.182c-.35-.1-.689-.24-1.008-.417c-.58-.324-1.058-.801-1.8-1.543l-.077-.078l-.55-.55a8 8 0 0 0-.503-.482a3.25 3.25 0 0 0-1.771-.734a8 8 0 0 0-.696-.014m5.3 7.25a.75.75 0 0 1 .75-.75h5a.75.75 0 0 1 0 1.5h-5a.75.75 0 0 1-.75-.75" clip-rule="evenodd"/></svg>
-		<span>File Manager</span>
+		<span><%= __('sidebar.File Manager') %></span>
 	</a>
-	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4">MESSAGES</span>
+	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4"><%= __('sidebar.MESSAGES') %></span>
 	<a href="/dashboard/sending" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 2.75A9.25 9.25 0 0 0 2.75 12c0 1.481.348 2.879.965 4.118c.248.498.343 1.092.187 1.677l-.596 2.225a.55.55 0 0 0 .673.674l2.227-.596a2.38 2.38 0 0 1 1.676.187A9.2 9.2 0 0 0 12 21.25a9.25 9.25 0 0 0 9.065-11.1a.75.75 0 1 1 1.47-.3q.213 1.046.215 2.15c0 5.937-4.813 10.75-10.75 10.75c-1.718 0-3.344-.404-4.787-1.122a.9.9 0 0 0-.62-.08l-2.226.595c-1.524.408-2.918-.986-2.51-2.51l.596-2.226a.9.9 0 0 0-.08-.62A10.7 10.7 0 0 1 1.25 12C1.25 6.063 6.063 1.25 12 1.25q1.104.002 2.15.215a.75.75 0 0 1-.3 1.47A9.3 9.3 0 0 0 12 2.75M15.25 5a3.75 3.75 0 1 1 7.5 0a3.75 3.75 0 0 1-7.5 0M19 2.75a2.25 2.25 0 1 0 0 4.5a2.25 2.25 0 0 0 0-4.5" clip-rule="evenodd"/></svg>
-		<span>Sending</span>
+		<span><%= __('sidebar.Sending') %></span>
 	</a>
 	<a href="/dashboard/broadcast" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12c0 1.6.376 3.112 1.043 4.453c.178.356.237.763.134 1.148l-.595 2.226a1.3 1.3 0 0 0 1.591 1.592l2.226-.596a1.63 1.63 0 0 1 1.149.133A9.96 9.96 0 0 0 12 22Z"/><path stroke-linecap="round" d="M8 10.5h8M8 14h5.5"/></g></svg>
-		<span>Broadcast</span>
+		<span><%= __('sidebar.Broadcast') %></span>
 	</a>
 	<a href="/dashboard/auto-reply" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12.978 21.456l.643.385zm.488-.814l-.643-.386zm-2.932 0l-.643.385zm.488.814l.643-.386zM12 4.222l-.527-.533a.75.75 0 0 0 0 1.067zm8.25 7.556a.75.75 0 0 0 1.5 0zm-18 0a.75.75 0 0 0 1.5 0zM4.034 16.3a.75.75 0 1 0-1.383.58zm4.177 3.026l-.013.75zm-2.433-.33l-.284.693zm14.88-2.406l.691.29zm-4.869 2.736l-.012-.75zm2.433-.33l.284.693zm.63-14.119l-.39.642zm1.485 1.467l.637-.395zM5.149 4.877l-.389-.642zM3.663 6.344l-.637-.395zm6 13.176l.373-.65zm5.114-16.986a.75.75 0 1 0-1.054-1.068zm-1.054 4.444a.75.75 0 1 0 1.054-1.067zm-4.42-2.005a.75.75 0 1 0-.005-1.5zm12.433 9.492a.75.75 0 0 0-1.499-.04zm-8.115 7.376l.488-.814l-1.286-.77l-.488.813zm-3.73-.814l.488.814l1.286-.77l-.488-.815zm2.444.043a.38.38 0 0 1-.335.18a.38.38 0 0 1-.335-.18l-1.286.771c.726 1.212 2.516 1.212 3.242 0zm-4.112-2.494c-1.13-.02-1.71-.09-2.161-.275l-.568 1.388c.738.302 1.574.367 2.704.387zM2.651 16.88a5.22 5.22 0 0 0 2.843 2.81l.568-1.39a3.72 3.72 0 0 1-2.028-2zm13.151 3.196c1.13-.02 1.966-.085 2.704-.387l-.568-1.388c-.45.184-1.031.256-2.161.275zm4.164-3.776a3.72 3.72 0 0 1-2.028 2l.568 1.39a5.22 5.22 0 0 0 2.843-2.81zM12 4.972c1.48 0 2.895 0 4.074.08c.588.04 1.1.099 1.518.182c.43.085.71.187.87.285l.778-1.284c-.38-.23-.859-.373-1.355-.472a14 14 0 0 0-1.71-.207c-1.24-.084-2.71-.084-4.175-.084zm9.75 6.806c0-1.44 0-2.574-.086-3.48c-.089-.916-.273-1.676-.69-2.349l-1.274.79c.245.397.393.898.47 1.704c.08.816.08 1.865.08 3.335zm-3.287-6.26c.505.306.928.725 1.237 1.222l1.274-.791a5.2 5.2 0 0 0-1.734-1.714zM3.75 11.779c0-1.47 0-2.519.08-3.335c.077-.806.225-1.307.47-1.703L3.026 5.95c-.418.673-.601 1.433-.69 2.35c-.087.905-.086 2.039-.086 3.479zm1.01-7.543A5.2 5.2 0 0 0 3.026 5.95l1.274.79a3.7 3.7 0 0 1 1.237-1.22zm6.417 16.021c-.181-.303-.344-.576-.503-.792a2.1 2.1 0 0 0-.638-.594l-.747 1.3c.03.018.081.054.178.185c.106.144.227.344.424.672zm-2.98-.18c.397.006.644.011.831.032c.174.019.232.046.26.062l.748-1.3a2.1 2.1 0 0 0-.845-.253c-.271-.03-.599-.035-.968-.041zm5.912.951a9 9 0 0 1 .424-.672c.097-.131.147-.167.178-.185l-.747-1.3a2.1 2.1 0 0 0-.638.594c-.159.216-.322.489-.503.792zm1.668-2.451c-.37.006-.697.011-.968.04c-.285.032-.57.096-.845.254l.747 1.3c.029-.016.087-.043.26-.062c.188-.02.435-.026.831-.032zm-3.25-13.82l2.25-2.222l-1.054-1.068l-2.25 2.223zm-1.054 0l2.25 2.222l1.054-1.067l-2.25-2.222zM9.298 3.473c-2.236.007-3.368.054-4.538.762l.777 1.284c.758-.459 1.46-.539 3.765-.546zm10.939 10.952c-.026.955-.102 1.471-.271 1.875l1.383.58c.284-.678.361-1.434.387-2.415z"/></svg>
-		<span>Auto Reply</span>
+		<span><%= __('sidebar.Auto Reply') %></span>
 	</a>
-	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4">MISCELLANEOUS</span>
+	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4"><%= __('sidebar.MISCELLANEOUS') %></span>
 	<a href="/dashboard/plugin" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9 17.25a.75.75 0 0 0 0 1.5h6a.75.75 0 1 0 0-1.5z"/><path fill="currentColor" fill-rule="evenodd" d="M12 1.25c-.706 0-1.155.5-1.457.947c-.306.455-.625 1.11-1.004 1.886L7.276 8.72c-.219.448-.36.735-.482.934a1 1 0 0 1-.142.192a.2.2 0 0 1-.087.017a1 1 0 0 1-.156-.122c-.162-.15-.364-.379-.684-.743l-.029-.033C5.124 8.313 4.656 7.78 4.27 7.42a3.3 3.3 0 0 0-.623-.477a1.4 1.4 0 0 0-.819-.196a1.74 1.74 0 0 0-1.187.637c-.355.429-.395 1.029-.39 1.547c.004.56.074 1.303.16 2.227l.238 2.522c.185 1.966.33 3.505.58 4.701c.256 1.218.64 2.183 1.375 2.933c.745.763 1.66 1.111 2.792 1.277c1.088.159 2.463.159 4.185.159h2.838c1.722 0 3.097 0 4.185-.16c1.132-.165 2.047-.513 2.792-1.276c.734-.75 1.119-1.715 1.374-2.933c.251-1.196.396-2.735.581-4.701l.238-2.522c.087-.924.157-1.667.16-2.227c.005-.518-.035-1.118-.39-1.547a1.74 1.74 0 0 0-1.187-.637a1.4 1.4 0 0 0-.819.196a3.3 3.3 0 0 0-.623.477c-.386.36-.854.893-1.426 1.545l-.03.033c-.32.364-.521.593-.683.743a1 1 0 0 1-.155.122a.2.2 0 0 1-.088-.017a1 1 0 0 1-.142-.192c-.122-.199-.263-.486-.482-.934l-2.263-4.637c-.379-.777-.698-1.431-1.004-1.886c-.302-.448-.75-.947-1.457-.947m-1.139 3.544c.412-.844.686-1.402.926-1.759A1.5 1.5 0 0 1 12 2.772c.04.037.11.112.213.263c.24.357.514.915.926 1.759l2.253 4.616c.198.407.371.76.536 1.03c.17.275.392.568.74.743c.313.158.666.216 1.016.16c.393-.062.691-.285.925-.501c.227-.21.48-.498.768-.826l.025-.028c.608-.693 1.027-1.169 1.352-1.472c.16-.15.266-.227.331-.263a.3.3 0 0 1 .113.08l.001.007c.01.03.054.172.05.58c-.003.487-.066 1.165-.157 2.136l-.23 2.435c-.19 2.024-.328 3.479-.56 4.582c-.229 1.09-.53 1.734-.978 2.193c-.438.448-1 .704-1.937.84c-.967.142-2.232.144-4.027.144h-2.72c-1.795 0-3.06-.002-4.027-.143c-.937-.137-1.499-.393-1.937-.841c-.448-.459-.75-1.103-.978-2.193c-.232-1.103-.37-2.558-.56-4.582l-.23-2.435c-.09-.971-.154-1.65-.158-2.137c-.003-.407.042-.55.05-.58l.003-.005a.3.3 0 0 1 .111-.082h.001c.065.037.17.114.331.264c.325.303.744.779 1.352 1.472l.025.028c.288.328.541.617.768.826c.234.216.532.44.925.502c.35.055.703-.003 1.016-.161c.348-.175.57-.468.74-.743c.165-.27.338-.623.536-1.03zm10.337 3.54l.005.006zM12.044 2.74l-.01.004q.01-.006.01-.004m-.079.004l-.009-.004z" clip-rule="evenodd"/></svg>
-		<span>Plugin</span>
+		<span><%= __('sidebar.Plugin') %></span>
 	</a>
 	<a href="/dashboard/rest-api" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Z"/><path stroke-linecap="round" d="M14 6.5L9 10m5 7.5L9 14"/><path d="M19 18.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Zm0-13a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Z"/></g></svg>
-		<span>Rest API</span>
+		<span><%= __('sidebar.Rest API') %></span>
 	</a>
-	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4">APPLICATION</span>
+	<span class="text-xs font-semibold text-gray-600 dark:text-gray-300 mt-4"><%= __('sidebar.APPLICATION') %></span>
 	<a href="/dashboard/settings" class="nav-link flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-sky-500 hover:font-semibold px-2 py-1.5 rounded">
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M13.765 2.152C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.484-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.579-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7s-.7 1.21-.751 1.605a2 2 0 0 0 .396 1.479c.148.192.355.353.676.555c.473.297.777.803.777 1.361s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.579.276.819.308a2 2 0 0 0 1.479-.396c.315-.242.548-.646 1.014-1.453s.7-1.21.751-1.605a2 2 0 0 0-.396-1.479c-.148-.192-.355-.353-.676-.555A1.62 1.62 0 0 1 19.562 12c0-.558.304-1.064.777-1.36c.321-.203.529-.364.676-.556a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083Z"/></g></svg>
-		<span>Settings</span>
+		<span><%= __('sidebar.Settings') %></span>
 	</a>
 </nav>
 <button id="closeSidebarBtn" class="absolute md:hidden top-1/2 right-0 py-4 bg-rose-500 dark:bg-rose-600 hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all rounded-l text-white">

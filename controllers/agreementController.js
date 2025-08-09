@@ -7,8 +7,8 @@ exports.privacy = (req, res) => {
   fs.readFile(privacyPath, 'utf8', (err, data) => {
     if (err) {
       return res.status(500).render('error', {
-        title: 'Internal Server Error',
-        message: 'Failed to load Privacy Policy.',
+        title: res.__('error.Internal Server Error'),
+        message: res.__('error.It seems there was an error'),
       });
     }
 
@@ -22,12 +22,12 @@ exports.term = (req, res) => {
   fs.readFile(termsPath, 'utf8', (err, data) => {
     if (err) {
       return res.status(500).render('error', {
-        title: 'Internal Server Error',
-        message: 'Failed to load Terms and Conditions.',
+        title: res.__('error.Internal Server Error'),
+        message: res.__('error.It seems there was an error'),
       });
     }
 
     const htmlContent = marked.parse(data);
-    res.render('terms-conditions', { title: 'Terms & Conditions', content: htmlContent });
+    res.render('terms-conditions', { content: htmlContent });
   });
 };

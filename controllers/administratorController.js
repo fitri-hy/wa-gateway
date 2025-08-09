@@ -52,8 +52,8 @@ exports.index = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in index controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -127,8 +127,8 @@ exports.users = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in users controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -300,8 +300,8 @@ exports.devices = async (req, res) => {
       if (err) {
         console.error('Error counting devices:', err);
         return res.status(500).render('error', {
-		  title: '500 Internal Server Error',
-		  message: 'Server Error',
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
 		});
       }
 
@@ -322,8 +322,8 @@ exports.devices = async (req, res) => {
         if (err) {
           console.error('Error retrieving devices:', err);
           return res.status(500).render('error', {
-		    title: '500 Internal Server Error',
-		    message: 'Server Error',
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
 	  	  });
         }
 
@@ -338,8 +338,8 @@ exports.devices = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in devices controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -388,8 +388,8 @@ exports.contacts = async (req, res) => {
       if (err) {
         console.error('Error counting contacts:', err);
         return res.status(500).render('error', {
-          title: '500 Internal Server Error',
-          message: 'Server Error',
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
         });
       }
 
@@ -410,8 +410,8 @@ exports.contacts = async (req, res) => {
         if (err) {
           console.error('Error retrieving contacts:', err);
           return res.status(500).render('error', {
-            title: '500 Internal Server Error',
-            message: 'Server Error',
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
           });
         }
 
@@ -426,8 +426,8 @@ exports.contacts = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in contacts controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -482,8 +482,8 @@ exports.files = async (req, res) => {
       if (err) {
         console.error('Error counting files:', err);
         return res.status(500).render('error', {
-          title: '500 Internal Server Error',
-          message: 'Server Error',
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
         });
       }
 
@@ -504,8 +504,8 @@ exports.files = async (req, res) => {
         if (err) {
           console.error('Error retrieving files:', err);
           return res.status(500).render('error', {
-            title: '500 Internal Server Error',
-            message: 'Server Error',
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
           });
         }
 
@@ -520,8 +520,8 @@ exports.files = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in files controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -579,8 +579,8 @@ exports.sending = async (req, res) => {
       if (err) {
         console.error('Error counting data:', err);
         return res.status(500).render('error', {
-          title: '500 Internal Server Error',
-          message: 'Server Error',
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
         });
       }
 
@@ -601,8 +601,8 @@ exports.sending = async (req, res) => {
         if (err) {
           console.error('Error retrieving data:', err);
           return res.status(500).render('error', {
-            title: '500 Internal Server Error',
-            message: 'Server Error',
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
           });
         }
 
@@ -617,8 +617,8 @@ exports.sending = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in data controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -666,8 +666,8 @@ exports.broadcasts = async (req, res) => {
       if (err) {
         console.error('Error counting broadcasts:', err);
         return res.status(500).render('error', {
-          title: 'Server Error',
-          message: 'Failed to count broadcasts'
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
         });
       }
 
@@ -688,8 +688,8 @@ exports.broadcasts = async (req, res) => {
         if (err) {
           console.error('Error retrieving broadcasts:', err);
           return res.status(500).render('error', {
-            title: 'Server Error',
-            message: 'Failed to fetch broadcasts'
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
           });
         }
 
@@ -704,8 +704,8 @@ exports.broadcasts = async (req, res) => {
   } catch (err) {
     console.error('Unexpected error:', err);
     res.status(500).render('error', {
-      title: 'Server Error',
-      message: 'Unexpected error occurred'
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -755,7 +755,10 @@ exports.autoreply = (req, res) => {
   db.query(countQuery, countParams, (err, countResult) => {
     if (err) {
       console.error('Count error:', err);
-      return res.status(500).render('error', { title: 'Server Error', message: 'Failed to count auto replies' });
+      return res.status(500).render('error', { 
+        title: res.__('error.Internal Server Error'),
+        message: res.__('error.It seems there was an error'),
+	  });
     }
 
     const totalData = countResult[0].total;
@@ -774,7 +777,10 @@ exports.autoreply = (req, res) => {
     db.query(dataQuery, dataParams, (err, data) => {
       if (err) {
         console.error('Data error:', err);
-        return res.status(500).render('error', { title: 'Server Error', message: 'Failed to fetch auto replies' });
+        return res.status(500).render('error', { 
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
+		});
       }
 
       res.render('administrator/auto-reply', {
@@ -858,8 +864,8 @@ exports.ads = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in ads controller:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -1057,8 +1063,8 @@ exports.plugins = async (req, res) => {
   } catch (error) {
     console.error('Unexpected error in Administrator.plugins:', error);
     res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'Server Error',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };

@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('partials/head', { title: 'Privacy Policy | FhytsBot' }) %>
-  <meta property="og:title" content="Privacy Policy | FhytsBot" />
-  <meta name="twitter:title" content="Privacy Policy | FhytsBot" />
+  <%- include('partials/head', { title: __('privacy.Privacy Policy') + ' | ' + __('app.FhytsBot') }) %>
+  <meta property="og:title" content="<%= __('privacy.Privacy Policy') %> |  <%= __('app.FhytsBot') %>" />
+  <meta name="twitter:title" content="<%= __('privacy.Privacy Policy') %> |  <%= __('app.FhytsBot') %>" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:url" content="<%= BASE_URL %>" />
   <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
   <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
-  <meta name="description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
-  <meta property="og:description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
-  <meta name="twitter:description" content="Learn how we collect, use, and protect your personal information when you use our website and services." />
+  <meta name="description" content="<%= __('privacy.Learn how we collect') %>" />
+  <meta property="og:description" content="<%= __('privacy.Learn how we collect') %>" />
+  <meta name="twitter:description" content="<%= __('privacy.Learn how we collect') %>" />
   <meta name="keywords" content="privacy policy, data protection, personal information, user privacy, data security" />
 
   <meta name="robots" content="index, follow" />

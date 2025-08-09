@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('partials/head', { title: 'Terms & Conditions | FhytsBot' }) %>
-  <meta property="og:title" content="Terms & Conditions | FhytsBot" />
-  <meta name="twitter:title" content="Terms & Conditions | FhytsBot" />
+  <%- include('partials/head', { title: __('term.Terms & Conditions') + ' | ' + __('app.FhytsBot') }) %>
+  <meta property="og:title" content="<%= __('term.Terms & Conditions') %> | <%= __('app.FhytsBot') %>" />
+  <meta name="twitter:title" content="<%= __('term.Terms & Conditions') %> | <%= __('app.FhytsBot') %>" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:url" content="<%= BASE_URL %>" />
   <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
   <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
-  <meta name="description" content="Read the terms and conditions governing the use of our website and services." />
-  <meta property="og:description" content="Read the terms and conditions governing the use of our website and services." />
-  <meta name="twitter:description" content="Read the terms and conditions governing the use of our website and services." />
+  <meta name="description" content="<%= __('term.Read the terms and conditions') %>" />
+  <meta property="og:description" content="<%= __('term.Read the terms and conditions') %>" />
+  <meta name="twitter:description" content="<%= __('term.Read the terms and conditions') %>" />
   <meta name="keywords" content="terms, conditions, user agreement, website policy, service rules" />
   <meta name="robots" content="index, follow" />
 </head>

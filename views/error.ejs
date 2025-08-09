@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <%- include('partials/head', { title: title + ' | FhytsBot' }) %>
-  <meta property="og:title" content="<%= title %> | FhytsBot" />
-  <meta name="twitter:title" content="<%= title %> | FhytsBot" />
+  <%- include('partials/head', { title: title + ' | ' + __('app.FhytsBot') }) %>
+  <meta property="og:title" content="<%= title %> | <%= __('app.FhytsBot') %>" />
+  <meta name="twitter:title" content="<%= title %> | <%= __('app.FhytsBot') %>" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta property="og:url" content="<%= BASE_URL %>" />
   <meta property="og:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
   <meta name="twitter:image" content="<%= BASE_URL %>/assets/images/gateway.png" />
-  <meta name="description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
-  <meta property="og:description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
-  <meta name="twitter:description" content="Sorry, the page you are looking for cannot be found or an error has occurred. Please check the URL or return to the homepage." />
+  <meta name="description" content="<%- message %>" />
+  <meta property="og:description" content="<%- message %>" />
+  <meta name="twitter:description" content="<%- message %>" />
   <meta name="keywords" content="error page, 404 error, page not found, website error, broken link" />
   <meta name="robots" content="index, follow" />
 </head>
@@ -26,7 +26,7 @@
 			<div class="flex justify-center items-center mt-4">
 				<a class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all" href="/">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M10.53 5.47a.75.75 0 0 1 0 1.06l-4.72 4.72H20a.75.75 0 0 1 0 1.5H5.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0" clip-rule="evenodd"/></svg>
-					Back to Home
+					<%= __('error.Back to Home') %>
 				</a>
 			</div>
 		<section>

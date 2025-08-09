@@ -31,8 +31,8 @@ exports.index = (req, res) => {
     if (errCount) {
       console.error('Error fetching auto replies count:', errCount);
       return res.status(500).render('error', {
-        title: '500 Internal Server Error',
-        message: 'Failed to retrieve auto reply data count.',
+        title: res.__('error.Internal Server Error'),
+        message: res.__('error.It seems there was an error'),
       });
     }
 
@@ -43,8 +43,8 @@ exports.index = (req, res) => {
       if (errReplies) {
         console.error('Error fetching auto replies:', errReplies);
         return res.status(500).render('error', {
-          title: '500 Internal Server Error',
-          message: 'Failed to retrieve auto reply data.',
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
         });
       }
 
@@ -54,8 +54,8 @@ exports.index = (req, res) => {
         if (errSessions) {
           console.error('Error fetching sessions:', errSessions);
           return res.status(500).render('error', {
-            title: '500 Internal Server Error',
-            message: 'Failed to retrieve sessions data.',
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
           });
         }
 

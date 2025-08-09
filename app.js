@@ -5,6 +5,7 @@ const { rimraf } = require('rimraf');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const { WebSocketServer } = require('ws');
@@ -12,6 +13,7 @@ const { WebSocketServer } = require('ws');
 const webRouter = require('./routes/web');
 const cleanupMiddleware = require('./middleware/cleanupMiddlewares');
 const { registerWsClient, startSession } = require('./services/whatsappService');
+const i18n = require('./utils/i18n');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -19,6 +21,7 @@ app.set('trust proxy', process.env.TRUST_PROXY === 'true');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
@@ -26,9 +29,12 @@ app.use(session({
 }));
 
 app.use(flash());
+app.use(i18n.init);
+
 app.use((req, res, next) => {
   const protocol = req.protocol;
   const host = req.get('host');
+  res.locals.__ = res.__;
   res.locals.BASE_URL = `${protocol}://${host}`;
   res.locals.user = req.session.user || null;
   res.locals.success = req.flash('success');
@@ -46,14 +52,14 @@ app.use('/', webRouter);
 
 app.use((req, res, next) => {
   res.status(404).render('error', {
-    title: '404 Not Found',
-    message: 'The page you are looking for was not found.',
+    title: res.__('error.Not Found'),
+    message: res.__('error.The page you are looking for was not found'),
   });
 });
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-
+/*
   (async () => {
     const sessionsDir = path.join(__dirname, 'sessions');
 
@@ -125,7 +131,7 @@ const server = app.listen(PORT, () => {
       console.error('Failed to initialize sessions:', err);
     }
   })();
-
+*/
 });
 
 const wss = new WebSocketServer({ server });

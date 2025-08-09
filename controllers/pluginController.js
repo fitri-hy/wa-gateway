@@ -88,8 +88,8 @@ exports.index = async (req, res) => {
   } catch (err) {
     console.error(err);
 	res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'There seems to be a problem with the internal server.',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
@@ -108,16 +108,16 @@ exports.enablePlugin = async (req, res) => {
     const sessionIds = userSessions.map(s => String(s.id));
     if (!sessionIds.includes(String(sessionId))) {
 	  return res.status(403).render('error', {
-        title: '403 Forbidden',
-        message: 'Session does not belong to logged-in user',
+        title: res.__('error.Forbidden'),
+        message: res.__('error.Access to this page'),
       });
     }
 
     const enableList = await getPluginEnableList(pluginName);
     if (enableList === null) 
 	return res.status(404).render('error', {
-      title: '404 Not Found',
-      message: 'Plugin not found',
+      title: res.__('error.Not Found'),
+      message: res.__('error.The page you are looking for was not found'),
     });
 
     const sessionIdStr = String(sessionId);
@@ -139,8 +139,8 @@ exports.enablePlugin = async (req, res) => {
   } catch (err) {
     console.error(err);
 	return res.status(500).render('error', {
-      title: '500 Internal Server Error',
-      message: 'There seems to be a problem with the internal server.',
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
     });
   }
 };
