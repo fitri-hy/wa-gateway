@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Auto Reply Administrator | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('autoreply.Auto Reply') + ' Administrator | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,12 +12,12 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Auto Reply' }) %>
+		<%- include('../components/header-dash', { dash_title: __('autoreply.Auto Reply') }) %>
 		<section class="px-4 pb-4">
 			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('autoreply.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -30,19 +30,19 @@
 						<table>
 							<thead>
 								<tr>
-									<th>Title</th>
-									<th>User</th>
-									<th>Prefix</th>
-									<th>Includes</th>
-									<th>Type</th>
-									<th>Date</th>
-									<th class="text-center">Action</th>
+									<th><%= __('autoreply.Title') %></th>
+									<th><%= __('autoreply.User') %></th>
+									<th><%= __('autoreply.Prefix') %></th>
+									<th><%= __('autoreply.Includes') %></th>
+									<th><%= __('autoreply.Type') %></th>
+									<th><%= __('autoreply.Date') %></th>
+									<th class="text-center"><%= __('autoreply.Action') %></th>
 								</tr>
 							</thead>
 							<tbody>
 								<% if (!data || data.length === 0) { %>
 								  <tr>
-									<td colspan="8" class="text-center">No messages found.</td>
+									<td colspan="8" class="text-center"><%= __('autoreply.No messages found') %></td>
 								  </tr>
 								<% } else { %>
 								  <% data.forEach(item => { %>

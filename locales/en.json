@@ -219,5 +219,63 @@
     "Action": "Action",
 	"Not available": "Not available",
     "No messages found": "No messages found."
+  },
+  "autoreply": {
+    "Auto Reply": "Auto Reply",
+    "Search": "Search",
+    "Title": "Title",
+    "User": "User",
+    "Prefix": "Prefix",
+    "Includes": "Includes",
+    "Type": "Type",
+    "Date": "Date",
+    "Action": "Action",
+    "No messages found": "No messages found."
+  },
+  "plugins": {
+    "Plugins": "Plugins",
+    "Search": "Search",
+    "Title": "Title",
+    "Command": "Command",
+    "File": "File",
+    "Author": "Author",
+    "Action": "Action",
+    "No plugin found": "No messages found.",
+	"Add New": "Add New",
+	"Plugin File Name": "Plugin File Name",
+	"Plugin Code": "Plugin Code",
+	"Save": "Save",
+	"Add Plugin": "Add Plugin",
+	"Edit Plugin": "Edit Plugin"
+  },
+  "ads": {
+    "Ads": "Ads",
+    "Search": "Search",
+    "Title": "Title",
+    "Thumbnail": "Thumbnail",
+    "Source": "Source",
+    "Created At": "Created At",
+    "Action": "Action",
+    "No ads found": "No ads found.",
+	"Add New": "Add New",
+	"Add Ads": "Add Ads",
+	"Content": "Content",
+	"Type": "Type",
+	"Save": "Save",
+	"Cancel": "Cancel",
+	"Select type": "Select type"
+  },
+  "users": {
+    "Users": "Users",
+    "Search": "Search",
+    "Name": "Name",
+    "Email": "Email",
+    "Role": "Role",
+    "Status": "Status",
+    "Package": "Package",
+    "Duration": "Duraiton",
+	"Expired": "Expired",
+	"Action": "Action",
+    "No users found": "No users found."
   }
 }

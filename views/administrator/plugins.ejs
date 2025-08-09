@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Plugins Administrator | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('plugins.Plugins') + ' Administrator | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,12 +12,12 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Plugins' }) %>
+		<%- include('../components/header-dash', { dash_title: __('plugins.Plugins') }) %>
 		<section class="px-4 pb-4">
 			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('plugins.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -29,7 +29,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
 							</svg>
-							<span class="hidden md:flex">Add New</span>
+							<span class="hidden md:flex"><%= __('plugins.Add New') %></span>
 						</a>
 					</div>
 				</div>
@@ -38,17 +38,17 @@
 						<table>
 							<thead>
 								<tr>
-									<th>Title</th>
-									<th>Command</th>
-									<th>File</th>
-									<th>Author</th>
-									<th class="text-center">Action</th>
+									<th><%= __('plugins.Title') %></th>
+									<th><%= __('plugins.Command') %></th>
+									<th><%= __('plugins.File') %></th>
+									<th><%= __('plugins.Author') %></th>
+									<th class="text-center"><%= __('plugins.Action') %></th>
 								</tr>
 							</thead>
 							<tbody>
 								<% if (!plugins || plugins.length === 0) { %>
 									<tr>
-									<td colspan="5" class="text-center">No plugins found.</td>
+									<td colspan="5" class="text-center"><%= __('plugins.No plugin found') %></td>
 									</tr>
 								<% } else { %>
 								<% plugins.forEach(plugin => { %>

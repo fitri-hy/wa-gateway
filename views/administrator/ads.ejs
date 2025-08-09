@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Ads Administrator | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('ads.Ads') + ' Administrator | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -12,12 +12,12 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Ads' }) %>
+		<%- include('../components/header-dash', { dash_title: __('ads.Ads') }) %>
 		<section class="px-4 pb-4">
 			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('ads.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -29,7 +29,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
 							</svg>
-							<span class="hidden md:flex">Add New</span>
+							<span class="hidden md:flex"><%= __('ads.Add New') %></span>
 						</button>
 					</div>
 				</div>
@@ -38,17 +38,17 @@
 						<table>
 							<thead>
 								<tr>
-									<th>Title</th>
-									<th>Thumbnail</th>
-									<th>Source</th>
-									<th>Ceated At</th>
-									<th class="text-center">Action</th>
+									<th><%= __('ads.Title') %></th>
+									<th><%= __('ads.Thumbnail') %></th>
+									<th><%= __('ads.Source') %></th>
+									<th><%= __('ads.Created At') %></th>
+									<th class="text-center"><%= __('ads.Action') %></th>
 								</tr>
 							</thead>
 							<tbody>
 								<% if (!ads || ads.length === 0) { %>
 									<tr>
-									<td colspan="5" class="text-center">No ads found.</td>
+									<td colspan="5" class="text-center"><%= __('ads.No ads found') %></td>
 									</tr>
 								<% } else { %>
 								<% ads.forEach(adsdata => { %>
@@ -135,42 +135,41 @@
 	
 	<div id="adsModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
 	  <div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative">
-		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add Ad</h2>
+		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white"><%= __('ads.Add Ads') %></h2>
 		<form id="adsForm" method="POST" action="/administrator/ads" class="flex flex-col gap-4">
 		  <div>
-			<label for="title" class="block mb-1 font-medium text-gray-700 dark:text-gray-300">Title</label>
+			<label for="title" class="block mb-1 font-medium text-gray-700 dark:text-gray-300"><%= __('ads.Title') %></label>
 			<input type="text" id="title" name="title" minlength="3" maxlength="25 required"
 			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 		  </div>
 		  <div>
-			<label for="thumbnail_path" class="block mb-1 font-medium text-gray-700 dark:text-gray-300">Thumbnail URL</label>
+			<label for="thumbnail_path" class="block mb-1 font-medium text-gray-700 dark:text-gray-300"><%= __('ads.Thumbnail') %></label>
 			<input type="url" id="thumbnail_path" name="thumbnail_path" required
 			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 		  </div>
 		  <div>
-			<label for="source_url" class="block mb-1 font-medium text-gray-700 dark:text-gray-300">Source URL</label>
+			<label for="source_url" class="block mb-1 font-medium text-gray-700 dark:text-gray-300"><%= __('ads.Source') %></label>
 			<input type="url" id="source_url" name="source_url" required
 			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 		  </div>
 		  <div>
-			<label for="media_type" class="block mb-1 font-medium text-gray-700 dark:text-gray-300">Media Type</label>
+			<label for="media_type" class="block mb-1 font-medium text-gray-700 dark:text-gray-300"><%= __('ads.Type') %></label>
 			<select id="media_type" name="media_type" required
 			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
-			  <option disabled selected>Select media type</option>
+			  <option disabled selected><%= __('ads.Select type') %></option>
 			  <option value="1">1</option>
 			  <option value="2">2</option>
 			  <option value="3">3</option>
 			</select>
 		  </div>
 		  <div>
-			<label for="body" class="block mb-1 font-medium text-gray-700 dark:text-gray-300">Body</label>
+			<label for="body" class="block mb-1 font-medium text-gray-700 dark:text-gray-300"><%= __('ads.Content') %></label>
 			<textarea id="body" name="body" rows="4" minlength="3" maxlength="50" 
-			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" 
-			  placeholder="Optional description or content"></textarea>
+			  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></textarea>
 		  </div>
 		  <div class="flex justify-end gap-2">
-			<button type="button" onclick="closeModal()" class="px-4 py-2 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 transition-all duration-300 font-semibold">Cancel</button>
-			<button type="submit" class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 transition-all duration-300 font-semibold">Save</button>
+			<button type="button" onclick="closeModal()" class="px-4 py-2 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 transition-all duration-300 font-semibold"><%= __('ads.Cancel') %></button>
+			<button type="submit" class="px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 transition-all duration-300 font-semibold"><%= __('ads.Save') %></button>
 		  </div>
 		</form>
 	  </div>

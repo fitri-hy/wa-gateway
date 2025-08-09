@@ -218,5 +218,63 @@
     "Action": "Aksi",
 	"Not available": "Tidak Tersedia",
     "No messages found": "Tidak ada pesan yang ditemukan."
+  },
+  "autoreply": {
+    "Auto Reply": "Balasan Otomatis",
+    "Search": "Cari",
+    "Title": "Judul",
+    "User": "Pengguna",
+    "Prefix": "Awalan",
+    "Includes": "Termasuk",
+    "Type": "Tipe",
+    "Date": "Tanggal",
+    "Action": "Aksi",
+    "No messages found": "Tidak ada pesan yang ditemukan."
+  },
+  "plugins": {
+    "Plugins": "Plugin",
+    "Search": "Cari",
+    "Title": "Judul",
+    "Command": "Perintah",
+    "File": "Berkas",
+    "Author": "Penulis",
+    "Action": "Aksi",
+    "No plugin found": "Tidak ada plugin yang ditemukan.",
+	"Add New": "Tambah Baru",
+	"Plugin File Name": "Nama Berkas Plugin",
+	"Plugin Code": "Kode Plugin",
+	"Save": "Simpan",
+	"Add Plugin": "Tambah Plugin",
+	"Edit Plugin": "Perbaharui Plugin"
+  },
+  "ads": {
+    "Ads": "Iklan",
+    "Search": "Cari",
+    "Title": "Judul",
+    "Thumbnail": "Gambar",
+    "Source": "Sumber",
+    "Created At": "Dibuat Pada",
+    "Action": "Aksi",
+    "No ads found": "Tidak ada iklan yang ditemukan.",
+	"Add New": "Tambah Baru",
+	"Add Ads": "Tambah Iklan",
+	"Content": "Isi",
+	"Type": "Tipe",
+	"Save": "Simpan",
+	"Cancel": "Batal",
+	"Select type": "Pilih tipe"
+  },
+  "users": {
+    "Users": "Pengguna",
+    "Search": "Cari",
+    "Name": "Nama",
+    "Email": "Email",
+    "Role": "Peran",
+    "Status": "Status",
+    "Package": "Paket",
+    "Duration": "Durasi",
+	"Expired": "Kadaluarsa",
+	"Action": "Aksi",
+    "No users found": "Tidak ada pengguna yang ditemukan."
   }
 }
