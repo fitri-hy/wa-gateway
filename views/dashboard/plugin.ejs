@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Plugin | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('plugins.Plugins') + ' | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
 </head>
 <body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
@@ -10,22 +10,22 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Plugin' }) %>
+		<%- include('../components/header-dash', { dash_title:  __('plugins.Plugins') }) %>
 		<section class="px-4 pb-4">
 	
 			<div class="flex gap-2 ml-3 h-10">
-				<button id="tab-active" class="w-[100px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
-					Active
+				<button id="tab-active" class="w-[150px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
+					<%= __('plugins.Active') %>
 				</button>
-				<button id="tab-inactive" class="w-[100px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
-					Inactive
+				<button id="tab-inactive" class="w-[150px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
+					<%= __('plugins.Inactive') %>
 				</button>
 			</div>
 
 			<div id="active-plugins" class="border-t-2 bg-white dark:bg-slate-800 p-4 md:p-6 rounded-md border-sky-500 dark:border-sky-600 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<% const activePlugins = plugins.filter(plugin => plugin.sessions.some(s => s.enabled));%>
 					<% if (activePlugins.length === 0) { %>
-						<p class="text-center py-6">There are no active plugins.</p>
+						<p class="text-center py-6"><%= __('plugins.There are no active plugins') %></p>
 					<% } else { %>
 					<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-2">
 						<% activePlugins.forEach(plugin => { %>
@@ -38,10 +38,10 @@
 										<%= plugin.description %>
 									</div>
 									<p class="overflow-hidden line-clamp-1 text-xs">
-										Publish by <a href="<%= plugin.github %>" class="font-semibold text-sky-500" target="_blank"><%= plugin.author %></a>
+										<%= __('plugins.Author') %> <a href="<%= plugin.github %>" class="font-semibold text-sky-500" target="_blank"><%= plugin.author %></a>
 									</p>
 									<div class="h-[4rem] overflow-y-auto text-xs flex flex-col border border-gray-100 dark:border-slate-700/60 bg-gray-50 dark:bg-slate-900/30 rounded px-2 py-1">
-										<span class="font-semibold">How to Use:</span>
+										<span class="font-semibold"><%= __('plugins.How to Use') %>:</span>
 										<span class="italic text-emerald-500">
 											!<%= plugin.command %>
 										</span>
@@ -50,7 +50,7 @@
 								<div class="flex flex-col space-y-1 border-t border-gray-200 dark:border-slate-700 pt-3">
 									<% if (plugin.sessions.length === 0) { %>
 										<p class="text-center prose dark:prose-invert text-xs italic">
-											<a href="/dashboard">Create a session</a> to activate the plugin.
+											<a href="/dashboard"><%= __('plugins.Create a session') %></a> <%= __('plugins.to activate the plugin') %>
 										</p>
 									<% } else { %>
 									<% plugin.sessions.forEach(session => { %>
@@ -71,7 +71,7 @@
 			<div id="inactive-plugins" class="hidden border-t-2 bg-white dark:bg-slate-800 p-4 md:p-6 rounded-md border-sky-500 dark:border-sky-600 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('plugins.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -81,7 +81,7 @@
 				</div>
 				<% const inactivePlugins = plugins.filter(plugin => !plugin.sessions.some(s => s.enabled)); %>
 				<% if (inactivePlugins.length === 0) { %>
-					<p class="text-center py-6">There are no active plugins.</p>
+					<p class="text-center py-6"><%= __('plugins.No plugin found') %></p>
 				<% } else { %>
 				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-9">
 					<% inactivePlugins.forEach(plugin => { %>
@@ -94,10 +94,10 @@
 									<%= plugin.description %>
 								</div>
 								<p class="overflow-hidden line-clamp-1 text-xs">
-									Publish by <a href="<%= plugin.github %>" class="font-semibold text-sky-500" target="_blank"><%= plugin.author %></a>
+									<%= __('plugins.Author') %> <a href="<%= plugin.github %>" class="font-semibold text-sky-500" target="_blank"><%= plugin.author %></a>
 								</p>
 								<div class="h-[4rem] overflow-y-auto text-xs flex flex-col border border-gray-100 dark:border-slate-700/60 bg-gray-50 dark:bg-slate-900/30 rounded px-2 py-1">
-									<span class="font-semibold">How to Use:</span>
+									<span class="font-semibold"><%= __('plugins.How to Use') %>:</span>
 									<span class="italic text-emerald-500">
 										!<%= plugin.command %>
 									</span>
@@ -106,7 +106,7 @@
 							<div class="flex flex-col space-y-1 border-t border-gray-200 dark:border-slate-700 pt-3">
 								<% if (plugin.sessions.length === 0) { %>
 									<p class="text-center prose dark:prose-invert text-xs italic">
-										<a href="/dashboard">Create a session</a> to activate the plugin.
+										<a href="/dashboard"><%= __('plugins.Create a session') %></a> <%= __('plugins.to activate the plugin') %>
 									</p>
 								<% } else { %>
 								<% plugin.sessions.forEach(session => { %>
@@ -208,7 +208,7 @@
 			const data = await response.json();
 
 			if (!data.success) {
-			  alert('Gagal update plugin: ' + (data.error || 'Unknown error'));
+			  // alert('Failed to update plugin: ' + (data.error || 'Unknown error'));
 			  this.checked = !enable;
 			} else {
 			  setTimeout(() => {
@@ -216,7 +216,7 @@
               }, 200);
 			}
 		  } catch (e) {
-			alert('Error saat update plugin');
+			// alert('Error while updating plugin');
 			this.checked = !enable;
 		  }
 		});

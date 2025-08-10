@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'Sending | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('sending.Sending') + ' | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
 </head>
 <body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
@@ -10,21 +10,21 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'Sending' }) %>
+		<%- include('../components/header-dash', { dash_title: __('sending.Sending') }) %>
 		<section class="flex flex-col px-4 pb-4">
 			<div class="flex gap-2 ml-3 h-10">
-				<button data-tab="1" class="w-[100px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
-					History
+				<button data-tab="1" class="w-[150px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
+					<%= __('sending.History') %>
 				</button>
-				<button data-tab="2" class="w-[100px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
-					Sending
+				<button data-tab="2" class="w-[150px] h-full px-4 rounded-t-md hover:bg-sky-500 dark:hover:bg-sky-600 hover:text-white dark:hover:text-white hover:text-semibold">
+					<%= __('sending.Sending') %>
 				</button>
 			</div>
 			
 			<div data-content="1" class="border-t-2 bg-white dark:bg-slate-800 p-4 md:p-6 rounded-md border-sky-500 dark:border-sky-600 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('sending.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -37,19 +37,19 @@
 					<table class="min-w-full">
 					  <thead>
 						<tr>
-						  <th>Session</th>
-						  <th>To</th>
-						  <th>Content</th>
-						  <th>Type</th>
-						  <th>File</th>
-						  <th>Date</th>
-						  <th>Action</th>
+						  <th><%= __('sending.Session') %></th>
+						  <th><%= __('sending.To') %></th>
+						  <th><%= __('sending.Content') %></th>
+						  <th><%= __('sending.Type') %></th>
+						  <th><%= __('sending.File') %></th>
+						  <th><%= __('sending.Date') %></th>
+						  <th><%= __('sending.Action') %></th>
 						</tr>
 					  </thead>
 					  <tbody>
 						<% if (messages.length === 0) { %>
 						  <tr>
-							<td colspan="7" class="text-center">No message history found.</td>
+							<td colspan="7" class="text-center"><%= __('sending.No history found') %></td>
 						  </tr>
 						<% } else { %>
 						  <% messages.forEach(message => { %>
@@ -66,7 +66,7 @@
 								<% } else if (message.type === 'location') { %>
 								  <span class="whitespace-nowrap"><%= message.location_name %> (<%= message.latitude %>, <%= message.longitude %>)</span>
 								<% } else { %>
-								  <span class="whitespace-nowrap text-rose-500">Not available</span>
+								  <span class="whitespace-nowrap text-rose-500"><%= __('sending.Not available') %></span>
 								<% } %>
 							  </td>
 							  <td>
@@ -78,7 +78,7 @@
 							        <%= message.file_name || 'View Media' %>
 							      </a>
 							    <% } else { %>
-							       <span class="whitespace-nowrap text-rose-500">Not available</span>
+							       <span class="whitespace-nowrap text-rose-500"><%= __('sending.Not available') %></span>
 								<% } %>
 							  </td>
 							  <td class="whitespace-nowrap">
@@ -135,15 +135,15 @@
 			<div data-content="2" class="border-t-2 bg-white dark:bg-slate-800 p-4 md:p-6 rounded-md border-sky-500 dark:border-sky-600 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<div class="w-full flex flex-col">
-						<label class="block mb-2">Message Type</label>
+						<label class="block mb-2"><%= __('sending.Type') %></label>
 						<select id="typeSelect" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
-							<option value="text">Text</option>
-							<option value="image">Image</option>
-							<option value="video">Video</option>
-							<option value="audio">Audio</option>
-							<option value="document">Document</option>
-							<option value="location">Location</option>
-							<option value="sticker">Sticker</option>
+							<option value="text"><%= __('sending.Text') %></option>
+							<option value="image"><%= __('sending.Image') %></option>
+							<option value="video"><%= __('sending.Video') %></option>
+							<option value="audio"><%= __('sending.Audio') %></option>
+							<option value="document"><%= __('sending.Document') %></option>
+							<option value="location"><%= __('sending.Location') %></option>
+							<option value="sticker"><%= __('sending.Sticker') %></option>
 						</select>
 					</div>
 				</div>
@@ -151,24 +151,24 @@
 					<!-- Form Text -->
 					<div id="form-text" class="form-item">
 						<h2 class="text-xl font-bold">
-							Text Message
+							<%= __('sending.Text Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/text-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -177,12 +177,12 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Content</label>
-									<textarea rows="4" name="content" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Write the contents of the message here" required></textarea>
+									<label class="block mb-2"><%= __('sending.Content') %></label>
+									<textarea rows="4" name="content" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" required></textarea>
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -192,24 +192,24 @@
 					<!-- Form Image -->
 					<div id="form-image" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Image Message
+							<%= __('sending.Image Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/image-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sendingSession') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -218,7 +218,7 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Image Url</label>
+									<label class="block mb-2"><%= __('sending.File URL') %></label>
 									<div class="flex items-center gap-2 max-w-2xl">
 										<input type="text" name="image-url" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="https://example.com/image.png" required>
 										<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
@@ -227,12 +227,12 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Caption</label>
-									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Write the caption of the message here" required></textarea>
+									<label class="block mb-2"><%= __('sending.Caption') %></label>
+									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" required></textarea>
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -242,24 +242,24 @@
 					<!-- Form Video -->
 					<div id="form-video" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Video Message
+							<%= __('sending.Video Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/video-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -268,7 +268,7 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Video Url</label>
+									<label class="block mb-2"><%= __('sending.File URL') %></label>
 									<div class="flex items-center gap-2 max-w-2xl">
 										<input type="text" name="video-url" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="https://example.com/video.mp4" required>
 										<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
@@ -277,12 +277,12 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Caption</label>
-									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Write the caption of the message here" required></textarea>
+									<label class="block mb-2"><%= __('sending.Caption') %></label>
+									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" required></textarea>
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -292,24 +292,24 @@
 					<!-- Form Audio -->
 					<div id="form-audio" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Audio Message
+							<%= __('sending.Audio Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/audio-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -318,7 +318,7 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Audio Url</label>
+									<label class="block mb-2"><%= __('sending.File URL') %></label>
 									<div class="flex items-center gap-2 max-w-2xl">
 										<input type="text" name="audio-url" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="https://example.com/audio.mp3" required>
 										<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
@@ -328,7 +328,7 @@
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -338,24 +338,24 @@
 					<!-- Form Document -->
 					<div id="form-document" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Document Message
+							<%= __('sending.Document Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/document-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -364,11 +364,11 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">File Name</label>
+									<label class="block mb-2"><%= __('sending.File Name') %></label>
 									<input type="text" name="file-name" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Example.pdf" required>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Document Url</label>
+									<label class="block mb-2"><%= __('sending.File URL') %></label>
 									<div class="flex items-center gap-2 max-w-2xl">
 										<input type="text" name="document-url" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="https://example.com/document.pdf" required>
 										<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
@@ -377,12 +377,12 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Caption</label>
-									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Write the caption of the message here" required></textarea>
+									<label class="block mb-2"><%= __('sending.Caption') %></label>
+									<textarea rows="4" name="caption" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" required></textarea>
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -392,24 +392,24 @@
 					<!-- Form Location -->
 					<div id="form-location" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Location Message
+							<%= __('sending.Location Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/location-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -419,21 +419,21 @@
 								</div>
 								<div class="flex items-center gap-4 w-full max-w-2xl">
 									<div class="flex flex-col">
-										<label class="block mb-2">Latitude</label>
+										<label class="block mb-2"><%= __('sending.Latitude') %></label>
 										<input type="text" name="latitude" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="40.7128" required>
 									</div>
 									<div class="flex flex-col">
-										<label class="block mb-2">Longitude</label>
+										<label class="block mb-2"><%= __('sending.Longitude') %></label>
 										<input type="text" name="longitude" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="-74.0060" required>
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Name</label>
+									<label class="block mb-2"><%= __('sending.Location Name') %></label>
 									<input type="text" name="name" class="w-full max-w-2xl bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Statue of Liberty" required>
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>
@@ -443,24 +443,24 @@
 					<!-- Form Sticker -->
 					<div id="form-sticker" class="form-item hidden">
 						<h2 class="text-xl font-bold">
-							Sticker Message
+							<%= __('sending.Sticker Message') %>
 						</h2>
 						<div class="mt-4">
 							<form method="POST" action="/dashboard/sending/sticker-message" class="flex flex-col gap-4">
 								<div class="flex flex-col">
-									<label class="block mb-2">Session</label>
+									<label class="block mb-2"><%= __('sending.Session') %></label>
 									<select id="session" name="session" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 									  <% if (devices.length > 0) { %>
 										<% devices.forEach(device => { %>
 										  <option value="<%= device.phone %>"><%= device.phone %></option>
 										<% }) %>
 									  <% } else { %>
-										<option disabled selected>No sessions available.</option>
+										<option disabled selected><%= __('sending.No sessions available') %></option>
 									  <% } %>
 									</select>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">To</label>
+									<label class="block mb-2"><%= __('sending.To') %></label>
 									<div class="flex items-center gap-2 max-w-xs">
 										<input type="text" name="phone" class="phone-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="628xxxxxxxx" required>
 										<button type="button" class="open-contact-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all" >
@@ -469,7 +469,7 @@
 									</div>
 								</div>
 								<div class="flex flex-col">
-									<label class="block mb-2">Sticker Url</label>
+									<label class="block mb-2"><%= __('sending.File URL') %></label>
 									<div class="flex items-center gap-2 max-w-2xl">
 										<input type="text" name="sticker-url" class="uploads-url-input w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="https://example.com/sticker.webp" required>
 										<button type="button" class="open-upload-modal-btn text-sky-500 hover:text-sky-600 dark:text-sky-600 dark:hover:text-sky-500 hover:duration-300 transition-all">
@@ -479,7 +479,7 @@
 								</div>
 								<div>
 									<button type="submit" class="flex items-center gap-2 font-semibold px-4 py-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
-										Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
+										<%= __('sending.Send') %> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m4.497 20.835l16.51-7.363c1.324-.59 1.324-2.354 0-2.944L4.497 3.164c-1.495-.667-3.047.814-2.306 2.202l3.152 5.904c.245.459.245 1 0 1.458l-3.152 5.904c-.74 1.388.81 2.87 2.306 2.202"></path></svg>
 									</button>
 								</div>
 							</form>

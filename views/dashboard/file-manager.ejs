@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <%- include('../partials/head', { title: 'File Manager | FhytsBot' }) %>
+  <%- include('../partials/head', { title: __('files.File Manager') + ' | ' + __('app.FhytsBot') }) %>
   <meta name="robots" content="noindex, nofollow" />
 </head>
 <body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
@@ -10,12 +10,12 @@
 	</aside>
 
 	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
-		<%- include('../components/header-dash', { dash_title: 'File Manager' }) %>
+		<%- include('../components/header-dash', { dash_title: __('files.File Manager') }) %>
 		<section class="px-4 pb-4">
 			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
 				<div class="mb-4 flex items-center justify-between gap-4">
 					<form class="flex items-center gap-2" method="GET">
-						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="Search...">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('files.Search') %>...">
 						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -27,7 +27,7 @@
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 							</svg>
-							<span class="hidden md:flex">Add New</span>
+							<span class="hidden md:flex"><%= __('files.Add New') %></span>
 						</button>
 					</div>
 				</div>
@@ -36,16 +36,16 @@
 						<table>
 							<thead>
 								<tr>
-									<th class="text-left">Name</th>
-									<th class="text-left">Size</th>
-									<th class="text-left">Date</th>
-									<th class="text-center">Action</th>
+									<th class="text-left"><%= __('files.Name') %></th>
+									<th class="text-left"><%= __('files.Size') %></th>
+									<th class="text-left"><%= __('files.Date') %></th>
+									<th class="text-center"><%= __('files.Action') %></th>
 								</tr>
 							</thead>
 							<tbody>
 								<% if (!files || files.length === 0) { %>
 									<tr>
-									<td colspan="4" class="text-center">No file found.</td>
+									<td colspan="4" class="text-center"><%= __('files.No files found') %></td>
 									</tr>
 								<% } else { %>
 								<% files.forEach(file => { %>
@@ -121,20 +121,20 @@
 		<button id="closeUploadModalTopBtn" class="absolute top-2 right-2 text-rose-500 dark:text-rose-600 hoer:text-rose-600 hoer:dark:text-rose-500">
 		  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06" clip-rule="evenodd"/></svg>
 		</button>
-		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Add File</h2>
+		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white"><%= __('files.Add New') %></h2>
 		<form action="/dashboard/file-manager/upload" method="POST" enctype="multipart/form-data">
 		  <div class="mb-4">
-			<label for="phone" class="block text-sm font-medium mb-1">Select File</label>
+			<label for="phone" class="block text-sm font-medium mb-1"><%= __('files.Select File') %></label>
 			<input type="file" name="file" required class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
 		  </div>
 		  <div class="flex justify-end gap-2">
 			<button type="button" id="closeUploadModalBtn" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"/></svg>
-				Cancel
+				<%= __('files.Cancel') %>
 			</button>
 			<button type="submit" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"/><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"/><path stroke-linecap="round" d="M7 8h6"/></g></svg>
-				Save
+				<%= __('files.Save') %>
 			</button>
 		  </div>
 		</form>

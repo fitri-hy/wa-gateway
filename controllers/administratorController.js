@@ -141,13 +141,13 @@ exports.usersUpdate = async (req, res) => {
   }
 
   if (!name || !role || !status || !package_id) {
-    req.flash('error', 'All fields are required!');
+    req.flash('error', res.__('flash.All fields are required'));
     return res.redirect('/administrator/users');
   }
 
   const nameRegex = /^[a-zA-Z\s]{1,25}$/;
   if (!nameRegex.test(name)) {
-    req.flash('error', 'Name must be max 25 characters and contain only letters and spaces.');
+    req.flash('error', res.__('flash.Name must be max'));
     return res.redirect('/administrator/users');
   }
 
@@ -158,7 +158,7 @@ exports.usersUpdate = async (req, res) => {
     );
 
     if (userRows.length === 0) {
-      req.flash('error', 'User not found.');
+      req.flash('error', res.__('flash.User not found'));
       return res.redirect('/administrator/users');
     }
 
@@ -166,12 +166,12 @@ exports.usersUpdate = async (req, res) => {
 
     if (existingUser.role === 'superadmin') {
       if (role !== existingUser.role || status !== existingUser.status) {
-		req.flash('error', 'Role and status of superadmin cannot be changed.');
+		req.flash('error', res.__('flash.Role and status of superadmin cannot be changed'));
 		return res.redirect('/administrator/users');
 	  }
 
 	  if (parseInt(package_id) !== existingUser.package_id) {
-		req.flash('error', 'Package of superadmin cannot be changed.');
+		req.flash('error', res.__('flash.Package of superadmin cannot be changed'));
 		return res.redirect('/administrator/users');
 	  }
 
@@ -180,7 +180,7 @@ exports.usersUpdate = async (req, res) => {
 		[name, id]
 	  );
 
-	  req.flash('success', 'Superadmin updated successfully.');
+	  req.flash('success', res.__('flash.Superadmin updated successfully'));
 	  return res.redirect('/administrator/users');
     }
 
@@ -190,7 +190,7 @@ exports.usersUpdate = async (req, res) => {
     );
 
     if (packageRows.length === 0) {
-      req.flash('error', 'Selected package not found.');
+      req.flash('error', res.__('flash.Selected package not found'));
       return res.redirect('/administrator/users');
     }
 
@@ -207,12 +207,12 @@ exports.usersUpdate = async (req, res) => {
       [name, role, status, package_id, package_start, package_end, id]
     );
 
-    req.flash('success', 'User updated successfully.');
+    req.flash('success', res.__('flash.User updated successfully'));
     res.redirect('/administrator/users');
 
   } catch (error) {
     console.error('Error updating user:', error);
-    req.flash('error', 'Server error while updating user.');
+    req.flash('error', res.__('flash.Server error while updating user'));
     res.redirect('/administrator/users');
   }
 
@@ -234,7 +234,7 @@ exports.usersDelete = (req, res) => {
   }
   
   if (String(req.session.user.id) === String(id)) {
-    req.flash('error', 'You cannot delete your own account.');
+    req.flash('error', res.__('flash.You cannot delete your own account'));
     return res.redirect('/administrator/users');
   }
   
@@ -246,19 +246,19 @@ exports.usersDelete = (req, res) => {
   db.query(checkQuery, [id], (err, results) => {
     if (err) {
       console.error('Query error:', err);
-      req.flash('error', 'An error occurred while retrieving user data.');
+      req.flash('error', res.__('flash.An error occurred while retrieving user data'));
       return res.redirect('/administrator/users');
     }
 
     if (results.length === 0) {
-      req.flash('error', 'User not found.');
+      req.flash('error', res.__('flash.User not found'));
       return res.redirect('/administrator/users');
     }
 
     const role = results[0].role;
 
     if (role === 'superadmin') {
-      req.flash('error', 'Users with the superadmin role cannot be deleted.');
+      req.flash('error', res.__('flash.Users with the superadmin role cannot be deleted'));
       return res.redirect('/administrator/users');
     }
 
@@ -266,11 +266,11 @@ exports.usersDelete = (req, res) => {
     db.query(deleteQuery, [id], (err, result) => {
       if (err) {
         console.error('Delete error:', err);
-        req.flash('error', 'Failed to delete user.');
+        req.flash('error', res.__('flash.Failed to delete user'));
         return res.redirect('/administrator/users');
       }
 
-      req.flash('success', 'User has been successfully deleted.');
+      req.flash('success', res.__('flash.User has been successfully deleted'));
       res.redirect('/administrator/users');
     });
   });
@@ -355,10 +355,10 @@ exports.devicesDelete = async (req, res) => {
     await db.promise().query('DELETE FROM auto_replies WHERE session_id = ?', [phone]);
     await db.promise().query('DELETE FROM sessions WHERE phone = ?', [phone]);
 
-    req.flash('success', 'Sessions deleted successfully.');
+    req.flash('success', res.__('flash.Sessions deleted successfully'));
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Failed to delete sessions.');
+    req.flash('error', res.__('flash.Failed to delete sessions'));
   }
 
   res.redirect('/administrator/devices');
@@ -443,16 +443,16 @@ exports.contactsDelete = async (req, res) => {
     const [[contact]] = await db.promise().query('SELECT * FROM contacts WHERE id = ?', [contactId]);
 
     if (!contact) {
-      req.flash('error', 'Contact not found.');
+      req.flash('error', res.__('flash.Contact not found'));
       return res.redirect('/administrator/contacts');
     }
 
     await db.promise().query('DELETE FROM contacts WHERE id = ?', [contactId]);
 
-    req.flash('success', 'Contact deleted successfully.');
+    req.flash('success', res.__('flash.Contact deleted successfully'));
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Failed to delete contact.');
+    req.flash('error', res.__('flash.Failed to delete contact'));
   }
 
   res.redirect('/administrator/contacts');
@@ -537,7 +537,7 @@ exports.filesDelete = async (req, res) => {
     const [[file]] = await db.promise().query('SELECT * FROM uploads WHERE id = ?', [fileId]);
 
     if (!file) {
-      req.flash('error', 'File not found.');
+      req.flash('error', res.__('flash.File not found'));
       return res.redirect('/administrator/files');
     }
 
@@ -546,10 +546,10 @@ exports.filesDelete = async (req, res) => {
     await fs.promises.unlink(filePath);
     await db.promise().query('DELETE FROM uploads WHERE id = ?', [fileId]);
 
-    req.flash('success', 'File deleted successfully.');
+    req.flash('success', res.__('flash.File deleted successfully'));
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Failed to delete file.');
+    req.flash('error', res.__('flash.Failed to delete file'));
   }
 
   res.redirect('/administrator/files');
@@ -633,11 +633,11 @@ exports.sendingDelete = (req, res) => {
   db.query('DELETE FROM messages WHERE id = ?', [messageId], (err, result) => {
     if (err) {
       console.error('Delete failed:', err);
-      req.flash('error', 'Failed to delete message');
+      req.flash('error', res.__('flash.Failed to delete message'));
       return res.redirect('/administrator/sending');
     }
 
-    req.flash('success', 'Message deleted successfully!');
+    req.flash('success', res.__('flash.Message deleted successfully'));
     res.redirect('/administrator/sending');
   });
 };
@@ -723,11 +723,11 @@ exports.broadcastsDelete = (req, res) => {
     (err, result) => {
       if (err) {
         console.error('Delete failed:', err);
-        req.flash('error', 'Failed to delete broadcast');
+        req.flash('error', res.__('flash.Failed to delete broadcast'));
         return res.redirect('/administrator/broadcasts');
       }
 
-      req.flash('success', 'Broadcast deleted successfully');
+      req.flash('success', res.__('flash.Broadcast deleted successfully'));
       res.redirect('/administrator/broadcasts');
     }
   );
@@ -803,9 +803,9 @@ exports.autoreplyDelete = (req, res) => {
   db.query('DELETE FROM auto_replies WHERE id = ?', [replyId], (err, result) => {
     if (err) {
       console.error('Delete error:', err);
-      req.flash('error', 'Failed to delete auto reply');
+      req.flash('error', res.__('flash.Failed to delete auto reply'));
     } else {
-      req.flash('success', 'Auto reply deleted successfully');
+      req.flash('success', res.__('flash.Auto reply deleted successfully'));
     }
     res.redirect('/administrator/auto-reply');
   });
@@ -882,27 +882,27 @@ exports.adsAdd = async (req, res) => {
     const urlRegex = /^https?:\/\/[\w\-\.]+\.[a-z]{2,}(\S*)?$/i;
 
     if (!title || !body || !media_type || !thumbnail_path || !source_url) {
-      req.flash('error', 'All fields are required.');
+      req.flash('error', res.__('flash.All fields are required'));
       return res.redirect('/administrator/ads');
     }
 
     if (!titleRegex.test(title)) {
-      req.flash('error', 'Title must be 3–30 characters.');
+      req.flash('error', res.__('flash.Title must be 3–30 characters'));
       return res.redirect('/administrator/ads');
     }
 
     if (!bodyRegex.test(body)) {
-      req.flash('error', 'Body must be 3–50 characters.');
+      req.flash('error', res.__('flash.Body must be 3–50 characters'));
       return res.redirect('/administrator/ads');
     }
 
     if (!urlRegex.test(thumbnail_path)) {
-      req.flash('error', 'Thumbnail URL is invalid.');
+      req.flash('error', res.__('flash.Thumbnail URL is invalid'));
       return res.redirect('/administrator/ads');
     }
 
     if (!urlRegex.test(source_url)) {
-      req.flash('error', 'Source URL is invalid.');
+      req.flash('error', res.__('flash.Source URL is invalid'));
       return res.redirect('/administrator/ads');
     }
 
@@ -912,12 +912,12 @@ exports.adsAdd = async (req, res) => {
     `;
     await db.execute(sql, [title, body, media_type, thumbnail_path, source_url]);
 
-    req.flash('success', 'Ads added successfully.');
+    req.flash('success', res.__('flash.Ads added successfully'));
     res.redirect('/administrator/ads');
 
   } catch (err) {
     console.error('Error adding ad:', err);
-    req.flash('error', 'Failed to add ads.');
+    req.flash('error', res.__('flash.Failed to add ads'));
     res.redirect('/administrator/ads');
   }
 };
@@ -931,7 +931,7 @@ exports.adsEdit = async (req, res) => {
     const { title, body, media_type, thumbnail_path, source_url } = req.body;
 
     if (!id) {
-      req.flash('error', 'Ads not found.');
+      req.flash('error', res.__('flash.Ads not found'));
       return res.redirect('/administrator/ads');
     }
 
@@ -940,27 +940,27 @@ exports.adsEdit = async (req, res) => {
     const urlRegex = /^https?:\/\/[\w\-\.]+\.[a-z]{2,}(\S*)?$/i;
 
     if (!title || !body || !media_type || !thumbnail_path || !source_url) {
-      req.flash('error', 'All fields are required.');
+      req.flash('error', res.__('flash.All fields are required'));
       return res.redirect('/administrator/ads');
     }
 
     if (!titleRegex.test(title)) {
-      req.flash('error', 'Title must be 3–30 characters.');
+      req.flash('error', res.__('flash.Title must be 3–30 characters'));
       return res.redirect('/administrator/ads');
     }
 
     if (!bodyRegex.test(body)) {
-      req.flash('error', 'Body must be 3–50 characters.');
+      req.flash('error', res.__('flash.Body must be 3–50 characters'));
       return res.redirect('/administrator/ads');
     }
 
     if (!urlRegex.test(thumbnail_path)) {
-      req.flash('error', 'Thumbnail URL is invalid.');
+      req.flash('error', res.__('flash.Thumbnail URL is invalid'));
       return res.redirect('/administrator/ads');
     }
 
     if (!urlRegex.test(source_url)) {
-      req.flash('error', 'Source URL is invalid.');
+      req.flash('error', res.__('flash.Source URL is invalid'));
       return res.redirect('/administrator/ads');
     }
 
@@ -968,7 +968,7 @@ exports.adsEdit = async (req, res) => {
     const rows = await executeAsync('SELECT * FROM ads WHERE id = ?', [id]);
 
     if (rows.length === 0) {
-      req.flash('error', 'Ads not found.');
+      req.flash('error', res.__('flash.Ads not found'));
       return res.redirect('/administrator/ads');
     }
 
@@ -984,12 +984,12 @@ exports.adsEdit = async (req, res) => {
 
     await executeAsync(updateSql, [title, body, media_type, thumbnail_path, source_url, id]);
 
-    req.flash('success', 'Ads updated successfully.');
+    req.flash('success', res.__('flash.Ads updated successfully'));
     res.redirect('/administrator/ads');
 
   } catch (err) {
     console.error('Error updating ad:', err);
-    req.flash('error', 'Failed to update ad.');
+    req.flash('error', res.__('flash.Failed to update ads'));
     res.redirect('/administrator/ads');
   }
 };
@@ -1002,7 +1002,7 @@ exports.adsDelete = async (req, res) => {
     const id = req.params.id;
 
     if (!id) {
-      req.flash('error', 'Ads not found.');
+      req.flash('error', res.__('flash.Ads not found'));
       return res.redirect('/administrator/ads');
     }
 
@@ -1010,18 +1010,18 @@ exports.adsDelete = async (req, res) => {
 
     const rows = await executeAsync('SELECT * FROM ads WHERE id = ?', [id]);
     if (rows.length === 0) {
-      req.flash('error', 'Ads not found.');
+      req.flash('error', res.__('flash.Ads not found'));
       return res.redirect('/administrator/ads');
     }
 
     await executeAsync('DELETE FROM ads WHERE id = ?', [id]);
 
-    req.flash('success', 'Ads successfully removed.');
+    req.flash('success', res.__('flash.Ads successfully removed'));
     res.redirect('/administrator/ads');
 
   } catch (err) {
     console.error('Error deleting ad:', err);
-    req.flash('error', 'Failed to remove ads.');
+    req.flash('error', res.__('flash.Failed to remove ads'));
     res.redirect('/administrator/ads');
   }
 };
@@ -1083,7 +1083,7 @@ exports.pluginPreviewForm = (req, res) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
       if (err) {
         console.error('Gagal baca file plugin:', err);
-        req.flash('error', 'Plugin tidak ditemukan');
+        req.flash('error', res.__('flash.Plugin not found'));
         return res.redirect('/administrator/plugins');
       }
 
@@ -1144,7 +1144,7 @@ exports.addPlugin = (req, res) => {
   const { title, code } = req.body;
 
   if (!title || !title.trim()) {
-    req.flash('error', 'Plugin file name (title) is required!');
+    req.flash('error', res.__('flash.Plugin file name is required'));
     return res.redirect('/administrator/plugins/add');
   }
 
@@ -1157,18 +1157,18 @@ exports.addPlugin = (req, res) => {
   const filePath = path.join(pluginsDir, filename);
 
   if (fs.existsSync(filePath)) {
-    req.flash('error', 'The plugin file already exists, use another name or delete the file first.');
+    req.flash('error', res.__('flash.The plugin file already exists'));
     return res.redirect('/administrator/plugins/add');
   }
 
   fs.writeFile(filePath, code, 'utf8', err => {
     if (err) {
       console.error('Failed to save plugin file:', err);
-      req.flash('error', 'Failed to save plugin file.');
+      req.flash('error', res.__('flash.Failed to save plugin file'));
       return res.redirect('/administrator/plugins/add');
     }
 
-    req.flash('success', 'Plugin saved successfully!');
+    req.flash('success', res.__('flash.Plugin saved successfully'));
     res.redirect('/administrator/plugins');
   });
 };
@@ -1181,7 +1181,7 @@ exports.editPlugin = (req, res) => {
   let { title, code } = req.body;
 
   if (!title || !title.trim()) {
-    req.flash('error', 'Plugin file name (title) is required!');
+    req.flash('error', res.__('flash.Plugin file name is required'));
     return res.redirect(`/administrator/plugins/views?name=${encodeURIComponent(title || '')}`);
   }
 
@@ -1194,18 +1194,18 @@ exports.editPlugin = (req, res) => {
   const filePath = path.join(pluginsDir, title);
 
   if (!fs.existsSync(filePath)) {
-    req.flash('error', 'Plugin file does not exist.');
+    req.flash('error', res.__('flash.Plugin file does not exist'));
     return res.redirect('/administrator/plugins');
   }
 
   fs.writeFile(filePath, code, 'utf8', err => {
     if (err) {
       console.error('Failed to update plugin file:', err);
-      req.flash('error', 'Failed to update plugin file.');
+      req.flash('error', res.__('flash.Failed to update plugin file'));
       return res.redirect(`/administrator/plugins/views?name=${encodeURIComponent(title)}`);
     }
 
-    req.flash('success', 'Plugin updated successfully!');
+    req.flash('success', res.__('flash.Plugin updated successfully'));
     res.redirect('/administrator/plugins');
   });
 };
@@ -1214,7 +1214,7 @@ exports.deletePlugin = (req, res) => {
   const name = req.params.name;
 
   if (!name) {
-    req.flash('error', 'Plugin name is mandatory');
+    req.flash('error', res.__('flash.Plugin name is mandatory'));
     return res.redirect('/administrator/plugins');
   }
 
@@ -1223,18 +1223,18 @@ exports.deletePlugin = (req, res) => {
 
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
-      req.flash('error', 'Plugin file not found');
+      req.flash('error', res.__('flash.Plugin file not found'));
       return res.redirect('/administrator/plugins');
     }
 
     fs.unlink(filePath, (err) => {
       if (err) {
         console.error('Gagal hapus plugin:', err);
-        req.flash('error', 'Failed to remove plugin');
+        req.flash('error', res.__('flash.Failed to remove plugin'));
         return res.redirect('/administrator/plugins');
       }
 
-      req.flash('success', `Plugin ${name} successfully removed`);
+      req.flash('success', res.__('flash.Plugin successfully removed'));
       return res.redirect('/administrator/plugins');
     });
   });
