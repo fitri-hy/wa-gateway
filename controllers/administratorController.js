@@ -1239,3 +1239,185 @@ exports.deletePlugin = (req, res) => {
     });
   });
 };
+
+// Subscribe
+exports.subscribe = async (req, res) => {
+  if (!req.session?.user) {
+    return res.redirect('/login');
+  }
+
+  const search = req.query.search || '';
+  const page = parseInt(req.query.page) || 1;
+  const limit = 25;
+  const offset = (page - 1) * limit;
+
+  try {
+    const countQuery = `
+      SELECT COUNT(*) AS total
+      FROM packages
+      WHERE (name LIKE ? OR description LIKE ?)
+        AND name <> 'ADMIN'
+    `;
+    const countParams = [`%${search}%`, `%${search}%`];
+
+    db.query(countQuery, countParams, (err, countResult) => {
+      if (err) {
+        console.error('Error counting packages:', err);
+        return res.status(500).render('error', {
+          title: res.__('error.Internal Server Error'),
+          message: res.__('error.It seems there was an error'),
+        });
+      }
+
+      const totalPackages = countResult[0].total;
+      const totalPages = Math.ceil(totalPackages / limit);
+
+      const dataQuery = `
+        SELECT id, name, duration_days, price, description
+        FROM packages
+        WHERE (name LIKE ? OR description LIKE ?)
+          AND name <> 'ADMIN'
+        ORDER BY price ASC
+        LIMIT ? OFFSET ?
+      `;
+      const dataParams = [`%${search}%`, `%${search}%`, limit, offset];
+
+      db.query(dataQuery, dataParams, (err, packages) => {
+        if (err) {
+          console.error('Error retrieving packages:', err);
+          return res.status(500).render('error', {
+            title: res.__('error.Internal Server Error'),
+            message: res.__('error.It seems there was an error'),
+          });
+        }
+
+        res.render('administrator/subscribe', {
+          package: packages,
+          search,
+          currentPage: page,
+          totalPages,
+        });
+      });
+    });
+  } catch (error) {
+    console.error('Unexpected error in subscribe controller:', error);
+    res.status(500).render('error', {
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
+    });
+  }
+};
+
+exports.addSubscribe = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const { name, duration_days, price, description } = req.body;
+
+    if (!name || name.length < 3 || name.length > 100) {
+      req.flash('error', res.__('flash.Name must be between 3 and 100 characters'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const duration = Number(duration_days);
+    if (!duration_days || isNaN(duration) || duration < 1) {
+      req.flash('error', res.__('flash.Duration must be a number and at least 1 day'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const priceNumber = Number(price);
+    if (
+      price == null ||
+      isNaN(priceNumber) ||
+      priceNumber < 0 ||
+      !/^\d+(\.\d{1,2})?$/.test(price.toString())
+    ) {
+      req.flash('error', res.__('flash.Price must be a positive number or zero'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const sql = `INSERT INTO packages (name, duration_days, price, description) VALUES (?, ?, ?, ?)`;
+    await db.promise().execute(sql, [name, duration, priceNumber, description || '']);
+
+    req.flash('success', res.__('flash.Subscribe successfully added'));
+    res.redirect('/administrator/subscribe');
+  } catch (err) {
+    console.error('Error adding subscribe:', err);
+    req.flash('error', res.__('flash.Failed to add subscribe'));
+    res.redirect('/administrator/subscribe');
+  }
+};
+
+exports.editSubscribe = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const id = req.params.id;
+    const { name, duration_days, price, description } = req.body;
+
+    if (!name || name.length < 3 || name.length > 100) {
+      req.flash('error', res.__('flash.Name must be between 3 and 100 characters'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const duration = Number(duration_days);
+    if (!duration_days || isNaN(duration) || duration < 1) {
+      req.flash('error', res.__('flash.Duration must be a number and at least 1 day'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const priceNumber = Number(price);
+    if (
+      price == null ||
+      isNaN(priceNumber) ||
+      priceNumber < 0 ||
+      !/^\d+(\.\d{1,2})?$/.test(price.toString())
+    ) {
+      req.flash('error', res.__('flash.Price must be a positive number or zero'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const [rows] = await db.promise().execute('SELECT * FROM packages WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      req.flash('error', res.__('flash.Subscribe not found'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const sql = `UPDATE packages SET name = ?, duration_days = ?, price = ?, description = ? WHERE id = ?`;
+    await db.promise().execute(sql, [name, duration, priceNumber, description || '', id]);
+
+    req.flash('success', res.__('flash.Subscribe successfully updated'));
+    res.redirect('/administrator/subscribe');
+  } catch (err) {
+    console.error('Error updating subscribe:', err);
+    req.flash('error', res.__('flash.Failed to update subscribe'));
+    res.redirect('/administrator/subscribe');
+  }
+};
+
+exports.deleteSubscribe = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) return res.redirect('/login');
+
+    const id = req.params.id;
+
+    const [rows] = await db.promise().execute('SELECT * FROM packages WHERE id = ?', [id]);
+    if (rows.length === 0) {
+      req.flash('error', res.__('flash.Subscribe not found'));
+      return res.redirect('/administrator/subscribe');
+    }
+
+    const sql = `DELETE FROM packages WHERE id = ?`;
+    await db.promise().execute(sql, [id]);
+
+    req.flash('success', res.__('flash.Subscribe successfully deleted'));
+    res.redirect('/administrator/subscribe');
+  } catch (err) {
+    console.error('Error deleting subscribe:', err);
+    req.flash('error', res.__('flash.Failed to delete subscribe'));
+    res.redirect('/administrator/subscribe');
+  }
+};

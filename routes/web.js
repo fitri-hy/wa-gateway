@@ -111,6 +111,10 @@ router.get('/administrator/plugins/views', administratorMiddleware, Administrato
 router.post('/administrator/plugins/add', administratorMiddleware, Administrator.addPlugin);
 router.post('/administrator/plugins/edit', administratorMiddleware, Administrator.editPlugin);
 router.post('/administrator/plugins/delete/:name', administratorMiddleware, Administrator.deletePlugin);
+router.get('/administrator/subscribe', administratorMiddleware, Administrator.subscribe);
+router.post('/administrator/subscribe/add', administratorMiddleware, Administrator.addSubscribe);
+router.post('/administrator/subscribe/edit/:id', administratorMiddleware, Administrator.editSubscribe);
+router.post('/administrator/subscribe/delete/:id', administratorMiddleware, Administrator.deleteSubscribe);
 
 router.get('/lang', (req, res) => {
   const currentLang = req.getLocale();

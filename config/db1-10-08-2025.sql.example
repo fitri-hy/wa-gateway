@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 10, 2025 at 09:18 AM
+-- Generation Time: Aug 10, 2025 at 10:36 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -137,7 +137,7 @@ CREATE TABLE `packages` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `duration_days` int(11) NOT NULL DEFAULT 3,
-  `price` decimal(10,2) NOT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
   `description` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -146,7 +146,7 @@ CREATE TABLE `packages` (
 --
 
 INSERT INTO `packages` (`id`, `name`, `duration_days`, `price`, `description`) VALUES
-(1, 'Unlimited', -1, 1000000.00, 'Access all full features for life without time limits.'),
+(1, 'ADMIN', -1, NULL, 'Access all full features for life without time limits.'),
 (2, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
 (3, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
 (4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features.'),
@@ -238,7 +238,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`, `package_id`, `package_start`, `package_end`) VALUES
 (1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 1, NULL, NULL),
 (2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 1, NULL, NULL),
-(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 2, '2025-08-10 14:18:28', '2025-08-12 14:18:28');
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 2, '2025-08-07 14:18:28', '2025-08-09 14:18:28');
 
 --
 -- Indexes for dumped tables
@@ -352,7 +352,7 @@ ALTER TABLE `packages`
 -- AUTO_INCREMENT for table `plugins`
 --
 ALTER TABLE `plugins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1261;
 
 --
 -- AUTO_INCREMENT for table `sessions`

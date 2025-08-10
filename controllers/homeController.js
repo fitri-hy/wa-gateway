@@ -1,7 +1,7 @@
 const db = require('../config/Mysql');
 
 exports.index = (req, res) => {
-  let query = 'SELECT * FROM packages WHERE duration_days <> -1';
+  let query = "SELECT * FROM packages WHERE name <> 'ADMIN'";
   
   if (req.session && req.session.user) {
     query += ' AND price <> 0.00';

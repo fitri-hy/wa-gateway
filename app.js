@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-/*
+
   (async () => {
     const sessionsDir = path.join(__dirname, 'sessions');
 
@@ -131,7 +131,7 @@ const server = app.listen(PORT, () => {
       console.error('Failed to initialize sessions:', err);
     }
   })();
-*/
+
 });
 
 const wss = new WebSocketServer({ server });

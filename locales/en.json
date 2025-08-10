@@ -35,7 +35,8 @@
 	"Ads": "Ads",
 	"Users": "Users",
 	"Analytic": "Analytic",
-    "Settings": "Settings"
+    "Settings": "Settings",
+    "Package": "Packages"
   },
   "home": {
     "Whatsapp Gateway": "Whatsapp Gateway",
@@ -382,6 +383,26 @@
 	"Cancel": "Cancel",
 	"Select type": "Select type"
   },
+  "packages": {
+    "Package": "Packages",
+    "Search": "Search",
+	"Add New": "Add New",
+	"Add Package": "Tambah Paket",
+	"Edit Package": "Perbaharui Paket",
+    "Title": "Name",
+    "Duration": "Duration",
+    "Price": "Price",
+    "Action": "Action",
+    "Days": "Days",
+	"No package found": "No package found.",
+	"Save": "Save",
+	"Cancel": "Cancel",
+	"Description": "Description",
+	"Enter a package name": "Enter a package name",
+	"Enter a duration in days": "Enter a duration in days",
+	"Enter a price": "Enter a price",
+	"Enter a description": "Enter a description"
+  },
   "users": {
     "Users": "Users",
     "Search": "Search",
@@ -516,6 +537,16 @@
 	"Failed to update user data": "Failed to update user data",
 	"Profile updated successfully": "Profile updated successfully",
 	"Please fill in both password fields": "Please fill in both password fields",
-	"Failed to update password": "Failed to update password"
+	"Failed to update password": "Failed to update password",
+    "Name must be between 3 and 100 characters": "Name must be between 3 and 100 characters",
+    "Duration must be a number and at least 1 day": "Duration must be a number and at least 1 day",
+    "Price must be a positive number or zero": "Price must be a positive number or zero",
+    "Subscribe successfully added": "Subscribe successfully added",
+    "Failed to add subscribe": "Failed to add subscribe",
+    "Subscribe not found": "Subscribe not found",
+    "Subscribe successfully updated": "Subscribe successfully updated",
+    "Failed to update subscribe": "Failed to update subscribe",
+    "Subscribe successfully deleted": "Subscribe successfully deleted",
+    "Failed to delete subscribe": "Failed to delete subscribe"
   }
 }

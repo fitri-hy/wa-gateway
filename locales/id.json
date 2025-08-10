@@ -35,7 +35,8 @@
 	"Ads": "Iklan",
 	"Users": "Pengguna",
 	"Analytic": "Analitik",
-    "Settings": "Pengaturan"
+    "Settings": "Pengaturan",
+    "Package": "Paket"
   },
   "home": {
     "Whatsapp Gateway": "Gerbang WhatsApp",
@@ -382,6 +383,26 @@
 	"Cancel": "Batal",
 	"Select type": "Pilih tipe"
   },
+  "packages": {
+    "Package": "Paket",
+    "Search": "Cari",
+	"Add New": "Tambah Baru",
+	"Add Package": "Tambah Paket",
+	"Edit Package": "Perbaharui Paket",
+    "Title": "Judul",
+    "Duration": "Durasi",
+    "Price": "Harga",
+    "Action": "Aksi",
+    "Days": "Hari",
+	"No package found": "Tidak ada paket yang ditemukan.",
+	"Save": "Simpan",
+	"Cancel": "Batal",
+	"Description": "Deskripsi",
+	"Enter a package name": "Masukkan nama paket",
+	"Enter a duration in days": "Masukkan durasi dalam hari",
+	"Enter a price": "Masukkan harga",
+	"Enter a description": "Masukkan deskripsi"
+  },
   "users": {
     "Users": "Pengguna",
     "Search": "Cari",
@@ -516,6 +537,16 @@
 	"Failed to update user data": "Gagal memperbarui data pengguna",
 	"Profile updated successfully": "Profil berhasil diperbarui",
 	"Please fill in both password fields": "Harap isi kedua kolom kata sandi",
-	"Failed to update password": "Gagal memperbarui kata sandi"
+	"Failed to update password": "Gagal memperbarui kata sandi",
+    "Name must be between 3 and 100 characters": "Nama harus antara 3 sampai 100 karakter",
+    "Duration must be a number and at least 1 day": "Durasi harus berupa angka dan minimal 1 hari",
+    "Price must be a positive number or zero": "Harga harus berupa angka positif atau nol",
+    "Subscribe successfully added": "Berhasil menambahkan subscribe",
+    "Failed to add subscribe": "Gagal menambahkan subscribe",
+    "Subscribe not found": "Subscribe tidak ditemukan",
+    "Subscribe successfully updated": "Berhasil memperbarui subscribe",
+    "Failed to update subscribe": "Gagal memperbarui subscribe",
+    "Subscribe successfully deleted": "Berhasil menghapus subscribe",
+    "Failed to delete subscribe": "Gagal menghapus subscribe"
   }
 }

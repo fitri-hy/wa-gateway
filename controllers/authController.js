@@ -11,7 +11,7 @@ const OTP_EXPIRATION = 5 * 60 * 1000; // 5 minutes
 exports.login = async (req, res) => {
   if (req.session && req.session.user) {
     const role = req.session.user.role;
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'superadmin') {
       return res.redirect('/administrator');
     } else if (role === 'user') {
       return res.redirect('/dashboard');
@@ -27,7 +27,7 @@ exports.login = async (req, res) => {
 exports.register = async (req, res) => {
   if (req.session && req.session.user) {
     const role = req.session.user.role;
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'superadmin') {
       return res.redirect('/administrator');
     } else if (role === 'user') {
       return res.redirect('/dashboard');

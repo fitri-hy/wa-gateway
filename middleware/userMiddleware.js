@@ -24,7 +24,7 @@ module.exports = async (req, res, next) => {
   try {
     const [result] = await db.promise().query(`
       SELECT u.package_id, u.package_start, u.package_end,
-             p.duration_days
+             p.name
       FROM users u
       LEFT JOIN packages p ON u.package_id = p.id
       WHERE u.id = ?
@@ -32,46 +32,46 @@ module.exports = async (req, res, next) => {
 
     const userData = result[0];
 	
-	const [packages] = await db.promise().query(`
+    const [packages] = await db.promise().query(`
       SELECT id, name, duration_days, price, description
       FROM packages
-	  WHERE duration_days <> -1
+      WHERE UPPER(name) <> 'ADMIN'
       ORDER BY id ASC
     `);
 	
-	const filteredPackages = packages
-	  .filter(pkg => parseFloat(pkg.price) > 0)
-	  .sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    const filteredPackages = packages
+      .filter(pkg => parseFloat(pkg.price) > 0)
+      .sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
 
     if (!userData || !userData.package_id) {
-	  return res.status(403).render('pricing', {
+      return res.status(403).render('pricing', {
         title: res.__('error.Incomplete Package Information'),
         message: res.__('error.We noticed some missing information in your subscription'),
-		packages: filteredPackages,
-	  });
+        packages: filteredPackages,
+      });
     }
 
-    if (userData.duration_days === -1) {
+    if (userData.name && userData.name.toUpperCase() === 'ADMIN') {
       return next();
     }
 
     if (!userData.package_start || !userData.package_end) {
-	  return res.status(403).render('pricing', {
+      return res.status(403).render('pricing', {
         title: res.__('error.Incomplete Package Information'),
         message: res.__('error.We noticed some missing information in your subscription'),
         packages: filteredPackages,
-	  });
+      });
     }
 
     const now = new Date();
     const packageEnd = new Date(userData.package_end);
 
     if (packageEnd < now) {
-	  return res.status(403).render('pricing', {
+      return res.status(403).render('pricing', {
         title: res.__('error.Subscription Expired'),
         message: res.__('error.Your subscription package has expired'),
         packages: filteredPackages,
-	  });
+      });
     }
 
     next();
