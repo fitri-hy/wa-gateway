@@ -457,6 +457,20 @@
 	"Plugin name is mandatory": "Plugin name is mandatory",
 	"Plugin file not found": "Plugin file not found",
 	"Failed to remove plugin": "Failed to remove plugin",
-	"Plugin successfully removed": "Plugin successfully removed"
+	"Plugin successfully removed": "Plugin successfully removed",
+	"Please enter both email and password": "Please enter both email and password",
+	"Invalid email format": "Invalid email format",
+	"Server error": "Server error",
+	"Email is incorrect or not registered": "Email is incorrect or not registered",
+	"Incorrect password": "Incorrect password",
+	"Your account is inactive": "Your account is inactive",
+	"Your account is suspended": "Your account is suspended",
+	"All fields are required": "All fields are required",
+	"Name must be max 25 characters and contain only letters and spaces": "Name must be max 25 characters and contain only letters and spaces",
+	"Password must be at least 6 characters": "Password must be at least 6 characters",
+	"Passwords do not match": "Passwords do not match",
+	"Default package not found": "Default package not found",
+	"Invalid package duration": "Invalid package duration",
+	"Email already registered": "Email already registered",
   }
 }

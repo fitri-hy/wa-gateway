@@ -455,6 +455,20 @@
 	"Plugin name is mandatory": "Nama plugin wajib diisi",
 	"Plugin file not found": "File plugin tidak ditemukan",
 	"Failed to remove plugin": "Gagal menghapus plugin",
-	"Plugin successfully removed": "Plugin berhasil dihapus"
+	"Plugin successfully removed": "Plugin berhasil dihapus",
+	"Please enter both email and password": "Silakan masukkan email dan kata sandi",
+	"Invalid email format": "Format email tidak valid",
+	"Server error": "Kesalahan server",
+	"Email is incorrect or not registered": "Email salah atau tidak terdaftar",
+	"Incorrect password": "Kata sandi salah",
+	"Your account is inactive": "Akun Anda tidak aktif",
+	"Your account is suspended": "Akun Anda ditangguhkan",
+	"All fields are required": "Semua kolom wajib diisi",
+	"Name must be max 25 characters and contain only letters and spaces": "Nama harus maksimal 25 karakter dan hanya mengandung huruf dan spasi",
+	"Password must be at least 6 characters": "Kata sandi harus minimal 6 karakter",
+	"Passwords do not match": "Kata sandi tidak cocok",
+	"Default package not found": "Paket default tidak ditemukan",
+	"Invalid package duration": "Durasi paket tidak valid",
+	"Email already registered": "Email sudah terdaftar",
   }
 }

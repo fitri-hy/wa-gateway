@@ -1454,17 +1454,14 @@ video {
 .w-9 {
   width: 2.25rem;
 }
-.w-\[100px\] {
-  width: 100px;
+.w-\[150px\] {
+  width: 150px;
 }
 .w-auto {
   width: auto;
 }
 .w-full {
   width: 100%;
-}
-.w-\[150px\] {
-  width: 150px;
 }
 .min-w-\[200px\] {
   min-width: 200px;

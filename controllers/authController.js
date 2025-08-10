@@ -54,25 +54,25 @@ exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    req.flash('error', 'Please enter both email and password');
+    req.flash('error', res.__('flash.Please enter both email and password'));
     return res.redirect('/login');
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    req.flash('error', 'Invalid email format');
+    req.flash('error', res.__('flash.Invalid email format'));
     return res.redirect('/login');
   }
 
   db.query('SELECT * FROM users WHERE email = ?', [email.toLowerCase()], async (err, results) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Server error');
+      req.flash('error', res.__('flash.Server error'));
       return res.redirect('/login');
     }
 
     if (results.length === 0) {
-      req.flash('error', 'Email is incorrect or not registered');
+      req.flash('error', res.__('flash.Email is incorrect or not registered'));
       return res.redirect('/login');
     }
 
@@ -80,7 +80,7 @@ exports.loginUser = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      req.flash('error', 'Incorrect password');
+      req.flash('error', res.__('flash.Incorrect password'));
       return res.redirect('/login');
     }
 
@@ -94,12 +94,12 @@ exports.loginUser = async (req, res) => {
     };
 
     if (user.status === 'inactive') {
-      req.flash('error', 'Your account is inactive. Please contact support.');
+      req.flash('error', res.__('flash.Your account is inactive'));
       return res.redirect('/login');
     }
 
     if (user.status === 'suspended') {
-      req.flash('error', 'Your account is suspended. Please contact support.');
+      req.flash('error', res.__('flash.Your account is suspended'));
       return res.redirect('/login');
     }
 
@@ -119,29 +119,29 @@ exports.registerUser = async (req, res) => {
   const { name, email, password, 're-password': confirmPassword } = req.body;
 
   if (!name || !email || !password || !confirmPassword) {
-    req.flash('error', 'All fields are required!');
+    req.flash('error', res.__('flash.All fields are required'));
     return res.redirect('/register');
   }
   
   const nameRegex = /^[a-zA-Z\s]{1,25}$/;
   if (!nameRegex.test(name)) {
-    req.flash('error', 'Name must be max 25 characters and contain only letters and spaces.');
+    req.flash('error', res.__('flash.Name must be max 25 characters and contain only letters and spaces'));
     return res.redirect('/register');
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    req.flash('error', 'Invalid email format!');
+    req.flash('error', res.__('flash.Invalid email format'));
     return res.redirect('/register');
   }
 
   if (password.length < 6) {
-    req.flash('error', 'Password must be at least 6 characters!');
+    req.flash('error', res.__('flash.Password must be at least 6 characters'));
     return res.redirect('/register');
   }
 
   if (password !== confirmPassword) {
-    req.flash('error', 'Passwords do not match!');
+    req.flash('error', res.__('flash.Passwords do not match'));
     return res.redirect('/register');
   }
 
@@ -157,13 +157,13 @@ exports.registerUser = async (req, res) => {
     );
 
     if (packageRows.length === 0) {
-      req.flash('error', 'Default package not found!');
+      req.flash('error', res.__('flash.Default package not found'));
       return res.redirect('/register');
     }
 
     const durationDays = packageRows[0].duration_days;
     if (durationDays <= 0) {
-      req.flash('error', 'Invalid package duration!');
+      req.flash('error', res.__('flash.Invalid package duration'));
       return res.redirect('/register');
     }
 
@@ -195,11 +195,11 @@ exports.registerUser = async (req, res) => {
 
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY') {
-      req.flash('error', 'Email already registered!');
+      req.flash('error', res.__('flash.Email already registered'));
       return res.redirect('/register');
     }
     console.error(err);
-    req.flash('error', 'Server error!');
+    req.flash('error', res.__('flash.Server error'));
     return res.redirect('/register');
   }
 };
