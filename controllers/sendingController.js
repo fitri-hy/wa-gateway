@@ -25,7 +25,7 @@ exports.index = async (req, res) => {
     db.query('SELECT * FROM uploads WHERE user_id = ? ORDER BY id DESC', [userId], (err, uploads) => {
       if (err) {
         console.error(err);
-		req.flash('error', 'Failed to load uploads');
+        req.flash('error', res.__('flash.Failed to load uploads'));
         return res.redirect('/dashboard/sending');
       }
 
@@ -46,7 +46,7 @@ exports.index = async (req, res) => {
       db.query(countSql, [userId, searchQuery, searchQuery, searchQuery, searchQuery], (errCount, countResult) => {
         if (errCount) {
           console.error(errCount);
-		  req.flash('error', 'Failed to count messages');
+          req.flash('error', res.__('flash.Failed to count messages'));
           return res.redirect('/dashboard/sending');
         }
 
@@ -56,7 +56,7 @@ exports.index = async (req, res) => {
         db.query(dataSql, [userId, searchQuery, searchQuery, searchQuery, searchQuery, limit, offset], (errData, messages) => {
           if (errData) {
             console.error(errData);
-		    req.flash('error', 'Failed to load messages');
+            req.flash('error', res.__('flash.Failed to load messages'));
             return res.redirect('/dashboard/sending');
           }
 
@@ -76,7 +76,7 @@ exports.index = async (req, res) => {
     });
   } catch (error) {
     console.error('Failed to get sessions or contacts:', error.message || error);
-    req.flash('error', 'Failed to get session or contact');
+    req.flash('error', res.__('flash.Failed to get session contact'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -102,14 +102,14 @@ exports.text = async (req, res) => {
   }
 
   if (!session || !phone || !content) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -130,11 +130,11 @@ exports.text = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -160,14 +160,14 @@ exports.image = async (req, res) => {
   }
 
   if (!session || !phone || !imageUrl) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -189,11 +189,11 @@ exports.image = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 	
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send image message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -219,14 +219,14 @@ exports.video = async (req, res) => {
   }
 
   if (!session || !phone || !videoUrl) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -248,11 +248,11 @@ exports.video = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send video message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -278,14 +278,14 @@ exports.audio = async (req, res) => {
   }
 
   if (!session || !phone || !audioUrl) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -307,11 +307,11 @@ exports.audio = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send audio message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -337,14 +337,14 @@ exports.document = async (req, res) => {
   }
 
   if (!session || !phone || !documentUrl) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -385,11 +385,11 @@ exports.document = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send document message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -415,14 +415,14 @@ exports.location = async (req, res) => {
   }
 
   if (!session || !phone || !latitude || !longitude || !name) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -447,11 +447,11 @@ exports.location = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send location message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -477,14 +477,14 @@ exports.sticker = async (req, res) => {
   }
 
   if (!session || !phone || !stickerUrl) {
-    req.flash('error', 'All fields must be filled in');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/sending');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/sending');
     }
 
@@ -505,11 +505,11 @@ exports.sticker = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/sending');
   } catch (error) {
     console.error('Failed to send sticker message:', error);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/sending');
   }
 };
@@ -524,7 +524,7 @@ exports.delete = async (req, res) => {
     db.query('DELETE FROM messages WHERE id = ? AND user_id = ?', [messageId, userId], (err, result) => {
       if (err) {
         console.error('Delete failed:', err);
-        req.flash('error', 'Failed to delete message');
+        req.flash('error', res.__('flash.Failed to delete message'));
         return res.redirect('/dashboard/sending');
       }
 
@@ -533,7 +533,7 @@ exports.delete = async (req, res) => {
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    req.flash('error', 'Failed sent message!');
+    req.flash('error', res.__('flash.Failed to delete message'));
     return res.redirect('/dashboard/sending');
   }
 };

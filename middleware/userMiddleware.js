@@ -9,15 +9,15 @@ module.exports = async (req, res, next) => {
 
   if (user.status !== 'active') {
     return res.status(403).render('error', {
-      title: 'Access Denied',
-      message: 'Your account is inactive or blocked. Please contact the admin.  <a class="text-rose-500" href="/logout">Logout</a>'
+      title: res.__('error.Access Denied'),
+      message: res.__('error.Your account is inactive or blocked')
     });
   }
 
   if (!['superadmin', 'admin', 'user'].includes(user.role)) {
     return res.status(403).render('error', {
-      title: 'Access Denied',
-      message: 'You do not have access to this page!. <a class="text-rose-500" href="/logout">Logout</a>'
+      title: res.__('error.Access Denied'),
+      message: res.__('error.You do not have access to this page')
     });
   }
 
@@ -35,6 +35,7 @@ module.exports = async (req, res, next) => {
 	const [packages] = await db.promise().query(`
       SELECT id, name, duration_days, price, description
       FROM packages
+	  WHERE duration_days <> -1
       ORDER BY id ASC
     `);
 	
@@ -44,8 +45,8 @@ module.exports = async (req, res, next) => {
 
     if (!userData || !userData.package_id) {
 	  return res.status(403).render('pricing', {
-        title: 'Incomplete Package Information',
-        message: 'We noticed some missing information in your subscription. Kindly reach out to support to resolve this.',
+        title: res.__('error.Incomplete Package Information'),
+        message: res.__('error.We noticed some missing information in your subscription'),
 		packages: filteredPackages,
 	  });
     }
@@ -56,8 +57,8 @@ module.exports = async (req, res, next) => {
 
     if (!userData.package_start || !userData.package_end) {
 	  return res.status(403).render('pricing', {
-        title: 'Incomplete Package Information',
-        message: 'We noticed some missing information in your subscription. Kindly reach out to support to resolve this.',
+        title: res.__('error.Incomplete Package Information'),
+        message: res.__('error.We noticed some missing information in your subscription'),
         packages: filteredPackages,
 	  });
     }
@@ -67,8 +68,8 @@ module.exports = async (req, res, next) => {
 
     if (packageEnd < now) {
 	  return res.status(403).render('pricing', {
-        title: 'Subscription Expired',
-        message: 'Your subscription package has expired. Kindly renew it to continue enjoying our services.',
+        title: res.__('error.Subscription Expired'),
+        message: res.__('error.Your subscription package has expired'),
         packages: filteredPackages,
 	  });
     }

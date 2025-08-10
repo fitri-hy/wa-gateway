@@ -16,7 +16,7 @@ exports.index = async (req, res) => {
     `, [userId]);
 
     if (results.length === 0) {
-      req.flash('error', 'User not found.');
+      req.flash('error', res.__('flash.User not found'));
       return res.redirect('/dashboard/settings');
     }
 
@@ -85,7 +85,7 @@ exports.index = async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    req.flash('error', 'Database error.');
+    req.flash('error', res.__('flash.Database error'));
     return res.redirect('/dashboard/settings');
   }
 };
@@ -98,19 +98,19 @@ exports.update = async (req, res) => {
 
   const nameRegex = /^[a-zA-Z\s]{1,25}$/;
   if (!nameRegex.test(name)) {
-    req.flash('error', 'Maximum name 25 characters, no symbols.');
+    req.flash('error', res.__('flash.Maximum name 25 characters no symbols'));
     return res.redirect('/dashboard/settings');
   }
 
   db.query('UPDATE users SET name = ? WHERE id = ?', [name, userId], (err) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Failed to update user data.');
+      req.flash('error', res.__('flash.Failed to update user data'));
       return res.redirect('/dashboard/settings');
     }
 
     req.session.user.name = name;
-    req.flash('success', 'Profile updated successfully.');
+    req.flash('success', res.__('flash.Profile updated successfully'));
     return res.redirect('/dashboard/settings');
   });
 };
@@ -122,17 +122,17 @@ exports.password = async (req, res) => {
   const { password, 're-password': confirmPassword } = req.body;
 
   if (!password || !confirmPassword) {
-    req.flash('error', 'Please fill in both password fields.');
+    req.flash('error', res.__('flash.Please fill in both password fields'));
     return res.redirect('/dashboard/settings');
   }
 
   if (password.length < 6) {
-    req.flash('error', 'Password must be at least 6 characters!');
+    req.flash('error', res.__('flash.Password must be at least 6 characters'));
     return res.redirect('/dashboard/settings');
   }
 
   if (password !== confirmPassword) {
-    req.flash('error', 'Passwords do not match!');
+    req.flash('error', res.__('flash.Passwords do not match'));
     return res.redirect('/dashboard/settings');
   }
 
@@ -142,7 +142,7 @@ exports.password = async (req, res) => {
     db.query('UPDATE users SET password = ? WHERE id = ?', [hashedPassword, userId], (err) => {
       if (err) {
         console.error(err);
-        req.flash('error', 'Failed to update password.');
+        req.flash('error', res.__('flash.Failed to update password'));
         return res.redirect('/dashboard/settings');
       }
 
@@ -156,7 +156,7 @@ exports.password = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    req.flash('error', 'Server error.');
+    req.flash('error', res.__('flash.Server error'));
     return res.redirect('/dashboard/settings');
   }
 };

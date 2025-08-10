@@ -52,7 +52,7 @@ exports.index = async (req, res) => {
     });
   } catch (err) {
     console.error('Failed to load contacts:', err);
-    req.flash('error', 'Failed to load contacts');
+    req.flash('error', res.__('flash.Failed to load contacts'));
     res.redirect('/dashboard/contact');
   }
 };
@@ -68,21 +68,21 @@ exports.store = async (req, res) => {
     const phoneRegex = /^\d{8,15}$/;
 
     if (!nameRegex.test(name)) {
-      req.flash('error', 'Name must be 3–25 characters and contain only letters and spaces.');
+      req.flash('error', res.__('flash.Name must be max 25 characters and contain only letters and spaces'));
       return res.redirect('/dashboard/contact');
     }
 
     if (!phoneRegex.test(phone)) {
-      req.flash('error', 'Phone must be 8–15 digits.');
+      req.flash('error', res.__('flash.Phone must be 8–15 digits'));
       return res.redirect('/dashboard/contact');
     }
 
     await contactService.createContact(userId, name, phone);
-    req.flash('success', 'Contact successfully added.');
+    req.flash('success', res.__('flash.Contact successfully added'));
     res.redirect('/dashboard/contact');
   } catch (err) {
     console.error('Error creating contact:', err);
-    req.flash('error', 'Failed to create contact.');
+    req.flash('error', res.__('flash.Failed to create contact'));
     res.redirect('/dashboard/contact');
   }
 };
@@ -99,21 +99,21 @@ exports.update = async (req, res) => {
     const phoneRegex = /^\d{8,15}$/;
 
     if (!nameRegex.test(name)) {
-      req.flash('error', 'Name must be 3–25 characters and contain only letters and spaces.');
+      req.flash('error', res.__('flash.Name must be max 25 characters and contain only letters and spaces'));
       return res.redirect('/dashboard/contact');
     }
 
     if (!phoneRegex.test(phone)) {
-      req.flash('error', 'Phone must be 8–15 digits.');
+      req.flash('error', res.__('flash.Phone must be 8–15 digits'));
       return res.redirect('/dashboard/contact');
     }
 
     await contactService.updateContact(id, name, phone);
-    req.flash('success', 'Contact successfully updated.');
+    req.flash('success', res.__('flash.Contact successfully updated'));
     res.redirect('/dashboard/contact');
   } catch (err) {
     console.error('Error updating contact:', err);
-    req.flash('error', 'Failed to update contact.');
+    req.flash('error', res.__('flash.Failed to update contact'));
     res.redirect('/dashboard/contact');
   }
 };
@@ -125,11 +125,11 @@ exports.delete = async (req, res) => {
     if (!userId) return res.redirect('/login');
 
     await contactService.deleteContact(contactId, userId);
-    req.flash('success', 'Contact successfully deleted.');
+    req.flash('success', res.__('flash.Contact successfully deleted'));
     res.redirect('/dashboard/contact');
   } catch (err) {
     console.error('Failed to delete contact:', err);
-    req.flash('error', 'Failed to delete contact.');
+    req.flash('error', res.__('flash.Failed to delete contact'));
     res.redirect('/dashboard/contact');
   }
 };
@@ -142,7 +142,7 @@ exports.import = async (req, res) => {
     }
 
     if (!req.file) {
-      req.flash('error', 'File not found.');
+      req.flash('error', res.__('flash.File not found'));
       return res.redirect('/dashboard/contact');
     }
 
@@ -150,7 +150,7 @@ exports.import = async (req, res) => {
     if (ext !== '.vcf') {
       fs.unlinkSync(req.file.path);
 
-      req.flash('error', 'The file must have a .vcf extension.');
+      req.flash('error', res.__('flash.The file must have a vcf extension'));
       return res.redirect('/dashboard/contact');
     }
 
@@ -159,7 +159,7 @@ exports.import = async (req, res) => {
     const contacts = parseVCard(vcardData);
 
     if (contacts.length === 0) {
-      req.flash('error', 'No valid contacts in vcf file');
+      req.flash('error', res.__('flash.No valid contacts in vcf file'));
       fs.unlinkSync(filePath);
       return res.redirect('/dashboard/contact');
     }
@@ -198,7 +198,7 @@ exports.import = async (req, res) => {
     res.redirect('/dashboard/contact');
   } catch (err) {
     console.error('Contact import failed:', err);
-    req.flash('error', 'An error occurred while importing contacts');
+    req.flash('error', res.__('flash.An error occurred while importing contacts'));
     res.redirect('/dashboard/contact');
   }
 };

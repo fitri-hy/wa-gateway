@@ -1,10 +1,10 @@
 const db = require('../config/Mysql');
 
 exports.index = (req, res) => {
-  let query = 'SELECT * FROM packages';
+  let query = 'SELECT * FROM packages WHERE duration_days <> -1';
   
   if (req.session && req.session.user) {
-    query += ' WHERE price <> 0.00';
+    query += ' AND price <> 0.00';
   }
 
   query += ' ORDER BY price ASC';

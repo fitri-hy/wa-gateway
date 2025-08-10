@@ -48,7 +48,7 @@ exports.index = (req, res) => {
 
     db.query(dataQuery, dataParams, (err, results) => {
       if (err) {
-        req.flash('error', 'Failed to load file data.');
+        req.flash('error', res.__('flash.Failed to load file data'));
         return res.render('dashboard/file-manager', {
           files: [],
           baseUrl,
@@ -72,7 +72,7 @@ exports.index = (req, res) => {
 exports.upload = (req, res) => {
   const file = req.file;
   if (!file) {
-    req.flash('error', 'No files uploaded.');
+    req.flash('error', res.__('flash.No files uploaded'));
     return res.redirect('/dashboard/file-manager');
   }
   const userId = req.session.user.id;
@@ -84,10 +84,10 @@ exports.upload = (req, res) => {
     [userId, filename, size, filePath],
     (err, results) => {
       if (err) {
-        req.flash('error', 'Failed to upload file.');
+        req.flash('error', res.__('flash.Failed to upload file'));
         return res.redirect('/dashboard/file-manager');
       }
-      req.flash('success', 'File uploaded successfully.');
+      req.flash('success', res.__('flash.File uploaded successfully'));
       res.redirect('/dashboard/file-manager');
     }
   );
@@ -101,7 +101,7 @@ exports.deleteFile = async (req, res) => {
     const [rows] = await db.promise().query('SELECT * FROM uploads WHERE id = ? AND user_id = ?', [fileId, userId]);
 
     if (rows.length === 0) {
-      req.flash('error', 'File not found.');
+      req.flash('error', res.__('flash.File not found'));
       return res.redirect('/dashboard/file-manager');
     }
 
@@ -112,11 +112,11 @@ exports.deleteFile = async (req, res) => {
 
     await db.promise().query('DELETE FROM uploads WHERE id = ? AND user_id = ?', [fileId, userId]);
 
-    req.flash('success', 'File deleted successfully.');
+    req.flash('success', res.__('flash.File deleted successfully'));
     res.redirect('/dashboard/file-manager');
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Failed to delete file.');
+    req.flash('error', res.__('flash.Failed to delete file'));
     res.redirect('/dashboard/file-manager');
   }
 };

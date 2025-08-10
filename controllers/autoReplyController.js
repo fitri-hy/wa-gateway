@@ -123,7 +123,7 @@ exports.create = (req, res) => {
     !validIncludes.includes(includes) ||
     !validTypes.includes(type)
   ) {
-    req.flash('error', 'Invalid input.');
+    req.flash('error', res.__('flash.Invalid input'));
     return res.redirect('/dashboard/auto-reply');
   }
 
@@ -133,7 +133,7 @@ exports.create = (req, res) => {
 
   if (type === 'Location') {
     if (!location_lat || !location_lng) {
-      req.flash('error', 'Latitude and Longitude are required for location.');
+      req.flash('error', res.__('flash.Latitude and Longitude are required for location'));
       return res.redirect('/dashboard/auto-reply');
     }
 
@@ -151,7 +151,7 @@ exports.create = (req, res) => {
   }
 
   if (type === 'Sticker' && !file) {
-    req.flash('error', 'File URL is required for sticker.');
+    req.flash('error', res.__('flash.File URL is required for sticker'));
     return res.redirect('/dashboard/auto-reply');
   }
 
@@ -177,10 +177,10 @@ exports.create = (req, res) => {
   db.query(query, values, (err) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Failed to save auto reply.');
+      req.flash('error', res.__('flash.Failed to save auto reply'));
       return res.redirect('/dashboard/auto-reply');
     }
-    req.flash('success', 'Auto reply saved successfully.');
+    req.flash('success', res.__('flash.Auto reply saved successfully'));
     return res.redirect('/dashboard/auto-reply');
   });
 };
@@ -191,7 +191,7 @@ exports.delete = (req, res) => {
 
   const autoReplyId = req.params.id;
   if (!autoReplyId) {
-    req.flash('error', 'Invalid auto reply ID.');
+    req.flash('error', res.__('flash.Invalid auto reply ID'));
     return res.redirect('/dashboard/auto-reply');
   }
 
@@ -200,16 +200,16 @@ exports.delete = (req, res) => {
   db.query(query, [autoReplyId, userId], (err, result) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Failed to delete auto reply.');
+      req.flash('error', res.__('flash.Failed to delete auto reply'));
       return res.redirect('/dashboard/auto-reply');
     }
 
     if (result.affectedRows === 0) {
-      req.flash('error', 'Auto reply not found or unauthorized.');
+      req.flash('error', res.__('flash.Auto reply not found or unauthorized'));;
       return res.redirect('/dashboard/auto-reply');
     }
 
-      req.flash('success', 'Auto reply deleted successfully.');
+      req.flash('success', res.__('flash.Auto reply deleted successfully'));
       return res.redirect('/dashboard/auto-reply');
   });
 };
@@ -220,7 +220,7 @@ exports.delete = (req, res) => {
 
   const autoReplyId = req.params.id;
   if (!autoReplyId) {
-    req.flash('error', 'Invalid auto reply ID.');
+    req.flash('error', res.__('flash.Invalid auto reply ID'));
     return res.redirect('/dashboard/auto-reply');
   }
 
@@ -229,16 +229,16 @@ exports.delete = (req, res) => {
   db.query(query, [autoReplyId, userId], (err, result) => {
     if (err) {
       console.error(err);
-      req.flash('error', 'Failed to delete auto reply.');
+      req.flash('error', res.__('flash.Failed to delete auto reply'));
       return res.redirect('/dashboard/auto-reply');
     }
 
     if (result.affectedRows === 0) {
-      req.flash('error', 'Auto reply not found or unauthorized.');
+      req.flash('error', res.__('flash.Auto reply not found or unauthorized'));
       return res.redirect('/dashboard/auto-reply');
     }
 
-    req.flash('success', 'Auto reply deleted successfully.');
+    req.flash('success', res.__('flash.Auto reply deleted successfully'));
     return res.redirect('/dashboard/auto-reply');
   });
 };

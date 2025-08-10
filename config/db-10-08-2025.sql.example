@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 09, 2025 at 05:29 AM
+-- Generation Time: Aug 10, 2025 at 09:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -146,10 +146,11 @@ CREATE TABLE `packages` (
 --
 
 INSERT INTO `packages` (`id`, `name`, `duration_days`, `price`, `description`) VALUES
-(1, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
-(2, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
-(3, 'Ultimate', -1, 500000.00, 'Access all full features for life without time limits.'),
-(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features.');
+(1, 'Unlimited', -1, 1000000.00, 'Access all full features for life without time limits.'),
+(2, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
+(3, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
+(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features.'),
+(5, 'Ultimate', 360, 300000.00, 'Access all full features for a year.');
 
 -- --------------------------------------------------------
 
@@ -162,6 +163,26 @@ CREATE TABLE `plugins` (
   `name` varchar(255) NOT NULL,
   `enable` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `enable`) VALUES
+(1, '_animal.js', NULL),
+(2, '_weather.js', NULL),
+(3, '_antiviewonce.js', NULL),
+(4, '_translate.js', NULL),
+(5, '_bmkg.js', NULL),
+(6, '_animu.js', NULL),
+(8, '_facebookdl.js', NULL),
+(9, '_country.js', NULL),
+(10, '_bmi.js', NULL),
+(11, '_wikipedia.js', NULL),
+(12, '_os.js', NULL),
+(13, '_youtubedl.js', NULL),
+(14, '_github.js', NULL),
+(15, '_ping.js', NULL);
 
 -- --------------------------------------------------------
 
@@ -215,9 +236,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`, `package_id`, `package_start`, `package_end`) VALUES
-(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 3, '2025-08-07 13:41:54', NULL),
-(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 3, '2025-08-07 13:41:52', NULL),
-(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 1, '2025-08-07 13:42:24', '2025-08-09 13:42:24');
+(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 1, NULL, NULL),
+(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 1, NULL, NULL),
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 2, '2025-08-10 14:18:28', '2025-08-12 14:18:28');
 
 --
 -- Indexes for dumped tables
@@ -325,13 +346,13 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `packages`
 --
 ALTER TABLE `packages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `plugins`
 --
 ALTER TABLE `plugins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
 
 --
 -- AUTO_INCREMENT for table `sessions`

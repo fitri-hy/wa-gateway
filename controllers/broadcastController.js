@@ -25,7 +25,7 @@ exports.index = async (req, res) => {
     db.query('SELECT * FROM uploads WHERE user_id = ? ORDER BY id DESC', [userId], (err, uploads) => {
       if (err) {
         console.error(err);
-        req.flash('error', 'Failed to load uploads');
+        req.flash('error', res.__('flash.Failed to load uploads'));
         return res.redirect('/dashboard/broadcast');
       }
 
@@ -46,7 +46,7 @@ exports.index = async (req, res) => {
       db.query(countSql, [userId, searchQuery, searchQuery, searchQuery, searchQuery], (errCount, countResult) => {
         if (errCount) {
           console.error(errCount);
-          req.flash('error', 'Failed to count messages');
+          req.flash('error', res.__('flash.Failed to count messages'));
           return res.redirect('/dashboard/broadcast');
         }
 
@@ -56,7 +56,7 @@ exports.index = async (req, res) => {
         db.query(dataSql, [userId, searchQuery, searchQuery, searchQuery, searchQuery, limit, offset], (errData, messages) => {
           if (errData) {
             console.error(errData);
-            req.flash('error', 'Failed to load messages');
+            req.flash('error', res.__('flash.Failed to load messages'));
             return res.redirect('/dashboard/broadcast');
           }
 
@@ -75,7 +75,7 @@ exports.index = async (req, res) => {
     });
   } catch (error) {
     console.error('Failed to get sessions or contacts:', error.message || error);
-    req.flash('error', 'Failed to get session contact');
+    req.flash('error', res.__('flash.Failed to get session contact'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -101,25 +101,25 @@ exports.text = async (req, res) => {
   }
 
   if (!session || !phone || !content) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -145,11 +145,11 @@ exports.text = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -169,12 +169,12 @@ exports.image = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
   
@@ -186,14 +186,14 @@ exports.image = async (req, res) => {
   }
 
   if (!session || !phone || !imageUrl) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -220,11 +220,11 @@ exports.image = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 	
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send image message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -244,12 +244,12 @@ exports.video = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
@@ -261,14 +261,14 @@ exports.video = async (req, res) => {
   }
 
   if (!session || !phone || !videoUrl) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -294,11 +294,11 @@ exports.video = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send video message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -318,12 +318,12 @@ exports.audio = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
@@ -335,14 +335,14 @@ exports.audio = async (req, res) => {
   }
 
   if (!session || !phone || !audioUrl) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -368,11 +368,11 @@ exports.audio = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send audio message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -392,12 +392,12 @@ exports.document = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
@@ -409,14 +409,14 @@ exports.document = async (req, res) => {
   }
 
   if (!session || !phone || !documentUrl) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -462,11 +462,11 @@ exports.document = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send document message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -486,12 +486,12 @@ exports.location = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
@@ -503,14 +503,14 @@ exports.location = async (req, res) => {
   }
 
   if (!session || !phone || !latitude || !longitude || !name) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -539,11 +539,11 @@ exports.location = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send location message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -563,12 +563,12 @@ exports.sticker = async (req, res) => {
   
   const phoneNumbers = phone.split(',').map(p => p.trim()).filter(p => p !== '');
   if (phoneNumbers.length < 2) {
-    req.flash('error', 'At+least 2 recipient numbers must be provided.');
+    req.flash('error', res.__('flash.At least 2 recipient numbers must be provided'));
     return res.redirect('/dashboard/broadcast');
   }
   const invalidNumber = phoneNumbers.find(num => !/^\d{7,15}$/.test(num));
   if (invalidNumber) {
-    req.flash('error', `Invalid number: ${invalidNumber}`);
+    req.flash('error', res.__('flash.Invalid number'));
     return res.redirect('/dashboard/broadcast');
   }
 
@@ -580,14 +580,14 @@ exports.sticker = async (req, res) => {
   }
 
   if (!session || !phone || !stickerUrl) {
-    req.flash('error', 'All fields must be filled in.');
+    req.flash('error', res.__('flash.All fields must be filled in'));
     return res.redirect('/dashboard/broadcast');
   }
 
   try {
     const client = getClientByPhone(session);
     if (!client) {
-      req.flash('error', 'Session not found or inactive.');
+      req.flash('error', res.__('flash.Session not found or inactive'));
       return res.redirect('/dashboard/broadcast');
     }
 
@@ -612,11 +612,11 @@ exports.sticker = async (req, res) => {
 	  if (err) console.error('Failed to save message:', err);
 	});
 
-    req.flash('success', 'Message sent successfully!');
+    req.flash('success', res.__('flash.Message sent successfully'));
     return res.redirect('/dashboard/broadcast');
   } catch (error) {
     console.error('Failed to send sticker message:', error);
-    req.flash('error', 'Failed to send message.');
+    req.flash('error', res.__('flash.Failed to send message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
@@ -631,16 +631,16 @@ exports.delete = async (req, res) => {
     db.query('DELETE FROM broadcasts WHERE id = ? AND user_id = ?', [messageId, userId], (err, result) => {
       if (err) {
         console.error('Delete failed:', err);
-        req.flash('error', 'Failed to delete message.');
+        req.flash('error', res.__('flash.Failed to delete message'));
         return res.redirect('/dashboard/broadcast');
       }
 
-    req.flash('success', 'Message delete successfully!');
+    req.flash('success', res.__('flash.Message delete successfully'));
     return res.redirect('/dashboard/broadcast');
     });
   } catch (err) {
     console.error('Unexpected error:', err);
-    req.flash('error', 'Failed to delete message.');
+    req.flash('error', res.__('flash.Failed to delete message'));
     return res.redirect('/dashboard/broadcast');
   }
 };
