@@ -470,5 +470,9 @@
 	"Default package not found": "Paket default tidak ditemukan",
 	"Invalid package duration": "Durasi paket tidak valid",
 	"Email already registered": "Email sudah terdaftar",
+	"Session delete successfully": "Sesi berhasil dihapus",
+	"The phone number must consist of 8-15 digits": "Nomor telepon harus terdiri dari 8-15 digit.",
+	"Failed to regenerate token": "Gagal membuat ulang token.",
+	"Token regenerated successfully'": "Token berhasil dibuat ulang."
   }
 }

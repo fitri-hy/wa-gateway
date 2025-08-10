@@ -17,7 +17,7 @@ exports.connect = async (req, res) => {
   let totalBroadcasts = 0;
 
   if (!phone || !/^\d{8,15}$/.test(phone)) {
-    req.flash('error', 'The phone number must consist of 8-15 digits.');
+    req.flash('error', res.__('flash.The phone number must consist of 8-15 digits'));
   }
 
   try {

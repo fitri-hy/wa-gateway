@@ -472,5 +472,9 @@
 	"Default package not found": "Default package not found",
 	"Invalid package duration": "Invalid package duration",
 	"Email already registered": "Email already registered",
+	"Session delete successfully": "Session delete successfully",
+	"The phone number must consist of 8-15 digits": "The phone number must consist of 8-15 digits.",
+	"Failed to regenerate token": "Failed to regenerate token.",
+	"Token regenerated successfully'": "Token regenerated successfully."
   }
 }

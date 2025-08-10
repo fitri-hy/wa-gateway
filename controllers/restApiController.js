@@ -45,13 +45,13 @@ exports.regenerateToken = (req, res) => {
     (err) => {
       if (err) {
         console.error(err);
-        req.flash('error', 'Failed to regenerate token');
+        req.flash('error', res.__('flash.Failed to regenerate token'));
         return res.redirect('/dashboard/rest-api');
       }
 
       req.session.user.token = newToken;
 
-      req.flash('success', 'Token regenerated successfully');
+      req.flash('success', res.__('flash.Token regenerated successfully'));
       return res.redirect('/dashboard/rest-api');
     }
   );

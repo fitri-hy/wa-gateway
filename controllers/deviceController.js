@@ -48,7 +48,7 @@ exports.delete = async (req, res) => {
   }
   try {
     await deleteSession(phone);
-	req.flash('success', 'Session delete successfully.');
+	req.flash('success', res.__('flash.Session delete successfully'));
 	res.redirect('/dashboard/devices');
   } catch (error) {
     console.error(error);
