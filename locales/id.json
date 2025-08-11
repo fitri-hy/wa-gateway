@@ -179,7 +179,10 @@
 	"The phone number must": "Nomor telepon harus terdiri dari 8-15 digit.",
 	"NOTE": "CATATAN",
 	"Once created": "Setelah dibuat, kode QR akan muncul untuk masuk ke WhatsApp.",
-	"Scan to Connect": "Pindai untuk Terhubung"
+	"Scan to Connect": "Pindai untuk Terhubung",
+	"Connecting to": "Menghubungkan ke",
+	"Connected": "Terhubung!",
+	"Logged Out": "Keluar!"
   },
   "devices": {
     "Devices": "Perangkat",
@@ -192,10 +195,7 @@
     "Session": "Sesi",
     "No devices found": "Tidak ada perangkat yang ditemukan.",
 	"There are no sessions registered yet": "Belum ada sesi yang terdaftar.",
-	"Create Now": "Buat Sekarang",
-	"Connecting to": "Menghubungkan ke",
-	"Connected": "Terhubung!",
-	"Logged Out": "Berakhir!"
+	"Create Now": "Buat Sekarang"
   },
   "contacts": {
     "Contacts": "Kontak",

@@ -94,7 +94,7 @@ async function startSession(phone) {
         console.log(`${phone} disconnected unexpectedly, retry #${retryCount[phone]}, reconnecting in 10 seconds...`);
         setTimeout(() => {
           startSession(phone).catch(console.error);
-        }, 10000);
+        }, 5000);
       }
     }
 

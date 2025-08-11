@@ -6,13 +6,13 @@ admin.initializeApp({
 });
 
 const Config = {
-  apiKey: "AIzaSyBjw59nXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-  authDomain: "XXXXXXX.firebaseapp.com",
-  projectId: "XXXXXXX",
-  storageBucket: "XXXXXXX.firebasestorage.app",
-  messagingSenderId: "2200000000",
-  appId: "1:2200000000:web:c35128bdb4b2c6dcf29b8e",
-  measurementId: "G-G0XXXXXXX",
+  apiKey: "AIzaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "XXXXXX.firebaseapp.com",
+  projectId: "XXXXXX",
+  storageBucket: "XXXXXX.firebasestorage.app",
+  messagingSenderId: "220000000000",
+  appId: "1:220000000000:web:c35128bdb4b2c6dcf29b8e",
+  measurementId: "G-G02R506JZG",
   useGoogleAuth: process.env.USE_GOOGLE_AUTH ? process.env.USE_GOOGLE_AUTH === 'true' : true
 };
 

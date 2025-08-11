@@ -2250,6 +2250,15 @@ pre, code {
   padding-bottom: 0.25rem;
 }
 
+.g-recaptcha {
+  transform: scale(0.9);
+  transform-origin: center;
+}
+
+.g-recaptcha iframe {
+  background: transparent !important;
+}
+
 .dark\:prose-invert:is(.dark *) {
   --tw-prose-body: var(--tw-prose-invert-body);
   --tw-prose-headings: var(--tw-prose-invert-headings);

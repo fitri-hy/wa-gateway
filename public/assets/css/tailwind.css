@@ -81,3 +81,8 @@ pre, code {
 .table-wrapper tbody tr td {
   @apply px-3 py-1;
 }
+
+.g-recaptcha {
+  transform: scale(0.9);
+  transform-origin: center;
+}
