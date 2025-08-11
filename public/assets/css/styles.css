@@ -1231,12 +1231,6 @@ video {
 .top-2 {
   top: 0.5rem;
 }
-.bottom-12 {
-  bottom: 3rem;
-}
-.top-12 {
-  top: 3rem;
-}
 .-z-10 {
   z-index: -10;
 }
@@ -1301,9 +1295,6 @@ video {
 }
 .mt-9 {
   margin-top: 2.25rem;
-}
-.mt-20 {
-  margin-top: 5rem;
 }
 .line-clamp-1 {
   overflow: hidden;
@@ -1668,6 +1659,10 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(229 231 235 / var(--tw-border-opacity, 1));
 }
+.border-gray-300 {
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
+}
 .border-sky-200 {
   --tw-border-opacity: 1;
   border-color: rgb(186 230 253 / var(--tw-border-opacity, 1));
@@ -1675,10 +1670,6 @@ video {
 .border-sky-500 {
   --tw-border-opacity: 1;
   border-color: rgb(14 165 233 / var(--tw-border-opacity, 1));
-}
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
 }
 .bg-amber-500 {
   --tw-bg-opacity: 1;
@@ -1939,9 +1930,6 @@ video {
 .pt-3 {
   padding-top: 0.75rem;
 }
-.pt-5 {
-  padding-top: 1.25rem;
-}
 .text-left {
   text-align: left;
 }
@@ -2119,6 +2107,11 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
 .transition-opacity {
   transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -2126,11 +2119,6 @@ video {
 }
 .transition-transform {
   transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-.transition-colors {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -2361,6 +2349,11 @@ pre, code {
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-gray-50:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:bg-rose-600:hover {
@@ -2690,6 +2683,10 @@ pre, code {
 .dark\:hover\:bg-sky-600:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(2 132 199 / var(--tw-bg-opacity, 1));
+}
+
+.dark\:hover\:bg-slate-700\/60:hover:is(.dark *) {
+  background-color: rgb(51 65 85 / 0.6);
 }
 
 .dark\:hover\:bg-slate-800:hover:is(.dark *) {

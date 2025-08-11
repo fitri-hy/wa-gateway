@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const db = require('../config/MySQL');
+const { admin, Config } = require('../config/firebase');
 const { sendMail } = require('../config/SMTP');
 
 const otpStore = {};
@@ -21,7 +22,9 @@ exports.login = async (req, res) => {
       });
     }
   }
-  res.render('login');
+  res.render('login', { 
+	firebaseConfig: Config 
+  });
 };
 
 exports.register = async (req, res) => {
@@ -77,6 +80,12 @@ exports.loginUser = async (req, res) => {
     }
 
     const user = results[0];
+	
+	if (!user.password) {
+      req.flash('error', res.__('flash.Please login using Google sign-in'));
+      return res.redirect('/login');
+    }
+	
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
@@ -152,8 +161,8 @@ exports.registerUser = async (req, res) => {
     const status = 'active';
 
     const [packageRows] = await db.promise().query(
-      'SELECT duration_days FROM packages WHERE id = ?',
-      [1]
+      'SELECT id, duration_days FROM packages WHERE price = ? LIMIT 1',
+      [0.00]
     );
 
     if (packageRows.length === 0) {
@@ -161,7 +170,8 @@ exports.registerUser = async (req, res) => {
       return res.redirect('/register');
     }
 
-    const durationDays = packageRows[0].duration_days;
+    const packageData = packageRows[0];
+    const durationDays = packageData.duration_days;
     if (durationDays <= 0) {
       req.flash('error', res.__('flash.Invalid package duration'));
       return res.redirect('/register');
@@ -171,15 +181,15 @@ exports.registerUser = async (req, res) => {
     const packageEnd = new Date(packageStart);
     packageEnd.setDate(packageEnd.getDate() + durationDays - 1);
 
-	function formatDateToMySQL(date) {
-	  const yyyy = date.getFullYear();
-	  const mm = String(date.getMonth() + 1).padStart(2, '0');
-	  const dd = String(date.getDate()).padStart(2, '0');
-	  const hh = String(date.getHours()).padStart(2, '0');
-	  const mi = String(date.getMinutes()).padStart(2, '0');
-	  const ss = String(date.getSeconds()).padStart(2, '0');
-	  return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
-	}
+    function formatDateToMySQL(date) {
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      const hh = String(date.getHours()).padStart(2, '0');
+      const mi = String(date.getMinutes()).padStart(2, '0');
+      const ss = String(date.getSeconds()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+    }
 
     const packageStartStr = formatDateToMySQL(packageStart);
     const packageEndStr = formatDateToMySQL(packageEnd);
@@ -188,7 +198,7 @@ exports.registerUser = async (req, res) => {
       `INSERT INTO users 
        (name, email, password, token, role, status, package_id, package_start, package_end) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, email.toLowerCase(), hashedPassword, token, role, status, 1, packageStartStr, packageEndStr]
+      [name, email.toLowerCase(), hashedPassword, token, role, status, packageData.id, packageStartStr, packageEndStr]
     );
 
     res.redirect('/login');
@@ -386,5 +396,133 @@ exports.forgotPost = (req, res) => {
         }
       });
     });
+  }
+};
+
+exports.googleLogin = async (req, res) => {
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    req.flash('error', res.__('flash.Token is required'));
+    return res.redirect('/login');
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const { email, name, uid } = decodedToken;
+
+    db.query('SELECT * FROM users WHERE email = ?', [email.toLowerCase()], async (err, results) => {
+      if (err) {
+        console.error(err);
+        req.flash('error', res.__('flash.Server error'));
+        return res.redirect('/login');
+      }
+
+      let user;
+      if (results.length === 0) {
+        let packageData;
+        try {
+          const [packageRows] = await db.promise().query(
+            'SELECT id, duration_days FROM packages WHERE price = ? LIMIT 1',
+            [0.00]
+          );
+          if (packageRows.length === 0) {
+            req.flash('error', res.__('flash.Default package not found'));
+            return res.redirect('/login');
+          }
+          packageData = packageRows[0];
+        } catch (pkgErr) {
+          console.error(pkgErr);
+          req.flash('error', res.__('flash.Failed to get default package'));
+          return res.redirect('/login');
+        }
+
+        const token = crypto.randomBytes(32).toString('hex');
+        const role = 'user';
+        const status = 'active';
+
+        const packageStart = new Date();
+        const packageEnd = new Date(packageStart);
+        packageEnd.setDate(packageEnd.getDate() + packageData.duration_days - 1);
+
+        function formatDateToMySQL(date) {
+          const yyyy = date.getFullYear();
+          const mm = String(date.getMonth() + 1).padStart(2, '0');
+          const dd = String(date.getDate()).padStart(2, '0');
+          const hh = String(date.getHours()).padStart(2, '0');
+          const mi = String(date.getMinutes()).padStart(2, '0');
+          const ss = String(date.getSeconds()).padStart(2, '0');
+          return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+        }
+
+        const packageStartStr = formatDateToMySQL(packageStart);
+        const packageEndStr = formatDateToMySQL(packageEnd);
+
+        try {
+          await db.promise().query(
+            `INSERT INTO users 
+             (name, email, password, token, role, status, google_uid, package_id, package_start, package_end) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [name, email.toLowerCase(), null, token, role, status, uid, packageData.id, packageStartStr, packageEndStr]
+          );
+
+          const [newUser] = await db.promise().query('SELECT * FROM users WHERE email = ?', [email.toLowerCase()]);
+          user = newUser[0];
+        } catch (insertErr) {
+          console.error(insertErr);
+          req.flash('error', res.__('flash.Failed to create user'));
+          return res.redirect('/login');
+        }
+      } else {
+        user = results[0];
+
+        if (!user.google_uid) {
+          try {
+            await db.promise().query(
+              `UPDATE users SET google_uid = ? WHERE email = ?`,
+              [uid, email.toLowerCase()]
+            );
+            user.google_uid = uid;
+          } catch (updateErr) {
+            console.error(updateErr);
+            req.flash('error', res.__('flash.Failed to update user'));
+            return res.redirect('/login');
+          }
+        }
+      }
+
+      req.session.user = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        token: user.token,
+        role: user.role,
+        status: user.status,
+      };
+
+      if (user.status === 'inactive') {
+        req.flash('error', res.__('flash.Your account is inactive'));
+        return res.redirect('/login');
+      }
+
+      if (user.status === 'suspended') {
+        req.flash('error', res.__('flash.Your account is suspended'));
+        return res.redirect('/login');
+      }
+
+      if (user.role === 'admin' || user.role === 'superadmin') {
+        return res.redirect('/administrator');
+      } else if (user.role === 'user') {
+        return res.redirect('/dashboard');
+      } else {
+        req.session.destroy(() => {
+          return res.redirect('/login');
+        });
+      }
+    });
+  } catch (error) {
+    console.error('Firebase token verification failed:', error);
+    req.flash('error', res.__('flash.Invalid Token'));
+    return res.redirect('/login');
   }
 };

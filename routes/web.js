@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { loginLimiter, registerLimiter } = require('../middleware/rateLimiterMiddleware.js');
 const userMiddleware = require('../middleware/userMiddleware');
 const administratorMiddleware = require('../middleware/administratorMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -13,11 +14,12 @@ router.get('/terms-conditions', Agreement.term);
 
 const Auth = require('../controllers/authController');
 router.get('/login', Auth.login);
-router.post('/login', Auth.loginUser);
+router.post('/login', loginLimiter, Auth.loginUser);
 router.get('/register', Auth.register);
-router.post('/register', Auth.registerUser);
+router.post('/register', registerLimiter, Auth.registerUser);
 router.get('/forgot-password', Auth.forgot);
 router.post('/forgot-password', Auth.forgotPost);
+router.post('/login-google', Auth.googleLogin);
 router.get('/logout', Auth.logout);
 
 const Dashboard = require('../controllers/dashboardController');

@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`Server running on localhost:${PORT}`);
-/*
+
   (async () => {
     const sessionsDir = path.join(__dirname, 'sessions');
 
@@ -98,7 +98,7 @@ const server = app.listen(PORT, () => {
         if (!fs.existsSync(fullPath) || fs.readdirSync(fullPath).length === 0) {
           sessionsToDelete.push(session.id);
         } else {
-          // Folder ada dan tidak kosong, tidak perlu update
+          // Folder exists and is not empty, no need to update
         }
       }
 
@@ -131,7 +131,7 @@ const server = app.listen(PORT, () => {
       console.error('Failed to initialize sessions:', err);
     }
   })();
-*/
+
 });
 
 const wss = new WebSocketServer({ server });

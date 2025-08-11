@@ -101,7 +101,10 @@
 	"Incomplete Package Information": "Informasi Paket Tidak Lengkap",
 	"We noticed some missing information in your subscription": "Kami menemukan beberapa informasi yang hilang dalam langganan Anda",
 	"Subscription Expired": "Langganan Telah Kedaluwarsa",
-	"Your subscription package has expired": "Paket langganan Anda telah kedaluwarsa, silakan perbarui untuk terus menikmati fitur kami."
+	"Your subscription package has expired": "Paket langganan Anda telah kedaluwarsa, silakan perbarui untuk terus menikmati fitur kami.",
+	"Too Many Requests": "Terlalu Banyak Permintaan",
+	"Too many login attempts please try again later'": "Terlalu banyak percobaan login, silakan coba lagi nanti",
+	"Too many registration attempts please try again later'": "Terlalu banyak upaya pendaftaran, silakan coba lagi nanti"
   },
   "login": {
     "Sign In": "Masuk",
@@ -112,6 +115,7 @@
     "LOGIN": "MASUK",
     "Dont have an account": "Belum punya akun?",
     "Sign Up": "Daftar",
+	"Log in with Google": "Masuk dengan Google",
 	"Sign in to your account securely": "Masuk ke akun Anda dengan aman untuk mengakses semua fitur dan layanan. Masukkan nama pengguna dan kata sandi Anda untuk memulai."
   },
   "register": {
@@ -550,6 +554,12 @@
     "Subscribe successfully updated": "Berhasil memperbarui subscribe",
     "Failed to update subscribe": "Gagal memperbarui subscribe",
     "Subscribe successfully deleted": "Berhasil menghapus subscribe",
-    "Failed to delete subscribe": "Gagal menghapus subscribe"
+    "Failed to delete subscribe": "Gagal menghapus subscribe",
+    "Please login using Google sign-in": "Silakan masuk menggunakan Google sign-in",
+	"Token is required": "Token diperlukan",
+	"Failed to get default package": "Gagal mendapatkan paket default",
+	"Failed to create user": "Gagal membuat pengguna",
+	"Failed to update user": "Gagal memperbarui pengguna",
+	"Invalid Token": "Token Tidak Valid"
   }
 }
