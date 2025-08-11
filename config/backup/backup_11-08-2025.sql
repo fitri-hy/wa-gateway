@@ -1,0 +1,389 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 11, 2025 at 11:19 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `demo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ads`
+--
+
+CREATE TABLE `ads` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `media_type` int(11) NOT NULL DEFAULT 3,
+  `thumbnail_path` varchar(500) NOT NULL,
+  `source_url` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `ads`
+--
+
+INSERT INTO `ads` (`id`, `title`, `body`, `media_type`, `thumbnail_path`, `source_url`, `created_at`) VALUES
+(1, 'Jasa Buat Website Profesional', 'Website cepat, responsif, dan mudah dikelola.', 3, 'https://tonjoo.com/wp-content/uploads/2021/08/jasa-pembuatan-website-terbaik-1.png', 'https://fhylabs.com', '2025-08-08 00:00:00'),
+(2, 'Web App Modern & Interaktif', 'Aplikasi web dengan UX/UI kekinian.', 3, 'https://image.web.id/images/what-is-pwa.jpg', 'https://fhylabs.com', '2025-08-08 00:00:00'),
+(3, 'Solusi Web Bisnis Lengkap', 'Dari desain hingga maintenance website.', 3, 'https://bigevo.com/assets/upload/article/website-adalah.jpg', 'https://fhylabs.com', '2025-08-08 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auto_replies`
+--
+
+CREATE TABLE `auto_replies` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `prefix` varchar(255) NOT NULL,
+  `includes` enum('Exactly','Contains') NOT NULL,
+  `category` enum('Private','Group','All') NOT NULL,
+  `type` enum('text','Image','Video','Document','Audio','Location','Sticker') NOT NULL,
+  `response` text DEFAULT NULL,
+  `file` varchar(255) DEFAULT NULL,
+  `fileName` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `broadcasts`
+--
+
+CREATE TABLE `broadcasts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session` varchar(50) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `content` text DEFAULT NULL,
+  `media_url` text DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(100) DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double DEFAULT NULL,
+  `location_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE `contacts` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `messages`
+--
+
+CREATE TABLE `messages` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `session` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `type` enum('text','image','video','audio','document','location','sticker') NOT NULL,
+  `content` text DEFAULT NULL,
+  `media_url` varchar(1024) DEFAULT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `mime_type` varchar(255) DEFAULT NULL,
+  `latitude` decimal(10,7) DEFAULT NULL,
+  `longitude` decimal(10,7) DEFAULT NULL,
+  `location_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packages`
+--
+
+CREATE TABLE `packages` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `duration_days` int(11) NOT NULL DEFAULT 3,
+  `price` decimal(10,2) DEFAULT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `packages`
+--
+
+INSERT INTO `packages` (`id`, `name`, `duration_days`, `price`, `description`) VALUES
+(1, 'ADMIN', -1, NULL, 'Access all full features for life without time limits.'),
+(2, 'Try', 3, 0.00, 'Trial package to try all features quickly and easily.'),
+(3, 'Essentials', 30, 30000.00, 'Enjoy all the full features with a flexible monthly subscription.'),
+(4, 'Launch', 7, 10000.00, 'Weekly packages that make it easy for you to try all the features.'),
+(5, 'Ultimate', 360, 300000.00, 'Access all full features for a year.');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `plugins`
+--
+
+CREATE TABLE `plugins` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `enable` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `plugins`
+--
+
+INSERT INTO `plugins` (`id`, `name`, `enable`) VALUES
+(1, '_animal.js', NULL),
+(2, '_weather.js', NULL),
+(3, '_antiviewonce.js', NULL),
+(4, '_translate.js', NULL),
+(5, '_bmkg.js', NULL),
+(6, '_animu.js', NULL),
+(8, '_facebookdl.js', NULL),
+(9, '_country.js', NULL),
+(10, '_bmi.js', NULL),
+(11, '_wikipedia.js', NULL),
+(12, '_os.js', NULL),
+(13, '_youtubedl.js', NULL),
+(14, '_github.js', NULL),
+(15, '_ping.js', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `connected` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `uploads`
+--
+
+CREATE TABLE `uploads` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `size` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `token` text NOT NULL,
+  `role` varchar(20) NOT NULL DEFAULT 'user',
+  `status` enum('active','inactive','suspended') DEFAULT 'active',
+  `package_id` int(11) DEFAULT NULL,
+  `package_start` datetime DEFAULT NULL,
+  `package_end` datetime DEFAULT NULL,
+  `google_uid` varchar(225) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `token`, `role`, `status`, `package_id`, `package_start`, `package_end`, `google_uid`) VALUES
+(1, 'Fitri HY', 'superadmin@gmail.com', '$2b$10$IreyA8gppya0PN73vfgAou/qC3wchucCrolrwKAz3AFDXSKsMMOiC', '06c09f6fc0e0eaf282a129a462d86c42a7bf1a03fdcecc258dd220e805b864ca', 'superadmin', 'active', 1, NULL, NULL, NULL),
+(2, 'Amelia', 'admin@gmail.com', '$2b$10$SRigqoiCUSCJG5mlPet/OONgdBBc7G.v7KaR92X5xYxolsnJ2CAta', '0a3e029d33c6a0afb04b442ab06d2a93084d08d66928216a493c88b8fcf2467b', 'admin', 'active', 1, NULL, NULL, NULL),
+(3, 'Zahra', 'user@gmail.com', '$2b$10$nEEHsq2n.kt0nSRdMFnuqufxVv2tETAySZK4s0yWr3eA0kmZUlG.2', 'a5c1b9c4843a5372f1520db994289aea1c55e622a8d9ed9a08a361b39d99472e', 'user', 'active', 2, '2025-08-07 14:18:28', '2025-08-09 14:18:28', NULL);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `ads`
+--
+ALTER TABLE `ads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `session_id` (`session_id`);
+
+--
+-- Indexes for table `broadcasts`
+--
+ALTER TABLE `broadcasts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contacts`
+--
+ALTER TABLE `contacts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `messages`
+--
+ALTER TABLE `messages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `packages`
+--
+ALTER TABLE `packages`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `plugins`
+--
+ALTER TABLE `plugins`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_user_phone` (`user_id`,`phone`);
+
+--
+-- Indexes for table `uploads`
+--
+ALTER TABLE `uploads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `ads`
+--
+ALTER TABLE `ads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `broadcasts`
+--
+ALTER TABLE `broadcasts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `contacts`
+--
+ALTER TABLE `contacts`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `messages`
+--
+ALTER TABLE `messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `packages`
+--
+ALTER TABLE `packages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `plugins`
+--
+ALTER TABLE `plugins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1261;
+
+--
+-- AUTO_INCREMENT for table `sessions`
+--
+ALTER TABLE `sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `uploads`
+--
+ALTER TABLE `uploads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `auto_replies`
+--
+ALTER TABLE `auto_replies`
+  ADD CONSTRAINT `auto_replies_ibfk_1` FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
