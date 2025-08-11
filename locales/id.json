@@ -103,7 +103,7 @@
 	"Subscription Expired": "Langganan Telah Kedaluwarsa",
 	"Your subscription package has expired": "Paket langganan Anda telah kedaluwarsa, silakan perbarui untuk terus menikmati fitur kami.",
 	"Too Many Requests": "Terlalu Banyak Permintaan",
-	"Too many login attempts please try again later'": "Terlalu banyak percobaan login, silakan coba lagi nanti",
+	"Too many login attempts please try again later": "Terlalu banyak percobaan login, silakan coba lagi nanti",
 	"Too many registration attempts please try again later'": "Terlalu banyak upaya pendaftaran, silakan coba lagi nanti"
   },
   "login": {
@@ -560,6 +560,7 @@
 	"Failed to get default package": "Gagal mendapatkan paket default",
 	"Failed to create user": "Gagal membuat pengguna",
 	"Failed to update user": "Gagal memperbarui pengguna",
-	"Invalid Token": "Token Tidak Valid"
+	"Invalid Token": "Token Tidak Valid",
+	"reCAPTCHA verification failed, please try again": "Verifikasi reCAPTCHA gagal, silakan coba lagi"
   }
 }

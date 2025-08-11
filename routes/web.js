@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { loginLimiter, registerLimiter } = require('../middleware/rateLimiterMiddleware.js');
+const { loginLimiterCheck, registerLimiterCheck } = require('../middleware/rateLimiterMiddleware.js');
 const userMiddleware = require('../middleware/userMiddleware');
 const administratorMiddleware = require('../middleware/administratorMiddleware');
 const upload = require('../middleware/uploadMiddleware');
+const { recaptcha, recaptchaMiddleware } = require('../middleware/recaptchaMiddleware');
 
 const Home = require('../controllers/homeController');
 router.get('/', Home.index);
@@ -13,12 +14,12 @@ router.get('/privacy-policy', Agreement.privacy);
 router.get('/terms-conditions', Agreement.term);
 
 const Auth = require('../controllers/authController');
-router.get('/login', Auth.login);
-router.post('/login', loginLimiter, Auth.loginUser);
-router.get('/register', Auth.register);
-router.post('/register', registerLimiter, Auth.registerUser);
+router.get('/login', loginLimiterCheck, Auth.login);
+router.post('/login', recaptchaMiddleware, Auth.loginUser);
+router.get('/register', registerLimiterCheck, Auth.register);
+router.post('/register', recaptchaMiddleware, Auth.registerUser);
 router.get('/forgot-password', Auth.forgot);
-router.post('/forgot-password', Auth.forgotPost);
+router.post('/forgot-password', recaptchaMiddleware, Auth.forgotPost);
 router.post('/login-google', Auth.googleLogin);
 router.get('/logout', Auth.logout);
 

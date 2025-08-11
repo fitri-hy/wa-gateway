@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const { WebSocketServer } = require('ws');
+const { recaptcha } = require('./middleware/recaptchaMiddleware');
 
 const webRouter = require('./routes/web');
 const cleanupMiddleware = require('./middleware/cleanupMiddlewares');
@@ -17,6 +18,7 @@ const i18n = require('./utils/i18n');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+
 app.set('trust proxy', process.env.TRUST_PROXY === 'true');
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,6 +41,7 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
+  res.locals.recaptcha = recaptcha;
   next();
 });
 

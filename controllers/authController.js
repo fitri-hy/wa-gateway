@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const db = require('../config/MySQL');
 const { admin, Config } = require('../config/firebase');
 const { sendMail } = require('../config/SMTP');
+const { loginLimiter, registerLimiter } = require('../middleware/rateLimiterMiddleware.js');
 
 const otpStore = {};
 const OTP_WAIT_SECONDS = 60 * 1000; // 60 second
@@ -22,8 +23,10 @@ exports.login = async (req, res) => {
       });
     }
   }
+  
   res.render('login', { 
-	firebaseConfig: Config 
+	firebaseConfig: Config,
+	useGoogleAuth: Config.useGoogleAuth
   });
 };
 
@@ -54,9 +57,21 @@ exports.forgot = (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
+  if (req.recaptcha && req.recaptcha.error) {
+    req.flash('error', res.__('flash.reCAPTCHA verification failed, please try again'));
+    return res.redirect('/login');
+  }
+  
   const { email, password } = req.body;
 
   if (!email || !password) {
+    const allowed = await loginLimiter(req);
+    if (!allowed) {
+      return res.status(429).render('error', {
+        title: res.__('error.Too Many Requests'),
+        message: res.__('error.Too many login attempts please try again later'),
+      });
+    }
     req.flash('error', res.__('flash.Please enter both email and password'));
     return res.redirect('/login');
   }
@@ -64,6 +79,13 @@ exports.loginUser = async (req, res) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     req.flash('error', res.__('flash.Invalid email format'));
+    const allowed = await loginLimiter(req);
+    if (!allowed) {
+      return res.status(429).render('error', {
+        title: res.__('error.Too Many Requests'),
+        message: res.__('error.Too many login attempts please try again later'),
+      });
+    }
     return res.redirect('/login');
   }
 
@@ -71,11 +93,25 @@ exports.loginUser = async (req, res) => {
     if (err) {
       console.error(err);
       req.flash('error', res.__('flash.Server error'));
+      const allowed = await loginLimiter(req);
+      if (!allowed) {
+        return res.status(429).render('error', {
+          title: res.__('error.Too Many Requests'),
+          message: res.__('error.Too many login attempts please try again later'),
+        });
+      }
       return res.redirect('/login');
     }
 
     if (results.length === 0) {
       req.flash('error', res.__('flash.Email is incorrect or not registered'));
+      const allowed = await loginLimiter(req);
+      if (!allowed) {
+          return res.status(429).render('error', {
+          title: res.__('error.Too Many Requests'),
+          message: res.__('error.Too many login attempts please try again later'),
+        });
+      }
       return res.redirect('/login');
     }
 
@@ -83,6 +119,13 @@ exports.loginUser = async (req, res) => {
 	
 	if (!user.password) {
       req.flash('error', res.__('flash.Please login using Google sign-in'));
+      const allowed = await loginLimiter(req);
+      if (!allowed) {
+        return res.status(429).render('error', {
+          title: res.__('error.Too Many Requests'),
+          message: res.__('error.Too many login attempts please try again later'),
+        });
+      }
       return res.redirect('/login');
     }
 	
@@ -90,6 +133,13 @@ exports.loginUser = async (req, res) => {
 
     if (!match) {
       req.flash('error', res.__('flash.Incorrect password'));
+      const allowed = await loginLimiter(req);
+      if (!allowed) {
+        return res.status(429).render('error', {
+          title: res.__('error.Too Many Requests'),
+          message: res.__('error.Too many login attempts please try again later'),
+        });
+      }
       return res.redirect('/login');
     }
 
@@ -125,6 +175,11 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
+  if (req.recaptcha && req.recaptcha.error) {
+    req.flash('error', res.__('flash.reCAPTCHA verification failed, please try again'));
+    return res.redirect('/register');
+  }
+  
   const { name, email, password, 're-password': confirmPassword } = req.body;
 
   if (!name || !email || !password || !confirmPassword) {
@@ -201,6 +256,13 @@ exports.registerUser = async (req, res) => {
       [name, email.toLowerCase(), hashedPassword, token, role, status, packageData.id, packageStartStr, packageEndStr]
     );
 
+	const allowed = await registerLimiter(req);
+    if (!allowed) {
+      return res.status(429).render('error', {
+        title: res.__('error.Too Many Requests'),
+        message: res.__('error.Too many registration attempts please try again later'),
+      });
+    }
     res.redirect('/login');
 
   } catch (err) {
@@ -228,6 +290,11 @@ exports.logout = (req, res) => {
 };
 
 exports.forgotPost = (req, res) => {
+  if (req.recaptcha && req.recaptcha.error) {
+    req.flash('error', res.__('flash.reCAPTCHA verification failed, please try again'));
+    return res.redirect('/forgot-password');
+  }
+  
   const { email, otp } = req.body;
 
   if (!email) {
@@ -400,6 +467,11 @@ exports.forgotPost = (req, res) => {
 };
 
 exports.googleLogin = async (req, res) => {
+  if (!Config.useGoogleAuth) {
+    req.flash('error', res.__('flash.Google authentication is disabled'));
+    return res.redirect('/login');
+  }
+  
   const { idToken } = req.body;
 
   if (!idToken) {
