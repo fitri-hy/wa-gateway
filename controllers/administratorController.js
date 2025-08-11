@@ -152,60 +152,67 @@ exports.usersUpdate = async (req, res) => {
   }
 
   try {
-    const [userRows] = await db.promise().query(
-      `SELECT role, status FROM users WHERE id = ?`,
-      [id]
-    );
+  const [userRows] = await db.promise().query(
+    `SELECT role, status, package_id, package_start, package_end FROM users WHERE id = ?`,
+    [id]
+  );
 
-    if (userRows.length === 0) {
-      req.flash('error', res.__('flash.User not found'));
+  if (userRows.length === 0) {
+    req.flash('error', res.__('flash.User not found'));
+    return res.redirect('/administrator/users');
+  }
+
+  const existingUser = userRows[0];
+
+  if (existingUser.role === 'superadmin') {
+    if (role !== existingUser.role || status !== existingUser.status) {
+      req.flash('error', res.__('flash.Role and status of superadmin cannot be changed'));
       return res.redirect('/administrator/users');
     }
 
-    const existingUser = userRows[0];
-
-    if (existingUser.role === 'superadmin') {
-      if (role !== existingUser.role || status !== existingUser.status) {
-		req.flash('error', res.__('flash.Role and status of superadmin cannot be changed'));
-		return res.redirect('/administrator/users');
-	  }
-
-	  if (parseInt(package_id) !== existingUser.package_id) {
-		req.flash('error', res.__('flash.Package of superadmin cannot be changed'));
-		return res.redirect('/administrator/users');
-	  }
-
-	  await db.promise().query(
-		`UPDATE users SET name = ? WHERE id = ?`,
-		[name, id]
-	  );
-
-	  req.flash('success', res.__('flash.Superadmin updated successfully'));
-	  return res.redirect('/administrator/users');
-    }
-
-    const [packageRows] = await db.promise().query(
-      `SELECT duration_days FROM packages WHERE id = ?`,
-      [package_id]
-    );
-
-    if (packageRows.length === 0) {
-      req.flash('error', res.__('flash.Selected package not found'));
+    if (parseInt(package_id) !== existingUser.package_id) {
+      req.flash('error', res.__('flash.Package of superadmin cannot be changed'));
       return res.redirect('/administrator/users');
     }
-
-    const duration = packageRows[0].duration_days;
-    const now = new Date();
-
-    const package_start = formatDateToMySQL(now);
-    const package_end = duration === -1 ? null : formatDateToMySQL(new Date(now.getTime() + (duration - 1) * 86400000));
 
     await db.promise().query(
-      `UPDATE users 
-       SET name = ?, role = ?, status = ?, package_id = ?, package_start = ?, package_end = ?
-       WHERE id = ?`,
-      [name, role, status, package_id, package_start, package_end, id]
+      `UPDATE users SET name = ? WHERE id = ?`,
+      [name, id]
     );
+
+    req.flash('success', res.__('flash.Superadmin updated successfully'));
+    return res.redirect('/administrator/users');
+  }
+
+  if (parseInt(package_id) === existingUser.package_id) {
+      await db.promise().query(
+        `UPDATE users SET name = ?, role = ?, status = ? WHERE id = ?`,
+        [name, role, status, id]
+      );
+    } else {
+      const [packageRows] = await db.promise().query(
+        `SELECT duration_days FROM packages WHERE id = ?`,
+        [package_id]
+      );
+
+      if (packageRows.length === 0) {
+        req.flash('error', res.__('flash.Selected package not found'));
+        return res.redirect('/administrator/users');
+      }
+
+      const duration = packageRows[0].duration_days;
+      const now = new Date();
+
+      const package_start = formatDateToMySQL(now);
+      const package_end = duration === -1 ? null : formatDateToMySQL(new Date(now.getTime() + (duration - 1) * 86400000));
+
+      await db.promise().query(
+        `UPDATE users 
+         SET name = ?, role = ?, status = ?, package_id = ?, package_start = ?, package_end = ?
+         WHERE id = ?`,
+        [name, role, status, package_id, package_start, package_end, id]
+      );
+    }
 
     req.flash('success', res.__('flash.User updated successfully'));
     res.redirect('/administrator/users');
