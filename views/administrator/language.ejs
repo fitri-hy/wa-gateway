@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: __('language.Language') + ' Administrator | ' + __('app.FhytsBot') }) %>
+  <meta name="robots" content="noindex, nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash-admin') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: __('language.Language') }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="mb-4 flex items-center justify-between gap-4">
+					<form class="flex items-center gap-2" method="GET">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('language.Search') %>...">
+						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+							</svg>
+						</button>
+					</form>
+				</div>
+				<div class="prose prose-lg dark:prose-invert max-w-none">
+					<div class="overflow-auto w-full">
+						<table>
+							<thead>
+							  <tr>
+								<% Object.entries(languages).forEach(([code, flag]) => { %>
+								  <% if (code === 'en') { %>
+									<th><%= flag %> <%= code.toUpperCase() %></th>
+								  <% } %>
+								<% }) %>
+								<th><%= __('language.Language') %></th>
+							  </tr>
+							</thead>
+
+							<tbody>
+							  <% keys.forEach(key => { %>
+								<tr>
+								  <% Object.keys(languages).forEach(locale => { %>
+									<% if (locale === 'en') { %>
+									  <td><%= translations[locale][key] || '-' %></td>
+									<% } %>
+								  <% }) %>
+								  <td>
+									<div class="flex items-center justify-center">
+									  <button class="edit-btn text-amber-500 p-1 hover:bg-gray-100 dark:hover:bg-slate-900 rounded-full" 
+										data-key="<%= key %>" 
+										data-value="<%= translations['id'][key] ? translations['id'][key].replace(/"/g, '&quot;') : '' %>">
+										<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="m11.4 18.161l7.396-7.396a10.3 10.3 0 0 1-3.326-2.234a10.3 10.3 0 0 1-2.235-3.327L5.839 12.6c-.577.577-.866.866-1.114 1.184a6.6 6.6 0 0 0-.749 1.211c-.173.364-.302.752-.56 1.526l-1.362 4.083a1.06 1.06 0 0 0 1.342 1.342l4.083-1.362c.775-.258 1.162-.387 1.526-.56q.647-.308 1.211-.749c.318-.248.607-.537 1.184-1.114m9.448-9.448a3.932 3.932 0 0 0-5.561-5.561l-.887.887l.038.111a8.75 8.75 0 0 0 2.092 3.32a8.75 8.75 0 0 0 3.431 2.13z"></path></svg>
+									  </button>
+									</div>
+								  </td>
+								</tr>
+							  <% }) %>
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				<div class="flex items-center gap-2 justify-center mt-6">
+				  <% if (totalPages > 1) { %>
+					<% if (currentPage > 1) { %>
+					  <a href="?search=<%= search %>&page=1" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded" title="First">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m13 19l-6-7l6-7"/><path d="m17 19l-6-7l6-7"/></g></svg>
+					  </a>
+					<% } %>
+
+					<% for (let i = 1; i <= totalPages; i++) { %>
+					  <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+						<a href="?search=<%= search %>&page=<%= i %>" class="h-7 w-7 flex items-center justify-center p-1 rounded 
+						  <%= i === currentPage ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white' %>">
+						  <%= i %>
+						</a>
+					  <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+						<span class="h-7 w-4 flex items-center justify-center p-1">...</span>
+					  <% } %>
+					<% } %>
+
+					<% if (currentPage < totalPages) { %>
+					  <a href="?search=<%= search %>&page=<%= totalPages %>" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m11 19l6-7l-6-7"/><path d="m7 19l6-7l-6-7"/></g></svg>
+					  </a>
+					<% } %>
+				  <% } %>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 hidden p-4">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative">
+			<h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"><%= __('language.Edit Translation') %></h3>
+			
+			<form id="editForm" method="post" action="/administrator/language/edit" class="flex flex-col gap-4">
+				<input type="hidden" name="key" id="modalKey" value="">
+				<div class="flex flex-col gap-1">
+					<label for="modalLocale" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+						<%= __('language.Select Language') %>
+					</label>
+					<select name="locale" id="modalLocale" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none">
+						<% Object.entries(languages).forEach(([code, flag]) => { %>
+						<% if (code !== 'en') { %>
+							<option value="<%= code %>"><%= flag %> <%= code.toUpperCase() %></option>
+						<% } %>
+						<% }) %>
+					</select>
+				</div>
+				<div class="flex flex-col gap-1">
+					<label for="modalValue" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+						<%= __('language.Translation') %>
+					</label>
+					<textarea name="value" id="modalValue" rows="8" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></textarea>
+				</div>
+				<div class="flex justify-end gap-2">
+					<button type="button" id="cancelBtn" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"></path></svg>
+						<%= __('language.Cancel') %>
+					</button>
+					<button type="submit" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"></path><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"></path><path stroke-linecap="round" d="M7 8h6"></path></g></svg>
+						<%= __('language.Save') %>
+					</button>
+				</div>
+			</form>
+
+		</div>
+	</div>
+
+	<%- include('../components/error-log') %>
+	
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+	  const translations = <%- JSON.stringify(translations) %>;
+
+	  const modal = document.getElementById('editModal');
+	  const cancelBtn = document.getElementById('cancelBtn');
+	  const modalKey = document.getElementById('modalKey');
+	  const modalValue = document.getElementById('modalValue');
+	  const modalLocale = document.getElementById('modalLocale');
+
+	  document.querySelectorAll('.edit-btn').forEach(button => {
+		button.addEventListener('click', () => {
+		  const key = button.getAttribute('data-key');
+
+		  modalKey.value = key;
+		  modalLocale.value = 'id';
+		  modalValue.value = (translations['id'] && translations['id'][key]) || '';
+
+		  modal.classList.remove('hidden');
+		});
+	  });
+
+	  modalLocale.addEventListener('change', () => {
+		const lang = modalLocale.value;
+		const key = modalKey.value;
+		modalValue.value = (translations[lang] && translations[lang][key]) || '';
+	  });
+
+	  cancelBtn.addEventListener('click', () => {
+		modal.classList.add('hidden');
+	  });
+
+	  window.addEventListener('click', (e) => {
+		if (e.target === modal) {
+		  modal.classList.add('hidden');
+		}
+	  });
+	</script>
+
+</body>
+</html>

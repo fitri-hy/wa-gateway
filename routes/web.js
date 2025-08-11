@@ -118,6 +118,8 @@ router.get('/administrator/subscribe', administratorMiddleware, Administrator.su
 router.post('/administrator/subscribe/add', administratorMiddleware, Administrator.addSubscribe);
 router.post('/administrator/subscribe/edit/:id', administratorMiddleware, Administrator.editSubscribe);
 router.post('/administrator/subscribe/delete/:id', administratorMiddleware, Administrator.deleteSubscribe);
+router.get('/administrator/language', administratorMiddleware, Administrator.language);
+router.post('/administrator/language/edit', administratorMiddleware, Administrator.editLanguage);
 
 router.get('/lang', (req, res) => {
   const currentLang = req.getLocale();

@@ -36,7 +36,8 @@
 	"Users": "Pengguna",
 	"Analytic": "Analitik",
     "Settings": "Pengaturan",
-    "Package": "Paket"
+    "Package": "Paket",
+    "Language": "Bahasa"
   },
   "home": {
     "Whatsapp Gateway": "Gerbang WhatsApp",
@@ -438,6 +439,19 @@
 	"Change": "Ubah",
 	"Save": "Simpan"
   },
+  "language": {
+    "Language": "Bahasa",
+    "Search": "Cari",
+    "English": "Inggris",
+    "Indonesia": "Indonesia",
+	"Action": "Aksi",
+	"Save": "Simpan",
+	"Cancel": "Batal",
+    "No language found": "Tidak ada bahasa yang ditemukan.",
+	"Edit Translation": "Perbaharui Terjemahan",
+	"Select Language": "Pilih Bahasa",
+	"Translation": "Terjemahan"
+  },
   "flash": {
 	"All fields are required": "Semua kolom wajib diisi!",
 	"Name must be max": "Nama harus maksimal 25 karakter dan hanya mengandung huruf dan spasi.",
@@ -561,6 +575,11 @@
 	"Failed to create user": "Gagal membuat pengguna",
 	"Failed to update user": "Gagal memperbarui pengguna",
 	"Invalid Token": "Token Tidak Valid",
-	"reCAPTCHA verification failed, please try again": "Verifikasi reCAPTCHA gagal, silakan coba lagi"
+	"reCAPTCHA verification failed, please try again": "Verifikasi reCAPTCHA gagal, silakan coba lagi",
+	"Missing key or locale": "Kunci atau lokal hilang",
+    "Editing the default language (EN) is not allowed": "Mengedit bahasa default (EN) tidak diperbolehkan",
+    "Language file not found": "File bahasa tidak ditemukan",
+    "Translation updated successfully": "Terjemahan berhasil diperbarui untuk lokal \"%s\"",
+    "Server error while updating language": "Kesalahan server saat memperbarui bahasa"
   }
 }

@@ -15,6 +15,8 @@ const webRouter = require('./routes/web');
 const cleanupMiddleware = require('./middleware/cleanupMiddlewares');
 const { registerWsClient, startSession } = require('./services/whatsappService');
 const i18n = require('./utils/i18n');
+const langFilePath = path.join(__dirname, './locales/lang.json');
+const availableLocales = JSON.parse(fs.readFileSync(langFilePath, 'utf-8')); 
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -37,6 +39,7 @@ app.use((req, res, next) => {
   const protocol = req.protocol;
   const host = req.get('host');
   res.locals.__ = res.__;
+  res.locals.availableLocales = availableLocales;
   res.locals.BASE_URL = `${protocol}://${host}`;
   res.locals.user = req.session.user || null;
   res.locals.success = req.flash('success');

@@ -37,12 +37,11 @@
 			</button>
 			<form action="/lang" method="get" class="inline-block text-2xl">
 			  <select name="locale" class="bg-white dark:bg-slate-800 border-none" onchange="this.form.submit()">
-				<option class="text-center" value="en" <%= getLocale() === 'en' ? 'selected' : '' %>>
-					🇬🇧
-				</option>
-				<option class="text-center" value="id" <%= getLocale() === 'id' ? 'selected' : '' %>>
-					🇮🇩
-				</option>
+				<% Object.keys(availableLocales).forEach(function(locale) { %>
+					<option class="text-center" value="<%= locale %>" <%= getLocale() === locale ? 'selected' : '' %>>
+						<%= availableLocales[locale] %>
+					</option>
+				<% }); %>
 			  </select>
 			</form>
 			<a href="/login" class="bg-gradient-to-r text-sm from-sky-500 dark:from-sky-600 to-indigo-500 dark:to-indigo-600 flex items-center gap-2 rounded md:rounded-full px-1 md:px-3 py-1 text-white font-semibold hover:shadow-lg hover:scale-105 hover:duration-all transition-all">

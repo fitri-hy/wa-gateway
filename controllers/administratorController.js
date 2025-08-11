@@ -1428,3 +1428,117 @@ exports.deleteSubscribe = async (req, res) => {
     res.redirect('/administrator/subscribe');
   }
 };
+
+exports.language = async (req, res) => {
+  function flattenObject(obj, prefix = '') {
+    return Object.keys(obj).reduce((acc, k) => {
+      const pre = prefix.length ? prefix + '.' : '';
+      if (typeof obj[k] === 'object' && obj[k] !== null) {
+        Object.assign(acc, flattenObject(obj[k], pre + k));
+      } else {
+        acc[pre + k] = obj[k];
+      }
+      return acc;
+    }, {});
+  }
+
+  try {
+    const langFilePath = path.join(__dirname, '../locales/lang.json');
+    const langMap = JSON.parse(fs.readFileSync(langFilePath, 'utf-8'));
+    const locales = Object.keys(langMap);
+
+    const translations = {};
+    for (const locale of locales) {
+      const filePath = path.join(__dirname, '../locales', `${locale}.json`);
+      if (fs.existsSync(filePath)) {
+        const raw = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        translations[locale] = flattenObject(raw);
+      } else {
+        translations[locale] = {};
+      }
+    }
+
+    const search = (req.query.search || '').toLowerCase();
+    const page = parseInt(req.query.page, 10) || 1;
+    const perPage = 25;
+
+    const allKeysSet = new Set();
+    Object.values(translations).forEach(langObj => {
+      Object.keys(langObj).forEach(key => allKeysSet.add(key));
+    });
+    let allKeys = Array.from(allKeysSet);
+
+    if (search) {
+      allKeys = allKeys.filter(key => {
+        const enText = (translations['en'] && translations['en'][key]) ? translations['en'][key].toLowerCase() : '';
+        return key.toLowerCase().includes(search) || enText.includes(search);
+      });
+    }
+
+    const totalKeys = allKeys.length;
+    const totalPages = Math.ceil(totalKeys / perPage);
+    const startIndex = (page - 1) * perPage;
+    const paginatedKeys = allKeys.slice(startIndex, startIndex + perPage);
+
+    res.render('administrator/language', {
+      user_name: req.session.user?.name || 'User',
+      languages: langMap,
+      translations,
+      keys: paginatedKeys,
+      search,
+      currentPage: page,
+      totalPages,
+    });
+  } catch (error) {
+    console.error('Failed to load languages:', error);
+    res.status(500).render('error', {
+      title: res.__('error.Internal Server Error'),
+      message: res.__('error.It seems there was an error'),
+    });
+  }
+};
+
+exports.editLanguage = (req, res) => {
+  const { key, locale, value } = req.body;
+
+  if (!key || !locale) {
+    req.flash('error', res.__('flash.Missing key or locale'));
+    return res.redirect('/administrator/language');
+  }
+
+  if (locale === 'en') {
+    req.flash('error', res.__('flash.Editing the default language (EN) is not allowed'));
+    return res.redirect('/administrator/language');
+  }
+
+  try {
+    const langFilePath = path.join(__dirname, '../locales', `${locale}.json`);
+    if (!fs.existsSync(langFilePath)) {
+      req.flash('error', res.__('flash.Language file not found'));
+      return res.redirect('/administrator/language');
+    }
+
+    const raw = JSON.parse(fs.readFileSync(langFilePath, 'utf-8'));
+
+    function setNested(obj, path, val) {
+      const keys = path.split('.');
+      let cur = obj;
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!cur[keys[i]]) cur[keys[i]] = {};
+        cur = cur[keys[i]];
+      }
+      cur[keys[keys.length - 1]] = val;
+    }
+
+    setNested(raw, key, value);
+
+    fs.writeFileSync(langFilePath, JSON.stringify(raw, null, 2), 'utf-8');
+
+    req.flash('success', res.__('flash.Translation updated successfully', locale));
+    res.redirect('/administrator/language');
+  } catch (error) {
+    console.error('Failed to update language file:', error);
+    req.flash('error', res.__('flash.Server error while updating language'));
+    res.redirect('/administrator/language');
+  }
+};
