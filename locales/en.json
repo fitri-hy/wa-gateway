@@ -222,7 +222,9 @@
     "Add New": "Add New",
     "Select File": "Select File",
     "Cancel": "Cancel",
-    "Save": "Save"
+    "Click to Upload": "Click to Upload",
+    "or": "or",
+    "Drag and Drop": "Drag and Drop"
   },
   "sending": {
     "Sending": "Sending",
@@ -314,7 +316,7 @@
     "Type": "Type",
     "Date": "Date",
     "Action": "Action",
-    "No messages found": "No messages found.",
+    "No auto reply found": "No auto reply found.",
 	"Add New": "Add New",
 	"Category": "Category",
 	"Session": "Session",

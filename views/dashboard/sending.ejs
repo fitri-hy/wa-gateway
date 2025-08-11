@@ -508,16 +508,12 @@
 		  </button>
 		</div>
 		<div id="contact-list" class="pt-20 max-h-full px-6 pb-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-		  <% if (contacts.length === 0) { %>
-		    <p>No contact found.</p>
-		  <% } else { %>
 		  <% contacts.forEach(contact => { %>
 			<button type="button" class="bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-950 w-full min-w-[200px] flex flex-col text-left px-4 py-2 border border-gray-100 dark:border-slate-700 rounded" data-phone="<%= contact.phone %>" data-name="<%= contact.name.toLowerCase() %>">
 			  <span class="font-semibold text-xl overflow-hidden line-clamp-1"><%= contact.name %></span>
 			  <span class="overflow-hidden line-clamp-1"><%= contact.phone %></span>
 			</button>
 		  <% }) %>
-		  <% } %>
 		</div>
 	  </div>
 	</div>

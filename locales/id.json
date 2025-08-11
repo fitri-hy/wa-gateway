@@ -222,7 +222,10 @@
     "Add New": "Tambah Baru",
     "Select File": "Pilih Berkas",
     "Cancel": "Batal",
-    "Save": "Simpan"
+    "Save": "Simpan",
+    "Click to Upload": "Klik untuk Mengunggah",
+    "or": "atau",
+    "Drag and Drop": "Seret dan Lepas"
   },
   "sending": {
     "Sending": "Mengirim",
@@ -314,7 +317,7 @@
     "Type": "Tipe",
     "Date": "Tanggal",
     "Action": "Aksi",
-    "No messages found": "Tidak ada pesan yang ditemukan.",
+    "No auto reply found": "Tidak ada balasan otomatis yang ditemukan.",
 	"Add New": "Tambah Baru",
 	"Category": "Kategori",
 	"Session": "Sesi",
