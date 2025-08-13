@@ -37,83 +37,73 @@ async function startSession(phone) {
     const { connection, lastDisconnect, qr } = update;
 
     if (qr && wsClients[phone]) {
-      QRCode.toDataURL(qr).then((dataUrl) => {
-        wsClients[phone].send(JSON.stringify({ qr: dataUrl }));
-      });
-    }
+		QRCode.toDataURL(qr).then((dataUrl) => {
+		  wsClients[phone].send(JSON.stringify({ qr: dataUrl }));
+		});
+	}
 
-    if (connection === 'close') {
-      const error = lastDisconnect?.error;
-      const status = error?.output?.statusCode || 0;
-
-      if (status === DisconnectReason.loggedOut) {
-        retryCount[phone] = 0;
-
-        console.log(`${phone} Logged out`);
-
-        db.query(
-          'DELETE FROM sessions WHERE phone = ?',
-          [phone],
-          (err) => {
-            if (err) console.error(`Error update session disconnected: ${err}`);
-          }
-        );
-
-        delete clients[phone];
+	const cleanupSession = async (reason) => {
+		delete clients[phone];
 		sockToPhone.delete(sock);
 
-        if (wsClients[phone]) {
-          wsClients[phone].send(JSON.stringify({ loggedOut: true }));
-          wsClients[phone].close();
-          delete wsClients[phone];
-        }
+		if (wsClients[phone]) {
+		  wsClients[phone].send(JSON.stringify({ inactive: true, reason }));
+		  wsClients[phone].close();
+		  delete wsClients[phone];
+		}
 
-        try {
-          await rimraf(sessionDir);
-          console.log(`${phone} Data session deleted.`);
-        } catch (err) {
-          console.error(`Failed to delete session folder for ${phone}:`, err);
-        }
+		try {
+		  await rimraf(sessionDir);
+		} catch (err) {
+		  console.error(`Failed to delete session folder for ${phone}:`, err);
+		}
 
-        return;
-      } else {
-        retryCount[phone]++;
-        if (retryCount[phone] > 5) {
-          console.log(`Too many retries for ${phone}, stop reconnecting.`);
-          return;
-        }
+		try { sock.end(); } catch {}
+	  };
 
-        db.query(
-          'UPDATE sessions SET connected = 0 WHERE phone = ?',
-          [phone],
-          (err) => {
-            if (err) console.error(`Error update session disconnected: ${err}`);
-          }
-        );
+	  if (connection === 'close') {
+		const status = lastDisconnect?.error?.output?.statusCode || 0;
 
-        console.log(`${phone} disconnected unexpectedly, retry #${retryCount[phone]}, reconnecting in 10 seconds...`);
-        setTimeout(() => {
-          startSession(phone).catch(console.error);
-        }, 5000);
-      }
-    }
+		if (status === DisconnectReason.loggedOut) {
+		  retryCount[phone] = 0;
+		  // console.log(`${phone} Logged out`);
 
-    if (connection === 'open') {
-      retryCount[phone] = 0;
-      console.log(`${phone} connected`);
+		  db.query('DELETE FROM sessions WHERE phone = ?', [phone], (err) => {
+			if (err) console.error(`Error update session disconnected: ${err}`);
+		  });
 
-      if (wsClients[phone]) {
-        wsClients[phone].send(JSON.stringify({ connected: true }));
-      }
+		  await cleanupSession('loggedOut');
+		  return;
+		}
 
-      db.query(
-        'UPDATE sessions SET connected = 1 WHERE phone = ?',
-        [phone],
-        (err) => {
-          if (err) console.error(`Error update session connected: ${err}`);
-        }
-      );
-    }
+		retryCount[phone]++;
+		if (retryCount[phone] > 5) {
+		  // console.log(`Too many retries for ${phone}, stop reconnecting.`);
+		  db.query('UPDATE sessions SET connected = 0 WHERE phone = ?', [phone], (err) => {
+			if (err) console.error(`Error update session inactive: ${err}`);
+		  });
+		  await cleanupSession('tooManyRetries');
+		  return;
+		}
+
+		db.query('UPDATE sessions SET connected = 0 WHERE phone = ?', [phone], (err) => {
+		  if (err) console.error(`Error update session disconnected: ${err}`);
+		});
+
+		// console.log(`${phone} disconnected unexpectedly, retry #${retryCount[phone]}, reconnecting in 5 seconds...`);
+		setTimeout(() => startSession(phone).catch(console.error), 5000);
+	  }
+
+	  if (connection === 'open') {
+		retryCount[phone] = 0;
+		console.log(`${phone} connected`);
+		if (wsClients[phone]) {
+		  wsClients[phone].send(JSON.stringify({ connected: true }));
+		}
+		db.query('UPDATE sessions SET connected = 1 WHERE phone = ?', [phone], (err) => {
+		  if (err) console.error(`Error update session connected: ${err}`);
+		});
+	}
   });
 
   sock.ev.on('creds.update', saveCreds);
@@ -163,14 +153,9 @@ async function getAllSessionsStatus(userId) {
     db.query('SELECT phone, connected FROM sessions WHERE user_id = ?', [userId], (err, results) => {
       if (err) return reject(err);
 
-      const sessionsDir = path.join(__dirname, '..', 'sessions');
-      const existingFolders = fs.existsSync(sessionsDir) ? fs.readdirSync(sessionsDir) : [];
-
-      const filtered = results.filter(row => existingFolders.includes(row.phone));
-
-      const formatted = filtered.map(row => ({
+      const formatted = results.map(row => ({
         phone: row.phone,
-        connected: row.connected === 1
+        connected: row.connected
       }));
 
       resolve(formatted);
@@ -225,7 +210,7 @@ async function deleteSession(phone) {
     const sessionDir = path.join(__dirname, '..', 'sessions', phone);
     await rimraf(sessionDir);
 
-    console.log(`Session ${phone} deleted successfully.`);
+    // console.log(`Session ${phone} deleted successfully.`);
   } catch (err) {
     console.error('Error deleting session and related data:', err);
     throw err;
