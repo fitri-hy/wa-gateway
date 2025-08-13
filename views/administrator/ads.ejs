@@ -133,8 +133,8 @@
 		</section>
 	</main>
 	
-	<div id="adsModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
-	  <div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative">
+	<div id="adsModal" class="fixed flex flex-col inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+	  <div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
 		<h2 id="modalTitle" class="text-xl font-semibold mb-4 text-gray-800 dark:text-white"><%= __('ads.Add Ads') %></h2>
 		<form id="adsForm" method="POST" action="/administrator/ads" class="flex flex-col gap-4">
 		  <div>

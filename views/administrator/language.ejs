@@ -93,8 +93,8 @@
 		</section>
 	</main>
 
-	<div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black/50 z-50 hidden p-4">
-		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative">
+	<div id="editModal" class="fixed flex flex-col inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
 			<h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white"><%= __('language.Edit Translation') %></h3>
 			
 			<form id="editForm" method="post" action="/administrator/language/edit" class="flex flex-col gap-4">

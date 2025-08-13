@@ -1542,3 +1542,143 @@ exports.editLanguage = (req, res) => {
     res.redirect('/administrator/language');
   }
 };
+
+exports.reports = async (req, res) => {
+  const query = util.promisify(db.query).bind(db);
+  
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+
+    const search = req.query.search ? req.query.search.trim() : '';
+    const currentPage = parseInt(req.query.page) || 1;
+    const perPage = 20;
+    const offset = (currentPage - 1) * perPage;
+
+    const searchCondition = search
+      ? `AND (title LIKE ? OR content LIKE ?)`
+      : '';
+
+    const countQuery = `
+      SELECT COUNT(*) AS total
+      FROM reports
+      JOIN users ON reports.user_id = users.id
+      WHERE reports.user_id = ? ${searchCondition}
+    `;
+
+    const countParams = search
+      ? [userId, `%${search}%`, `%${search}%`]
+      : [userId];
+
+    const countResult = await query(countQuery, countParams);
+    const totalReports = countResult[0].total;
+    const totalPages = Math.max(1, Math.ceil(totalReports / perPage));
+
+    const dataQuery = `
+      SELECT reports.id, reports.user_id, users.name, reports.title, reports.category, reports.content, reports.status, reports.created_at
+      FROM reports
+      JOIN users ON reports.user_id = users.id
+      WHERE reports.user_id = ? ${searchCondition}
+      ORDER BY reports.created_at DESC
+      LIMIT ? OFFSET ?
+    `;
+
+
+    const dataParams = search
+      ? [userId, `%${search}%`, `%${search}%`, perPage, offset]
+      : [userId, perPage, offset];
+
+    const reports = await query(dataQuery, dataParams);
+
+    res.render('administrator/reports', {
+      reports,
+      search,
+      currentPage,
+      totalPages
+    });
+
+  } catch (error) {
+    console.error('Failed to get reports:', error);
+    res.render('dashboard/reports', {
+      reports: [],
+      search: '',
+      currentPage: 1,
+      totalPages: 1
+    });
+  }
+};
+
+exports.editResponse = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+
+    const id = req.body.id;
+    const response = req.body.response;
+    const status = req.body.status;
+
+    if (!id || !response || !status) {
+      req.flash('error', res.__('flash.All fields are required'));
+      return res.redirect('/administrator/reports');
+    }
+	
+	const allowedStatuses = ['Pending', 'Rejected', 'Completed'];
+    if (!allowedStatuses.includes(status)) {
+      req.flash('error', res.__('flash.Invalid status'));
+      return res.redirect('/administrator/reports');
+    }
+
+    const [result] = await db.promise().query(
+      'UPDATE reports SET response = ?, status = ? WHERE id = ?',
+      [response, status, id]
+    );
+
+    if (result.affectedRows === 0) {
+      req.flash('error', res.__('flash.No report found'));
+      return res.redirect('/administrator/reports');
+    }
+
+    req.flash('success', res.__('flash.Successfully replied to the report'));
+    res.redirect('/administrator/reports');
+  } catch (error) {
+    console.error('Failed to reply:', error);
+    req.flash('error', res.__('flash.Failed to reply'));
+    res.redirect('/administrator/reports');
+  }
+};
+
+exports.deleteResponse = async (req, res) => {
+  try {
+    const userId = req.session.user?.id;
+    if (!userId) {
+      return res.redirect('/login');
+    }
+
+    const id = req.params.id;
+    if (!id) {
+      req.flash('error', res.__('flash.All fields are required'));
+      return res.redirect('/administrator/reports');
+    }
+
+    const [result] = await db.promise().query(
+      'DELETE FROM reports WHERE id = ?',
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      req.flash('error', res.__('flash.No report found'));
+      return res.redirect('/administrator/reports');
+    }
+
+    req.flash('success', res.__('flash.Report successfully deleted'));
+    res.redirect('/administrator/reports');
+  } catch (error) {
+    console.error('Failed to delete report:', error);
+    req.flash('error', res.__('flash.Failed to delete report'));
+    res.redirect('/administrator/reports');
+  }
+};

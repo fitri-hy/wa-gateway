@@ -29,7 +29,7 @@
 					<% } else { %>
 					<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-2">
 						<% activePlugins.forEach(plugin => { %>
-							<div class="flex flex-col gap-3 border p-3 rounded-md border-gray-100 dark:border-slate-700">
+							<div class="hover:scale-105 hover:duration-300 hover:transition-all hover:shadow-lg flex flex-col gap-3 border p-3 rounded-md border-gray-100 dark:border-slate-700">
 								<div class="flex flex-col gap-2">
 									<h3 class="font-semibold overflow-hidden line-clamp-1">
 										<%= plugin.title %>
@@ -85,7 +85,7 @@
 				<% } else { %>
 				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mt-9">
 					<% inactivePlugins.forEach(plugin => { %>
-						<div class="flex flex-col gap-3 border p-3 rounded-md border-gray-100 dark:border-slate-700">
+						<div class="hover:scale-105 hover:duration-300 hover:transition-all hover:shadow-lg flex flex-col gap-3 border p-3 rounded-md border-gray-100 dark:border-slate-700">
 							<div class="flex flex-col gap-2">
 								<h3 class="font-semibold overflow-hidden line-clamp-1">
 									<%= plugin.title %>

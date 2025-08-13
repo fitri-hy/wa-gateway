@@ -80,6 +80,10 @@ const RestApi = require('../controllers/restApiController');
 router.get('/dashboard/rest-api', userMiddleware, RestApi.index);
 router.post('/dashboard/rest-api/regenerate-token', userMiddleware, RestApi.regenerateToken);
 
+const Reports = require('../controllers/reportsController');
+router.get('/dashboard/reports', userMiddleware, Reports.index);
+router.post('/dashboard/reports/add', userMiddleware, Reports.addReport);
+
 const Settings = require('../controllers/settingsController');
 router.get('/dashboard/settings', userMiddleware, Settings.index);
 router.post('/dashboard/settings/update', userMiddleware, Settings.update);
@@ -120,6 +124,9 @@ router.post('/administrator/subscribe/edit/:id', administratorMiddleware, Admini
 router.post('/administrator/subscribe/delete/:id', administratorMiddleware, Administrator.deleteSubscribe);
 router.get('/administrator/language', administratorMiddleware, Administrator.language);
 router.post('/administrator/language/edit', administratorMiddleware, Administrator.editLanguage);
+router.get('/administrator/reports', administratorMiddleware, Administrator.reports);
+router.post('/administrator/reports', administratorMiddleware, Administrator.editResponse);
+router.post('/administrator/reports/delete/:id', administratorMiddleware, Administrator.deleteResponse );
 
 router.get('/lang', (req, res) => {
   const currentLang = req.getLocale();

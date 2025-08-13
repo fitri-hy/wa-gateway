@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: __('reports.Reports') + ' Administrator | ' + __('app.FhytsBot') }) %>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash-admin') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: __('reports.Reports') }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="mb-4 flex items-center justify-between gap-4">
+					<form class="flex items-center gap-2" method="GET">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('reports.Search') %>...">
+						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+							</svg>
+						</button>
+					</form>
+				</div>
+				<div class="prose prose-lg dark:prose-invert max-w-none">
+					<div class="overflow-auto w-full">
+						<table>
+							<thead>
+								<tr>
+									<th><%= __('reports.Users') %></th>
+									<th><%= __('reports.Title') %></th>
+									<th><%= __('reports.Category') %></th>
+									<th><%= __('reports.Status') %></th>
+									<th><%= __('reports.Date') %></th>
+									<th class="text-center"><%= __('reports.Action') %></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if (!reports || reports.length === 0) { %>
+									<tr>
+										<td colspan="5" class="text-center">
+											<%= __('reports.No reports found') %>
+										</td>
+									</tr>
+								<% } else { %>
+								<% reports.forEach(report => { %>
+									<tr>
+										<td class="whitespace-nowrap">
+											<%= report.name %>
+										</td>
+										<td class="w-full">
+											<div class="overflow-hidden line-clamp-1 min-w-[150px]">
+												<%= report.title %>
+											</div>
+										</td>
+										<td class="whitespace-nowrap">
+											<%= __('reports.' + report.category) %>
+										</td>
+										<td class="whitespace-nowrap
+											  <% if (report.status === 'Pending') { %> text-amber-500
+											  <% } else if (report.status === 'Rejected') { %> text-rose-500
+											  <% } else if (report.status === 'Completed') { %> text-emerald-500
+											  <% } %>">
+											  <%= __('reports.' + report.status) %>
+										</td>
+										<td class="whitespace-nowrap">
+											<%
+											  const createdAt = new Date(report.created_at);
+											  const pad = (n) => n.toString().padStart(2, '0');
+											  const formattedDate = `${pad(createdAt.getHours())}:${pad(createdAt.getMinutes())}:${pad(createdAt.getSeconds())} ${pad(createdAt.getDate())}/${pad(createdAt.getMonth() + 1)}/${createdAt.getFullYear()}`;
+											  %>
+											<%= formattedDate %>
+										</td>
+										<td class="text-center">
+											<div class="flex items-center justify-center gap-2">
+												<button type="button" class="text-sky-500" 
+												  onclick="openDetailModal({
+													title: '<%- report.title.replace(/'/g, "\\'") %>',
+													category: '<%= report.category %>',
+													status: '<%= report.status %>',
+													created_at: '<%= new Date(report.created_at).toLocaleString() %>',
+													content: `<%- (report.content || '-').replace(/`/g, '\\`').replace(/\\/g, '\\\\') %>`,
+													response: `<%- (report.response || '-').replace(/`/g, '\\`').replace(/\\/g, '\\\\') %>`
+												  })">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
+												</button>
+												<button type="button" class="text-emerald-500"
+													onclick="openReportModal('<%= report.id %>')">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m11.985 21.449l.489-.824c.378-.64.568-.96.872-1.136c.304-.177.687-.184 1.453-.197c1.13-.02 1.84-.089 2.434-.335a4.5 4.5 0 0 0 2.438-2.435c.161-.39.247-.83.292-1.406c.027-.354.041-.53-.053-.674c-.095-.143-.276-.205-.638-.327C17.864 13.64 14.752 12.481 13 11c-1.98-1.674-3.754-5.054-4.418-6.414c-.142-.29-.213-.435-.336-.511s-.28-.074-.592-.07c-1.808.02-2.637.126-3.504.657a4.5 4.5 0 0 0-1.486 1.486C2 7.23 2 8.703 2 11.65v.9c0 2.096 0 3.145.343 3.972a4.5 4.5 0 0 0 2.437 2.435c.595.246 1.304.316 2.434.335c.766.013 1.15.02 1.453.197c.305.177.494.496.873 1.136l.488.824c.435.735 1.522.735 1.957 0"/><path fill="currentColor" fill-rule="evenodd" d="M13.702 1.217a.696.696 0 0 1-.007 1.035l-1.002.921a47 47 0 0 1 2.467.076c.65.041 1.26.104 1.79.202c.52.096 1.022.237 1.42.46c.74.418 1.363.99 1.817 1.672c.438.656.63 1.398.723 2.292c.09.875.09 1.969.09 3.355v.038c0 .404-.352.732-.786.732s-.785-.328-.785-.732c0-1.433-.001-2.456-.084-3.253c-.08-.785-.236-1.274-.493-1.66a3.8 3.8 0 0 0-1.296-1.191c-.168-.096-.462-.195-.912-.278a14 14 0 0 0-1.59-.177a45 45 0 0 0-2.348-.072l.989.91a.696.696 0 0 1 .007 1.034a.83.83 0 0 1-1.111.006L10.234 4.42A.7.7 0 0 1 10 3.899c0-.196.084-.383.234-.52L12.59 1.21a.83.83 0 0 1 1.11.006" clip-rule="evenodd"/></svg>
+												</button>
+												<form action="/administrator/reports/delete/<%= report.id %>" method="POST" title="Delete">
+												  <button type="submit" class="text-rose-500 hover:bg-gray-100 dark:hover:bg-slate-900 rounded-full" title="Delete">
+													<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="currentColor" d="M2.75 6.167c0-.46.345-.834.771-.834h2.665c.529-.015.996-.378 1.176-.916l.03-.095l.115-.372c.07-.228.131-.427.217-.605c.338-.702.964-1.189 1.687-1.314c.184-.031.377-.031.6-.031h3.478c.223 0 .417 0 .6.031c.723.125 1.35.612 1.687 1.314c.086.178.147.377.217.605l.115.372l.03.095c.18.538.74.902 1.27.916h2.57c.427 0 .772.373.772.834S20.405 7 19.979 7H3.52c-.426 0-.771-.373-.771-.833M11.607 22h.787c2.707 0 4.06 0 4.941-.863c.88-.864.97-2.28 1.15-5.111l.26-4.081c.098-1.537.147-2.305-.295-2.792s-1.187-.487-2.679-.487H8.23c-1.491 0-2.237 0-2.679.487s-.392 1.255-.295 2.792l.26 4.08c.18 2.833.27 4.248 1.15 5.112S8.9 22 11.607 22"></path></svg>
+												  </button>
+												</form>
+											</div>
+										</td>
+									</tr>
+								<% }) %>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="flex items-center gap-2 justify-center mt-6">
+				  <% if (totalPages > 1) { %>
+					<% if (currentPage > 1) { %>
+					  <a href="?search=<%= search %>&page=1" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded" title="First">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m13 19l-6-7l6-7"/><path d="m17 19l-6-7l6-7"/></g></svg>
+					  </a>
+					<% } %>
+
+					<% for (let i = 1; i <= totalPages; i++) { %>
+					  <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+						<a href="?search=<%= search %>&page=<%= i %>" class="h-7 w-7 flex items-center justify-center p-1 rounded 
+						  <%= i === currentPage ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white' %>">
+						  <%= i %>
+						</a>
+					  <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+						<span class="h-7 w-4 flex items-center justify-center p-1">...</span>
+					  <% } %>
+					<% } %>
+
+					<% if (currentPage < totalPages) { %>
+					  <a href="?search=<%= search %>&page=<%= totalPages %>" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m11 19l6-7l-6-7"/><path d="m7 19l6-7l-6-7"/></g></svg>
+					  </a>
+					<% } %>
+				  <% } %>
+				</div>
+			</div>
+		</section>
+	</main>
+	
+	<div id="detailModal" class="fixed inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
+		<button onclick="closeDetailModal()" class="absolute top-2 right-2 text-rose-500 dark:text-rose-600 hover:text-rose-600 hover:dark:text-rose-500" aria-label="Close detail">
+		  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+			<path fill="currentColor" fill-rule="evenodd"
+			  d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06"
+			  clip-rule="evenodd" />
+		  </svg>
+		</button>
+		<h2 class="text-xl font-semibold mb-4">Detail Laporan</h2>
+		<div id="detailContent" class="flex flex-col gap-4">
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Title') %></label>
+				<span id="detailTitle" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Category') %></label>
+				<span id="detailCategory" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Status') %></label>
+				<span id="detailStatus" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Date') %></label>
+				<span id="detailCreatedAt" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Content') %></label>
+				<span id="detailContentText" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Response') %></label>
+				<span id="detailResponseText" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+		</div>
+	  </div>
+	</div>
+	
+	<div id="openReportModal" class="fixed inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
+		<h2 class="text-xl font-semibold mb-4"><%= __('reports.Reply to Report') %></h2>
+		<form id="replyForm" method="POST" action="/administrator/reports">
+			<input type="hidden" name="id" id="replyReportId" value="">
+			<div class="flex flex-col">
+				<label for="status" class="font-medium mb-1"><%= __('reports.Status') %></label>
+				<select
+				  id="status"
+				  name="status"
+				  required
+				  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"
+				>
+				  <option value="Pending"><%= __('reports.Pending') %></option>
+				  <option value="Rejected"><%= __('reports.Rejected') %></option>
+				  <option value="Completed"><%= __('reports.Completed') %></option>
+				</select>
+			  </div>
+			<div class="flex flex-col">
+				<label for="content" class="font-medium mb-1"><%= __('reports.Content') %></label>
+				<textarea
+				  id="content"
+				  name="response"
+				  rows="4"
+				  maxlength="300"
+				  required
+				  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none resize-none"
+				></textarea>
+			</div>
+
+			<div class="flex justify-end gap-2 mt-2">
+				<button
+				  type="button"
+				  onclick="closeReplyModal()"
+				  class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all"
+				>
+				  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"></path></svg>
+				  <%= __('reports.Cancel') %>
+				</button>
+				<button
+				  type="submit"
+				  class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all"
+				>
+				  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"></path><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"></path><path stroke-linecap="round" d="M7 8h6"></path></g></svg>
+				  <%= __('reports.Send') %>
+				</button>
+			</div>
+		</form>
+	  </div>
+	</div>
+	
+	<%- include('../components/error-log') %>
+
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+	  const detailModal = document.getElementById('detailModal');
+	  function openDetailModal(data) {
+		document.getElementById('detailTitle').textContent = data.title || '';
+		document.getElementById('detailCategory').textContent = data.category || '';
+		document.getElementById('detailStatus').textContent = data.status || '';
+		document.getElementById('detailCreatedAt').textContent = data.created_at || '';
+		document.getElementById('detailContentText').textContent = data.content || '';
+		document.getElementById('detailResponseText').textContent = data.response || '';
+		
+		detailModal.classList.remove('hidden');
+	  }
+	  function closeDetailModal() {
+		detailModal.classList.add('hidden');
+	  }
+	  detailModal.addEventListener('click', e => {
+		if (e.target === detailModal) closeDetailModal();
+	  });
+
+	  const replyModal = document.getElementById('openReportModal');
+	  function openReportModal(id) {
+		document.getElementById('replyReportId').value = id;
+		replyModal.classList.remove('hidden');
+	  }
+	  function closeReplyModal() {
+		replyModal.classList.add('hidden');
+		const form = document.getElementById('replyForm');
+		form.reset();
+		document.getElementById('replyReportId').value = '';
+	  }
+	  replyModal.addEventListener('click', e => {
+		if (e.target === replyModal) closeReplyModal();
+	  });
+	</script>
+
+</body>
+</html>

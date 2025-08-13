@@ -8,6 +8,7 @@ const pluginsDir = path.join(__dirname, '../plugins');
 let plugins = [];
 
 let lastAllowedPhonesCache = {};
+let skipPlugins = new Set();
 
 function findPluginIndex(fileName) {
   return plugins.findIndex(p => p.fileName === fileName);
@@ -109,6 +110,11 @@ async function syncPluginsDB() {
 }
 
 async function reloadSinglePlugin(file) {
+  if (skipPlugins.has(file)) {
+    console.warn(`[Plugin] Skip ${file} karena sebelumnya error`);
+    return;
+  }
+  
   try {
     const pluginPath = path.join(pluginsDir, file);
 	
@@ -142,6 +148,7 @@ async function reloadSinglePlugin(file) {
     }
   } catch (err) {
     console.error(`[Plugin] Error reload plugin ${file}: ${err.message}`);
+	skipPlugins.add(file);
   }
 }
 

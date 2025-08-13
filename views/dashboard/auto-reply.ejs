@@ -131,8 +131,8 @@
 		</section>
 	</main>
 	
-	<div id="modalAddAutoReply" class="fixed inset-0 bg-black/50 flex hidden items-center justify-center p-4 z-50 pointer-events-none">
-		<form action="/dashboard/auto-reply/create" method="POST" class="bg-white dark:bg-slate-800 rounded-md w-full max-w-lg w-full p-4 md:p-6 overflow-auto max-h-[90vh] pointer-events-auto">
+	<div id="modalAddAutoReply" class="fixed flex flex-col inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<form action="/dashboard/auto-reply/create" method="POST" class="bg-white dark:bg-slate-800 rounded-md w-full max-w-lg w-full p-4 md:p-6 overflow-auto max-h-[90vh] pointer-events-auto max-h-[95vh] mx-auto overflow-y-auto">
 			<h2 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white"><%= __('autoreply.Add New') %></h2>
 			<div class="flex flex-col gap-4">
 				<div class="flex flex-col">
@@ -261,8 +261,8 @@
 	  </div>
 	</div>
 	
-	<div id="detailModal" class="hidden bg-black/50 fixed inset-0 flex items-center justify-center z-50">
-		<div class="bg-white w-full dark:bg-slate-800 shadow-lg max-w-lg p-4 md:p-6 rounded-lg">
+	<div id="detailModal" class="fixed flex flex-col inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
 			<div class="flex justify-between items-center mb-4">
 				<h2 class="text-xl font-semibold"><%= __('autoreply.Detail') %></h2>
 				<button id="closeDetailModal" class="text-rose-500 dark:text-rose-600 hover:text-rose-600 hoer:dark:text-rose-500">

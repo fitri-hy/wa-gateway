@@ -37,7 +37,8 @@
 	"Analytic": "Analytic",
     "Settings": "Settings",
     "Package": "Packages",
-    "Language": "Language"
+    "Language": "Language",
+    "Reports": "Reports"
   },
   "home": {
     "Whatsapp Gateway": "Whatsapp Gateway",
@@ -98,14 +99,14 @@
 	"Access to this page": "Access to this page or resource is denied because you do not have the required permission.",
 	"Access Denied": "Access Denied",
 	"Your account is inactive or blocked": "Your account is inactive or blocked",
-	"You do not have access to this page'": "You do not have access to this page",
+	"You do not have access to this page": "You do not have access to this page",
 	"Incomplete Package Information": "Incomplete Package Information",
 	"We noticed some missing information in your subscription": "We noticed some missing information in your subscription",
 	"Subscription Expired": "Subscription Expired",
 	"Your subscription package has expired": "Your subscription package has expired, please renew it to continue enjoying our features.",
 	"Too Many Requests": "Too Many Requests",
 	"Too many login attempts please try again later": "Too many login attempts please try again later",
-	"Too many registration attempts please try again later'": "Too many registration attempts please try again later"
+	"Too many registration attempts please try again later": "Too many registration attempts please try again later"
   },
   "login": {
     "Sign In": "Sign In",
@@ -452,6 +453,42 @@
 	"Select Language": "Select Language",
 	"Translation": "Translation"
   },
+  "reports": {
+    "Reports": "Reports",
+    "Search": "Search",
+    "Users": "Users",
+    "Title": "Title",
+    "Category": "Category",
+    "Status": "Status",
+    "Date": "Date",
+    "Action": "Action",
+	"Add New": "Add New",
+	"Send": "Send",
+	"Cancel": "Cancel",
+    "No reports found": "No reports found.",
+	"Title": "Title",
+	"Category": "Category",
+	"Content": "Content",
+    "Devices": "Devices",
+    "Device": "Device",
+    "Contact": "Contact",
+    "File Manager": "File Manager",
+    "Sending": "Sending",
+    "Broadcast": "Broadcast",
+    "Auto Reply": "Auto Reply",
+    "Plugin": "Plugin",
+    "Rest API": "Rest API",
+	"Subscribe": "Subscribe",
+	"Account": "Account",
+	"Other": "Other",
+	"Response": "Response",
+	"Report title": "Report title",
+	"Describe the issue": "Describe the issue",
+	"Pending": "Pending",
+	"Rejected": "Rejected",
+	"Completed": "Completed",
+	"Reply to Report": "Reply to Report"
+  },
   "flash": {
 	"All fields are required": "All fields are required!",
 	"Name must be max": "Name must be max 25 characters and contain only letters and spaces.",
@@ -521,7 +558,7 @@
 	"Session delete successfully": "Session delete successfully",
 	"The phone number must consist of 8-15 digits": "The phone number must consist of 8-15 digits.",
 	"Failed to regenerate token": "Failed to regenerate token.",
-	"Token regenerated successfully'": "Token regenerated successfully.",
+	"Token regenerated successfully": "Token regenerated successfully.",
 	"Invalid input": "Invalid input",
 	"Latitude and Longitude are required for location": "Latitude and Longitude are required for location",
 	"File URL is required for sticker": "File URL is required for sticker",
@@ -580,6 +617,16 @@
     "Editing the default language (EN) is not allowed": "Editing the default language (EN) is not allowed",
     "Language file not found": "Language file not found",
     "Translation updated successfully": "Translation updated successfully for locale \"%s\"",
-    "Server error while updating language": "Server error while updating language"
+    "Server error while updating language": "Server error while updating language",
+	"Title must be at most 50 characters": "Title must be at most 50 characters",
+	"Content must be at most 300 characters": "Content must be at most 300 characters",
+	"Report added successfully": "Report added successfully",
+	"Failed to add report": "Failed to add report",
+	"No report found": "No report found",
+	"Successfully replied to the report": "Successfully replied to the report",
+	"Failed to reply": "Failed to reply",
+	"Invalid status": "Invalid status",
+	"Report successfully deleted": "Report successfully deleted",
+	"Failed to delete report": "Failed to delete report"
   }
 }

@@ -128,7 +128,7 @@ const server = app.listen(PORT, () => {
       });
 
       for (const session of validSessions) {
-        console.log(`Initializing session for ${session.phone}`);
+        //console.log(`Initializing session for ${session.phone}`);
         await startSession(session.phone).catch(console.error);
       }
 

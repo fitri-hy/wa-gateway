@@ -37,7 +37,8 @@
 	"Analytic": "Analitik",
     "Settings": "Pengaturan",
     "Package": "Paket",
-    "Language": "Bahasa"
+    "Language": "Bahasa",
+    "Reports": "Laporan"
   },
   "home": {
     "Whatsapp Gateway": "Gerbang WhatsApp",
@@ -98,14 +99,14 @@
 	"Access to this page": "Akses ke halaman atau sumber ini ditolak karena Anda tidak memiliki izin yang diperlukan.",
 	"Access Denied": "Akses Ditolak",
 	"Your account is inactive or blocked": "Akun Anda tidak aktif atau diblokir",
-	"You do not have access to this page'": "Anda tidak memiliki akses ke halaman ini",
+	"You do not have access to this page": "Anda tidak memiliki akses ke halaman ini",
 	"Incomplete Package Information": "Informasi Paket Tidak Lengkap",
 	"We noticed some missing information in your subscription": "Kami menemukan beberapa informasi yang hilang dalam langganan Anda",
 	"Subscription Expired": "Langganan Telah Kedaluwarsa",
 	"Your subscription package has expired": "Paket langganan Anda telah kedaluwarsa, silakan perbarui untuk terus menikmati fitur kami.",
 	"Too Many Requests": "Terlalu Banyak Permintaan",
 	"Too many login attempts please try again later": "Terlalu banyak percobaan login, silakan coba lagi nanti",
-	"Too many registration attempts please try again later'": "Terlalu banyak upaya pendaftaran, silakan coba lagi nanti"
+	"Too many registration attempts please try again later": "Terlalu banyak upaya pendaftaran, silakan coba lagi nanti"
   },
   "login": {
     "Sign In": "Masuk",
@@ -452,6 +453,42 @@
 	"Select Language": "Pilih Bahasa",
 	"Translation": "Terjemahan"
   },
+  "reports": {
+    "Reports": "Laporkan",
+    "Search": "Cari",
+    "Users": "Pengguna",
+    "Title": "Judul",
+    "Category": "Kategori",
+    "Status": "Status",
+    "Date": "Tanggal",
+    "Action": "Aksi",
+	"Add New": "Tambah Baru",
+	"Send": "Kirim",
+	"Cancel": "Batal",
+    "No reports found": "Tidak ada laporan yang ditemukan.",
+	"Title": "Judul",
+	"Category": "Kategori",
+	"Content": "Isi",
+    "Devices": "Perangkat",
+    "Device": "Perangkat",
+    "Contact": "Kontak",
+    "File Manager": "Manajer Berkas",
+    "Sending": "Mengirim",
+    "Broadcast": "Siaran",
+    "Auto Reply": "Balasan Otomatis",
+    "Plugin": "Plugin",
+    "Rest API": "Rest API",
+	"Subscribe": "Berlangganan",
+	"Account": "Akun",
+	"Other": "Lainnya",
+	"Response": "Balasan",
+	"Report title": "Judul laporan",
+	"Describe the issue": "Jelaskan masalahnya",
+	"Pending": "Tertunda",
+	"Rejected": "Ditolak",
+	"Completed": "Selesai",
+	"Reply to Report": "Membalas Laporan"
+  },
   "flash": {
 	"All fields are required": "Semua kolom wajib diisi!",
 	"Name must be max": "Nama harus maksimal 25 karakter dan hanya mengandung huruf dan spasi.",
@@ -521,7 +558,7 @@
 	"Session delete successfully": "Sesi berhasil dihapus",
 	"The phone number must consist of 8-15 digits": "Nomor telepon harus terdiri dari 8-15 digit.",
 	"Failed to regenerate token": "Gagal membuat ulang token.",
-	"Token regenerated successfully'": "Token berhasil dibuat ulang.",
+	"Token regenerated successfully": "Token berhasil dibuat ulang.",
 	"Invalid input": "Masukan tidak valid",
 	"Latitude and Longitude are required for location": "Lintang dan Bujur diperlukan untuk lokasi",
 	"File URL is required for sticker": "URL file diperlukan untuk stiker",
@@ -580,6 +617,16 @@
     "Editing the default language (EN) is not allowed": "Mengedit bahasa default (EN) tidak diperbolehkan",
     "Language file not found": "File bahasa tidak ditemukan",
     "Translation updated successfully": "Terjemahan berhasil diperbarui untuk lokal \"%s\"",
-    "Server error while updating language": "Kesalahan server saat memperbarui bahasa"
+    "Server error while updating language": "Kesalahan server saat memperbarui bahasa",
+	"Title must be at most 50 characters": "Judul harus maksimal 50 karakter",
+	"Content must be at most 300 characters": "Konten harus maksimal 300 karakter",
+	"Report added successfully": "Laporan berhasil ditambahkan",
+	"Failed to add report": "Gagal menambahkan laporan",
+	"No report found": "Tidak ada laporan yang ditemukan",
+	"Successfully replied to the report": "Berhasil membalas laporan",
+	"Failed to reply": "Gagal membalas",
+	"Invalid status": "Statusnya tidak valid",
+	"Report successfully deleted": "Laporan berhasil dihapus",
+	"Failed to delete report": "Gagal menghapus laporan"
   }
 }

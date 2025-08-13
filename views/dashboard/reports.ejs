@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', { title: __('reports.Reports') + ' | ' + __('app.FhytsBot') }) %>
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body class="flex text-gray-700 dark:text-neutral-200 bg-gradient-to-r from-slate-50 to-white dark:from-slate-700 dark:to-slate-800 min-h-screen w-full">
+	<aside id="sidebar" class="flex-none fixed md:static top-0 left-0 overflow-y-auto h-screen w-64 bg-white dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50">
+		<%- include('../components/sidebar-dash') %>
+	</aside>
+
+	<main class="flex flex-col gap-4 h-screen w-full overflow-y-auto">
+		<%- include('../components/header-dash', { dash_title: __('reports.Reports') }) %>
+		<section class="px-4 pb-4">
+			<div class="bg-white dark:bg-slate-800 p-4 md:p-6 border rounded-md border-gray-100 dark:border-slate-800 shadow-md shadow-gray-100 dark:shadow-slate-900">
+				<div class="mb-4 flex items-center justify-between gap-4">
+					<form class="flex items-center gap-2" method="GET">
+						<input type="text" name="search" id="search" value="<%= search %>" class="w-full max-w-xs bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none" placeholder="<%= __('reports.Search') %>...">
+						<button type="submit" title="Search" class="flex items-center gap-2 font-semibold p-2 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+							</svg>
+						</button>
+					</form>
+					<div class="flex items-center gap-2">
+						<button onclick="openAddModal()" title="Add New" class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+							</svg>
+							<span class="hidden md:flex"><%= __('reports.Add New') %></span>
+						</button>
+					</div>
+				</div>
+				<div class="prose prose-lg dark:prose-invert max-w-none">
+					<div class="overflow-auto w-full">
+						<table>
+							<thead>
+								<tr>
+									<th class="text-left"><%= __('reports.Title') %></th>
+									<th><%= __('reports.Category') %></th>
+									<th><%= __('reports.Status') %></th>
+									<th><%= __('reports.Date') %></th>
+									<th class="text-center"><%= __('reports.Action') %></th>
+								</tr>
+							</thead>
+							<tbody>
+								<% if (!reports || reports.length === 0) { %>
+									<tr>
+										<td colspan="5" class="text-center">
+											<%= __('reports.No reports found') %>
+										</td>
+									</tr>
+								<% } else { %>
+								<% reports.forEach(report => { %>
+									<tr>
+										<td class="w-full">
+											<div class="overflow-hidden line-clamp-1 min-w-[150px]">
+												<%= report.title %>
+											</div>
+										</td>
+										<td class="whitespace-nowrap">
+											<%= __('reports.' + report.category) %>
+										</td>
+										<td class="whitespace-nowrap
+											  <% if (report.status === 'Pending') { %> text-amber-500
+											  <% } else if (report.status === 'Rejected') { %> text-rose-500
+											  <% } else if (report.status === 'Completed') { %> text-emerald-500
+											  <% } %>">
+											  <%= __('reports.' + report.status) %>
+										</td>
+										<td class="whitespace-nowrap">
+											<%
+											  const createdAt = new Date(report.created_at);
+											  const pad = (n) => n.toString().padStart(2, '0');
+											  const formattedDate = `${pad(createdAt.getHours())}:${pad(createdAt.getMinutes())}:${pad(createdAt.getSeconds())} ${pad(createdAt.getDate())}/${pad(createdAt.getMonth() + 1)}/${createdAt.getFullYear()}`;
+											  %>
+											<%= formattedDate %>
+										</td>
+										<td class="text-center">
+											<div class="flex items-center justify-center">
+												<button type="button" class="text-sky-500" 
+												  onclick="openDetailModal({
+													title: '<%- report.title.replace(/'/g, "\\'") %>',
+													category: '<%= report.category %>',
+													status: '<%= report.status %>',
+													created_at: '<%= new Date(report.created_at).toLocaleString() %>',
+													content: `<%- (report.content || '-').replace(/`/g, '\\`').replace(/\\/g, '\\\\') %>`,
+													response: `<%- (report.response || '-').replace(/`/g, '\\`').replace(/\\/g, '\\\\') %>`
+												  })">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.75 12a2.25 2.25 0 1 1 4.5 0a2.25 2.25 0 0 1-4.5 0"/><path fill="currentColor" fill-rule="evenodd" d="M2 12c0 1.64.425 2.191 1.275 3.296C4.972 17.5 7.818 20 12 20s7.028-2.5 8.725-4.704C21.575 14.192 22 13.639 22 12c0-1.64-.425-2.191-1.275-3.296C19.028 6.5 16.182 4 12 4S4.972 6.5 3.275 8.704C2.425 9.81 2 10.361 2 12m10-3.75a3.75 3.75 0 1 0 0 7.5a3.75 3.75 0 0 0 0-7.5" clip-rule="evenodd"/></svg>
+												</button>
+											</div>
+										</td>
+									</tr>
+								<% }) %>
+								<% } %>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="flex items-center gap-2 justify-center mt-6">
+				  <% if (totalPages > 1) { %>
+					<% if (currentPage > 1) { %>
+					  <a href="?search=<%= search %>&page=1" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded" title="First">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m13 19l-6-7l6-7"/><path d="m17 19l-6-7l6-7"/></g></svg>
+					  </a>
+					<% } %>
+
+					<% for (let i = 1; i <= totalPages; i++) { %>
+					  <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
+						<a href="?search=<%= search %>&page=<%= i %>" class="h-7 w-7 flex items-center justify-center p-1 rounded 
+						  <%= i === currentPage ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white' %>">
+						  <%= i %>
+						</a>
+					  <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
+						<span class="h-7 w-4 flex items-center justify-center p-1">...</span>
+					  <% } %>
+					<% } %>
+
+					<% if (currentPage < totalPages) { %>
+					  <a href="?search=<%= search %>&page=<%= totalPages %>" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m11 19l6-7l-6-7"/><path d="m7 19l6-7l-6-7"/></g></svg>
+					  </a>
+					<% } %>
+				  <% } %>
+				</div>
+			</div>
+		</section>
+	</main>
+	
+	<div id="reportModal" class="fixed inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
+			<h2 id="modalTitle" class="text-xl font-semibold mb-4"><%= __('reports.Add New') %></h2>
+			<form id="reportForm" method="POST" action="/dashboard/reports/add" class="flex flex-col gap-4">
+			  <div class="flex flex-col">
+				<label for="title" class="font-medium mb-1"><%= __('reports.Title') %></label>
+				<input
+				  type="text"
+				  id="title"
+				  name="title"
+				  maxlength="50"
+				  required
+				  placeholder="<%= __('reports.Report title') %>"
+				  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"
+				/>
+			  </div>
+
+			  <div class="flex flex-col">
+				<label for="category" class="font-medium mb-1"><%= __('reports.Category') %></label>
+				<select
+				  id="category"
+				  name="category"
+				  required
+				  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"
+				>
+				  <option value="Devices"><%= __('reports.Devices') %></option>
+				  <option value="Contact"><%= __('reports.Contact') %></option>
+				  <option value="File Manager"><%= __('reports.File Manager') %></option>
+				  <option value="Sending"><%= __('reports.Sending') %></option>
+				  <option value="Broadcast"><%= __('reports.Broadcast') %></option>
+				  <option value="Auto Reply"><%= __('reports.Auto Reply') %></option>
+				  <option value="Plugin"><%= __('reports.Plugin') %></option>
+				  <option value="Rest API"><%= __('reports.Rest API') %></option>
+				  <option value="Subscribe"><%= __('reports.Subscribe') %></option>
+				  <option value="Account"><%= __('reports.Account') %></option>
+				  <option value="Other" selected><%= __('reports.Other') %></option>
+				</select>
+			  </div>
+
+			  <div class="flex flex-col">
+				<label for="content" class="font-medium mb-1"><%= __('reports.Content') %></label>
+				<textarea
+				  id="content"
+				  name="content"
+				  rows="4"
+				  maxlength="300"
+				  required
+				  placeholder="<%= __('reports.Describe the issue') %>"
+				  class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none resize-none"
+				></textarea>
+			  </div>
+
+			  <div class="flex justify-end gap-2 mt-2">
+				<button
+				  type="button"
+				  onclick="closeModal()"
+				  class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-rose-500 dark:bg-rose-600 text-white hover:bg-rose-600 dark:hover:bg-rose-500 hover:duration-300 transition-all"
+				>
+				  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m4.5 12l5-5m-5 5l5 5m-5-5h10c1.667 0 5 1 5 5"></path></svg>
+				  <%= __('reports.Cancel') %>
+				</button>
+				<button
+				  type="submit"
+				  class="flex items-center gap-2 font-semibold px-2 py-2 md:px-4 rounded-md bg-sky-500 dark:bg-sky-600 text-white hover:bg-sky-600 dark:hover:bg-sky-500 hover:duration-300 transition-all"
+				>
+				  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.464 20.536C4.93 22 7.286 22 12 22s7.071 0 8.535-1.465C22 19.072 22 16.714 22 12c0-.341 0-.512-.015-.686a4.04 4.04 0 0 0-.921-2.224a8 8 0 0 0-.483-.504l-5.167-5.167a9 9 0 0 0-.504-.483a4.04 4.04 0 0 0-2.224-.92C12.512 2 12.342 2 12 2C7.286 2 4.929 2 3.464 3.464C2 4.93 2 7.286 2 12s0 7.071 1.464 8.535Z"></path><path d="M17 22v-1c0-1.886 0-2.828-.586-3.414S14.886 17 13 17h-2c-1.886 0-2.828 0-3.414.586S7 19.114 7 21v1"></path><path stroke-linecap="round" d="M7 8h6"></path></g></svg>
+				  <%= __('reports.Send') %>
+				</button>
+			  </div>
+			</form>
+		</div>
+	</div>
+	
+	<div id="detailModal" class="fixed inset-0 bg-black/50 z-50 hidden p-4 overflow-auto">
+		<div class="bg-white dark:bg-slate-800 rounded-md w-full max-w-md shadow-lg p-4 md:p-6 relative max-h-[95vh] mx-auto overflow-y-auto">
+		<button onclick="closeDetailModal()" class="absolute top-2 right-2 text-rose-500 dark:text-rose-600 hover:text-rose-600 hover:dark:text-rose-500" aria-label="Close detail">
+		  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+			<path fill="currentColor" fill-rule="evenodd"
+			  d="M12 22c-4.714 0-7.071 0-8.536-1.465C2 19.072 2 16.714 2 12s0-7.071 1.464-8.536C4.93 2 7.286 2 12 2s7.071 0 8.535 1.464C22 4.93 22 7.286 22 12s0 7.071-1.465 8.535C19.072 22 16.714 22 12 22M8.97 8.97a.75.75 0 0 1 1.06 0L12 10.94l1.97-1.97a.75.75 0 0 1 1.06 1.06L13.06 12l1.97 1.97a.75.75 0 1 1-1.06 1.06L12 13.06l-1.97 1.97a.75.75 0 1 1-1.06-1.06L10.94 12l-1.97-1.97a.75.75 0 0 1 0-1.06"
+			  clip-rule="evenodd" />
+		  </svg>
+		</button>
+		<h2 class="text-xl font-semibold mb-4">Detail Laporan</h2>
+		<div id="detailContent" class="flex flex-col gap-4">
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Title') %></label>
+				<span id="detailTitle" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Category') %></label>
+				<span id="detailCategory" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Status') %></label>
+				<span id="detailStatus" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Date') %></label>
+				<span id="detailCreatedAt" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Content') %></label>
+				<span id="detailContentText" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+			<div class="flex flex-col">
+				<label class="font-medium mb-1"><%= __('reports.Response') %></label>
+				<span id="detailResponseText" class="w-full bg-gray-50 dark:bg-slate-900 px-4 py-2 rounded-md border border-gray-200 dark:border-slate-700 focus:outline-none"></span>
+			</div>
+		</div>
+	  </div>
+	</div>
+	
+	<%- include('../components/error-log') %>
+
+	<script src="/assets/js/dashboard.js"></script>
+	<script>
+		const modal = document.getElementById('reportModal');
+		function openAddModal() {
+		  modal.classList.remove('hidden');
+		}
+		function closeModal() {
+		  modal.classList.add('hidden');
+		}
+		modal.addEventListener('click', e => {
+		  if (e.target === modal) closeModal();
+		});
+		
+		const detailModal = document.getElementById('detailModal');
+
+		function openDetailModal(report) {
+		  document.getElementById('detailTitle').textContent = report.title;
+		  document.getElementById('detailCategory').textContent = report.category;
+		  document.getElementById('detailStatus').textContent = report.status;
+		  document.getElementById('detailCreatedAt').textContent = report.created_at;
+		  document.getElementById('detailContentText').textContent = report.content;
+		  document.getElementById('detailResponseText').textContent = report.response;
+
+		  detailModal.classList.remove('hidden');
+		}
+
+		function closeDetailModal() {
+		  detailModal.classList.add('hidden');
+		}
+
+		detailModal.addEventListener('click', e => {
+		  if (e.target === detailModal) closeDetailModal();
+		});
+
+	</script>
+</body>
+</html>
