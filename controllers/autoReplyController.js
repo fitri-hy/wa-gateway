@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 
 exports.index = (req, res) => {
   const userId = req.session.user?.id;

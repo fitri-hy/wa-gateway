@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 const { startSession, deleteSession } = require('../services/whatsappService');
 const { getTotalContactsByUser } = require('../services/contactService');
 

@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 const { createContextInfoIfFreePackage } = require('../helpers/contextInfo');
 
 async function messageService(sock, msg) {

@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 
 async function getContactsByUser(userId) {
   return new Promise((resolve, reject) => {

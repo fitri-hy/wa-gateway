@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 
 exports.index = (req, res) => {
   let query = "SELECT * FROM packages WHERE name <> 'ADMIN'";

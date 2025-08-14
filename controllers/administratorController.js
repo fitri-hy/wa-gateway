@@ -1,4 +1,4 @@
-const db = require('../config/Mysql');
+const db = require('../config/MySQL');
 const pluginManager = require('../services/pluginManager');
 const fs = require('fs');
 const path = require('path');
