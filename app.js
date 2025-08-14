@@ -19,6 +19,7 @@ const langFilePath = path.join(__dirname, './locales/lang.json');
 const availableLocales = JSON.parse(fs.readFileSync(langFilePath, 'utf-8')); 
 
 const PORT = process.env.PORT || 3000;
+const SERVER = process.env.SERVER || '127.0.0.1';
 const app = express();
 
 app.set('trust proxy', process.env.TRUST_PROXY === 'true');
@@ -63,8 +64,8 @@ app.use((req, res, next) => {
   });
 });
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on localhost:${PORT}`);
+const server = app.listen(PORT, SERVER, () => {
+  console.log(`Server running on ${SERVER}:${PORT}`);
 
   (async () => {
     const sessionsDir = path.join(__dirname, 'sessions');
