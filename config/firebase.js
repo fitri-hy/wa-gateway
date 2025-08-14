@@ -6,12 +6,12 @@ admin.initializeApp({
 });
 
 const Config = {
-  apiKey: "AIzaSyBjw59nyjBO6B8DkRS6U4jodPbBBNOY6xc",
-  authDomain: "fhytsbot.firebaseapp.com",
-  projectId: "fhytsbot",
-  storageBucket: "fhytsbot.firebasestorage.app",
-  messagingSenderId: "225813398923",
-  appId: "1:225813398923:web:c35128bdb4b2c6dcf29b8e",
+  apiKey: "AIzaXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "XXXXXXXXXX.firebaseapp.com",
+  projectId: "XXXXXXXXXX",
+  storageBucket: "XXXXXXXXXX.firebasestorage.app",
+  messagingSenderId: "220000000000",
+  appId: "1:220000000000:web:c35128bdb4b2c6dcf29b8e",
   measurementId: "G-G02R506JZG",
   useGoogleAuth: process.env.USE_GOOGLE_AUTH ? process.env.USE_GOOGLE_AUTH === 'true' : true
 };
