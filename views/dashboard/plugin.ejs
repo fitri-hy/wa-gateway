@@ -122,32 +122,6 @@
 					<% }) %>
 					<% } %>
 				</div>
-				<div class="flex items-center gap-2 justify-center mt-6">
-				  <% if (totalPages > 1) { %>
-					<% if (currentPage > 1) { %>
-					  <a href="?search=<%= search %>&page=1#inactive" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded" title="First">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m13 19l-6-7l6-7"/><path d="m17 19l-6-7l6-7"/></g></svg>
-					  </a>
-					<% } %>
-
-					<% for (let i = 1; i <= totalPages; i++) { %>
-					  <% if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) { %>
-						<a href="?search=<%= search %>&page=<%= i %>#inactive" class="h-7 w-7 flex items-center justify-center p-1 rounded 
-						  <%= i === currentPage ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white' %>">
-						  <%= i %>
-						</a>
-					  <% } else if (i === currentPage - 2 || i === currentPage + 2) { %>
-						<span class="h-7 w-4 flex items-center justify-center p-1">...</span>
-					  <% } %>
-					<% } %>
-
-					<% if (currentPage < totalPages) { %>
-					  <a href="?search=<%= search %>&page=<%= totalPages %>#inactive" class="h-7 w-7 flex items-center justify-center p-1 bg-slate-100 dark:bg-slate-700 hover:bg-sky-500 hover:text-white rounded">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="m11 19l6-7l-6-7"/><path d="m7 19l6-7l-6-7"/></g></svg>
-					  </a>
-					<% } %>
-				  <% } %>
-				</div>
 			</div>
 		</section>
 	</main>

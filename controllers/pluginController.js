@@ -44,20 +44,13 @@ exports.index = async (req, res) => {
     const plugins = pluginService.getPlugins();
 
     const search = req.query.search?.toLowerCase() || '';
-    const page = parseInt(req.query.page) || 1;
-    const perPage = 15;
 
     const filteredPlugins = plugins.filter(plugin =>
       plugin.title?.toLowerCase().includes(search) ||
       plugin.description?.toLowerCase().includes(search)
     );
 
-    const totalPlugins = filteredPlugins.length;
-    const totalPages = Math.ceil(totalPlugins / perPage);
-    const offset = (page - 1) * perPage;
-    const paginatedPlugins = filteredPlugins.slice(offset, offset + perPage);
-
-    const pluginList = await Promise.all(paginatedPlugins.map(async plugin => {
+    const pluginList = await Promise.all(filteredPlugins.map(async plugin => {
       const enableList = await getPluginEnableList(plugin.fileName) || [];
 
       const sessions = userSessions.filter(sess => sess.connected === 1).map(sess => ({
@@ -81,18 +74,18 @@ exports.index = async (req, res) => {
     res.render('dashboard/plugin', {
       plugins: pluginList,
       search,
-      currentPage: page,
-      totalPages,
+      // pagination dihapus
     });
 
   } catch (err) {
     console.error(err);
-	res.status(500).render('error', {
+    res.status(500).render('error', {
       title: res.__('error.Internal Server Error'),
       message: res.__('error.It seems there was an error'),
     });
   }
 };
+
 
 exports.enablePlugin = async (req, res) => {
   try {
