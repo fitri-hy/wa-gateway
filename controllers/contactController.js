@@ -38,7 +38,7 @@ exports.index = async (req, res) => {
 
     const search = req.query.search || '';
     const page = parseInt(req.query.page) || 1;
-    const limit = 20;
+    const limit = 25;
     const offset = (page - 1) * limit;
 
     const { contacts, total } = await contactService.getContactsByUserPaginated(userId, search, limit, offset);
