@@ -25,6 +25,7 @@ router.get('/logout', Auth.logout);
 
 const Dashboard = require('../controllers/dashboardController');
 router.get('/dashboard', userMiddleware, Dashboard.index);
+router.get('/dashboard/api/stats', userMiddleware, Dashboard.apiStats);
 
 const Session = require('../controllers/sessionController');
 router.post('/dashboard', userMiddleware, Session.connect);

@@ -1241,8 +1241,22 @@ exports.deletePlugin = (req, res) => {
         return res.redirect('/administrator/plugins');
       }
 
-      req.flash('success', res.__('flash.Plugin successfully removed'));
-      return res.redirect('/administrator/plugins');
+      // Hapus record dari database plugins
+      const pluginName = name.endsWith('.js') ? name : name;
+      db.query('DELETE FROM plugins WHERE name = ?', [pluginName], (err2) => {
+        if (err2) {
+          console.error('Gagal hapus plugin dari database:', err2);
+        }
+
+        // Bersihkan require cache agar plugin tidak load lagi
+        try {
+          const resolved = require.resolve(filePath);
+          delete require.cache[resolved];
+        } catch (_) {}
+
+        req.flash('success', res.__('flash.Plugin successfully removed'));
+        return res.redirect('/administrator/plugins');
+      });
     });
   });
 };

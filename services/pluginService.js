@@ -204,7 +204,20 @@ chokidar.watch(pluginsDir).on('all', async (event, filePath) => {
   if (filePath.endsWith('.js')) {
     const file = path.basename(filePath);
     //console.log(`[Plugin Watcher] ${event}: ${file}`);
-    await reloadSinglePlugin(file);
+    if (event === 'unlink') {
+      // File dihapus, bersihkan dari database juga
+      db.query('DELETE FROM plugins WHERE name = ?', [file], (err) => {
+        if (err) console.error('Gagal hapus plugin dari database:', err);
+      });
+      // Hapus dari memory juga
+      const idx = plugins.findIndex(p => p.fileName === file);
+      if (idx !== -1) {
+        plugins.splice(idx, 1);
+        console.log(`[Plugin] ${file} dihapus dari memory`);
+      }
+    } else {
+      await reloadSinglePlugin(file);
+    }
   }
 });
 

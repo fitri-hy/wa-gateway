@@ -1,6 +1,7 @@
 const chokidar = require('chokidar');
 const path = require('path');
 const fs = require('fs');
+const db = require('../config/MySQL');
 
 const pluginsDir = path.join(__dirname, '../plugins');
 let pluginsCache = [];
@@ -45,7 +46,7 @@ watcher.on('add', filePath => {
     const plugin = loadPlugin(file);
     if (plugin) {
       pluginsCache.push(plugin);
-      // console.log(`Plugin ditambahkan: ${file}`);
+      console.log(`[PluginManager] Add: ${file} (cache: ${pluginsCache.length})`);
     }
   }
 });
@@ -58,10 +59,10 @@ watcher.on('change', filePath => {
       const idx = pluginsCache.findIndex(p => p.command === plugin.command);
       if (idx !== -1) {
         pluginsCache[idx] = plugin;
-        console.log(`Plugin diupdate: ${file}`);
+        console.log(`[PluginManager] Change: ${file} (cache: ${pluginsCache.length})`);
       } else {
         pluginsCache.push(plugin);
-        // console.log(`Plugin ditambahkan saat update: ${file}`);
+        console.log(`[PluginManager] Change (new): ${file} (cache: ${pluginsCache.length})`);
       }
     }
   }
@@ -70,8 +71,13 @@ watcher.on('change', filePath => {
 watcher.on('unlink', filePath => {
   const file = path.basename(filePath);
   if (file.endsWith('.js')) {
-    pluginsCache = pluginsCache.filter(p => p.command !== path.parse(file).name);
-    // console.log(`Plugin dihapus: ${file}`);
+    const before = pluginsCache.length;
+    pluginsCache = pluginsCache.filter(p => p.name !== file);
+    console.log(`[PluginManager] Unlink: ${file} (cache: ${before} -> ${pluginsCache.length})`);
+    // Bersihkan dari database juga
+    db.query('DELETE FROM plugins WHERE name = ?', [file], (err) => {
+      if (err) console.error('Gagal hapus plugin dari database:', err);
+    });
   }
 });
 
